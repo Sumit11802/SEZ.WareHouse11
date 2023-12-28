@@ -1,0 +1,738 @@
+﻿@model List<MVC.Domain.Model.CUSTOMER>
+@{ ViewBag.Title = "CustomerEntry";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+
+<style>
+
+    .button {
+        float: right;
+        padding: 10px 20px;
+        background-color: #4CAF50; /* Set your desired button color */
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+</style>
+<div id="divSummary">
+    <div class="page-header">
+
+        <div class="crumbs">
+            <ul id="breadcrumbs" class="breadcrumb">
+                <li>
+                    <i class="icon-home"></i>
+                    <a href="index.html">Customer</a>
+                </li>
+                <li class="current">
+                    <a href="pages_calendar.html" title="">Customer Master</a>
+                </li>
+            </ul>
+        </div>
+        <div class="page-header row">
+            <div class="page-title col-6">
+                <h3>Customer Master</h3>
+            </div>
+            <div class="col-6">
+                <br />
+                <button type="button" class="btn btn-primary float-right" id="CustomerAddBtn" onclick="AddMaster();">Add New Customer</button>
+            </div>
+        </div>
+
+    </div>
+    <div class="widget box">
+        <div class="widget-header">
+            <h4><i class="icon-reorder"></i> Customer Summary</h4>
+        </div>
+        <div class="widget-content">
+            <div class="row">
+
+                <div class="col-lg-7 col-sm-12">
+
+                    <input type="text" id="txtSearch" class="form-control" placeholder="Search for...">
+
+                </div>
+                <div class="col-lg-1 col-sm-6 col-12">
+                    <div class="form-group">
+                        <button class="btn btn-primary" id="btnSearch" type="button">Search</button>
+                        @* <a onclick="AddBL();" class="btn btn-primary btn-primary text-right" style="align-content:center;color:white"><i class="fa fa-plus" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Generate BL"></i> </a>*@
+                    </div>
+                </div>
+            </div>
+
+            <!-- /Filter -->
+            <div class="table-responsive">
+                <table id="tblGlobalGST" class="table table-striped table-bordered" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th class="text-center">#</th>
+                            @*<th style="visibility:hidden"></th>
+                                 <th style="visibility:hidden"></th>
+                                <th style="visibility:hidden"></th>
+                                 <th style="visibility:hidden"></th>
+                                 <th style="visibility:hidden"></th>
+                                 <th style="visibility:hidden"></th>*@
+                            <th class="wd-15p">Name</th>
+                            <th class="wd-25p">Address</th>
+                            <th class="wd-20p">Contact Person</th>
+                            <th class="wd-10p ">Contact No.</th>
+                            <th class="wd-15p">CHA</th>
+                            <th class="wd-10p ">Importer</th>
+                            <th class="wd-10p ">Customer</th>
+                            @*<th class="wd-25p">Shipper</th>
+                                <th class="wd-20p">ShipingLine</th>*@
+                            <th class="wd-10p ">Vendor</th>
+                        </tr>
+                    </thead>
+                    @*<tbody style="box-sizing :border-box;">
+                            @foreach (var d in Model)
+                            {
+
+                                <tr>
+                                    <td>@d.trailername <input name=hdTrailerName type=hidden id=trailerName value='@d.trailername'></td>
+                                    <td>@d.TransName <input name=hdTrailerID type=hidden id=trailerid value='@d.trailerid'></td>
+                                    <td>@d.trailername <input name=hdTrailerName type=hidden id=trailerName value='@d.trailername'></td>
+                                    <td>@d.TransName <input name=hdTrailerID type=hidden id=trailerid value='@d.trailerid'></td>
+                                    <td>@d.trailername <input name=hdTrailerName type=hidden id=trailerName value='@d.trailername'></td>
+                                    <td>@d.TransName <input name=hdTrailerID type=hidden id=trailerid value='@d.trailerid'></td>
+                                    <td>@d.trailername <input name=hdTrailerName type=hidden id=trailerName value='@d.trailername'></td>
+                                    <td>@d.TransName <input name=hdTrailerID type=hidden id=trailerid value='@d.trailerid'></td>
+                                    <td>@d.trailername <input name=hdTrailerName type=hidden id=trailerName value='@d.trailername'></td>
+                                    <td>@d.TransName <input name=hdTrailerID type=hidden id=trailerid value='@d.trailerid'></td>
+                                    <td>@d.trailername <input name=hdTrailerName type=hidden id=trailerName value='@d.trailername'></td>
+
+                                </tr>
+                            }
+
+                        </tbody>*@
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- /product list -->
+</div>
+
+<div class=" content-area" id="divUpdateCustomerData">
+</div>
+<script>
+
+    $("#btnSearch").click(function () {
+        debugger;
+        var SearchText = $("#txtSearch").val();
+
+        //  $("#divLoading").show();
+
+        //   alert(SearchText)
+        //  alert(MasterName)
+        if (SearchText == "") {
+            //   alert("Please enter search text!")
+            $("#txtSearch").removeClass("form-control is-valid state-valid")
+            $("#txtSearch").addClass("form-control is-invalid state-invalid")
+            $("#divAddMaster").hide()
+        }
+        else {
+            $("#txtSearch").removeClass("form-control is-invalid state-invalid")
+            $("#txtSearch").addClass("form-control is-valid state-valid")
+            $("#divAddMaster").show()
+
+            //  $("#SearchText").val() = SearchText;
+
+            var data = JSON.stringify({
+                'SearchText': SearchText,
+
+
+            });
+            $.ajax({
+                url: "/Customer/GetGlobalGSTList",
+                data: data,
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                //  dataType: "json",
+                success: function (data) {
+                    //alert(JSON.stringify(data))
+
+                    $('#tblGlobalGST').dataTable({
+                        "destroy": true,
+                        "bLengthChange": false,
+                        "aaData": data,
+
+                        "bInfo": false,
+                        "bPaginate": false,
+                        "bFilter": true,
+                        "paging": false,
+                        "columns": [
+
+                            {
+                                "data": "Id",
+                                "render": function (data, type, row, meta) {
+
+
+                                    var button = '<div class="btn-group mb-2 mr-2">'
+                                    button += ' <button class="btn  btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>'
+                                    button += '<div class="dropdown-menu">'
+
+                                    button += '<a href="#" class="form-control" onclick="ViewDetails(' + data + ')">View Details </a>'
+                                    button += '<a href="#" class="form-control" onclick="EditDetails(' + data + ')"> Edit </a>'
+                                    button += '<a href="#" class="form-control" onclick="LocationDetails(' + data + ',\'' + row.Name + '\')"> Location / GST  </a>'
+                                    button += '<a href="#" class="form-control" onclick="BankDetails(' + data + ')">\ Bank Details </a>'
+                                    //button += ' <li><a href="#" class="dropdown-item" onclick="TdsMapping(' + data + ',\'' + row.Name + '\')"><img src="/assets/img/icons/download.svg" class="me-2" alt="img"> TDS Details </a></li>'
+                                    // button += ' <li><a href="#" class="dropdown-item" onclick="SpaceOccupied(' + data + ',\'' + row.Name + '\')"><img src="/assets/img/icons/eye1.svg" class="me-2" alt="img"> Space Occupations </a></li>'
+                                    button += '</div>'
+                                    button += '</div>'
+
+
+
+                                    return button;
+
+
+
+                                }
+
+                            },
+
+
+
+                            { "data": "Name" },
+                            { "data": "Address" },
+                            { "data": "ContactPerson" },
+                            { "data": "ContactNo" },
+                            { "data": "CHA" },
+                            { "data": "Importer" },
+                            { "data": "Customer" },
+                            //{ "data": "Shipper" },
+                            //{ "data": "ShippingLine" },
+                            { "data": "Vendor" }
+
+                        ]
+                    });
+
+
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+
+        }
+    });
+    function EditDetails(id) {
+        $("#global-loader").fadeIn("fast");
+        $("#divAddMaster").hide();
+        $("#divPageHeader").hide();
+
+        var data = JSON.stringify({
+            'ID': id
+        });
+
+        $.ajax({
+            url: "/Customer/EditCustomerDetails",
+            data: data,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            //  dataType: "json",
+            success: function (response) {
+                $("#divSummary").hide()
+                $('#divUpdateCustomerData').show()
+                ///ViewAttachmentforviewandedit(id)
+                $('#divAttach :input').attr('disabled', true);
+                //document.getElementById("Download").readOnly = true;
+                //document.getElementById("Delete").readOnly = true;
+
+                $('#divUpdateCustomerData').html(response);
+                //  $('#AGaID').addClass("form-control disabled");
+                // $('.code').attr("disabled", true);
+                document.getElementById("custCode").readOnly = true;
+            }
+        });
+
+        $("#global-loader").fadeOut("fast");
+    }
+</script>
+<script>
+
+    function AddMaster() {
+        $("#global-loader").fadeIn("slow");
+        // alert(jono)
+        $("#divAddMaster").hide();
+        $("#divPageHeader").hide();
+
+
+        $.ajax({
+            url: "/Customer/AddCustomerDetails1",
+
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            //  dataType: "json",
+            success: function (response) {
+                debugger
+                $("#global-loader").fadeOut("slow");
+
+                $("#divSummary").hide()
+                $("#global-loader").fadeOut("slow");
+
+                $('#divUpdateCustomerData').show()
+
+                $('#divUpdateCustomerData').html(response);
+
+            }
+        });
+    }
+</script>
+<script>
+
+    function ViewDetails(id) {
+        //alert('View');
+        $("#divAddMaster").hide();
+        $("#divPageHeader").hide();
+
+        var data = JSON.stringify({
+            'ID': id
+        });
+
+        $.ajax({
+            url: "/Customer/EditCustomerDetails",
+            data: data,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            //  dataType: "json",
+            success: function (response) {
+                $("#divSummary").hide()
+                ViewAttachmentforviewandedit(id)
+                // $('#divAttach :input').attr('disabled', true);
+                $('#divUpdateCustomerData').show()
+
+                $('#divUpdateCustomerData').html(response);
+                // $('#divAttach1').show()
+                //$('#divUpdateCustomerData :input').attr('disabled', true);
+
+                $('#divUpdateCustomerData :input').attr('disabled', true);
+                $('#btnUploadAttachment').attr('disabled', false);
+
+            }
+        });
+    }
+
+    var AttachmentList = [];
+    var TableData = [];
+    var RequestDtls = [];
+
+
+    function ViewAttachment(id) {
+        //alert('View');
+        debugger
+        //$("#divAttach").modal("show");
+        //$('#divAttach :input').attr('disabled', true);
+
+
+        //$("#divAddMaster").hide();
+        //$("#divPageHeader").hide();
+
+
+
+        var data = JSON.stringify({
+            'ID': id
+        });
+
+        $.ajax({
+            url: "/Customer/GetAttachment", //GetAttachment ViewEditCustattach
+            data: data,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            //  dataType: "json",
+            success: function (Data) {
+                debugger
+                $("#divAttach").modal("show");
+                $('#divUploadDocSection :input').attr('disabled', true);
+                console.log(Data);
+                AttachmentCounter = 1;
+                Data.srno = AttachmentCounter;
+                Data.DocFileName = Data[0].DocFileName;
+                Data.RunningID = Data[0].RunningID;
+                $('#JOAttachment').dataTable({
+                    "bLengthChange": false,
+                    "bInfo": false,
+                    "bPaginate": false,
+                    "bFilter": false,
+                    "paging": false,
+                    "destroy": true,
+                    "bLengthChange": false,
+                    "aaData": Data,
+                    "columns": [
+                        { "data": "srno" },
+                        { "data": "DocFileName" },
+                        {
+                            "data": "RunningID",
+                            "render": function (data, type, row, meta) {
+                                if (type === 'display') {
+
+                                    data = '<a   onclick="DownloadAttachment(' + data + ')"  href="#" class="btn btn-sm btn-primary" id="Download" title="Download"><i class="fa fa-download"></i></a>';
+                                    //  data = '<a  onclick="SubmitJO(' + data + ')"  href="#" class="submitbtn"  title="Submit"><i class="fa fa-save"></i></a>';
+                                }
+
+                                return data;
+                            }
+
+
+                        },
+                        {
+                            "data": "RunningID",
+                            "render": function (data, type, row, meta) {
+                                if (type === 'display') {
+
+                                    data = '<a   onclick="DeleteAttachment(' + data + ')"  href="#" class="btn btn-sm btn-danger removebutton disabled" id="Delete" title="Delete"><i class="fa fa-trash"></i></a>';
+                                    //  data = '<a  onclick="SubmitJO(' + data + ')"  href="#" class="submitbtn"  title="Submit"><i class="fa fa-save"></i></a>';
+                                }
+
+                                return data;
+                            }
+                        }
+
+                    ]
+                });
+
+
+                //$("#divSummary").hide()
+                //$('#divUpdateCustomerData').show()
+
+                //$('#divUpdateCustomerData').html(response);
+                //$('#divUpdateCustomerData :input').attr('disabled', true);
+
+            }
+        });
+    }
+
+
+    function setAttachmentDataTable() {
+        debugger
+        $('#JOAttachment').dataTable({
+            "bLengthChange": false,
+            "bInfo": false,
+            "bPaginate": false,
+            "bFilter": false,
+            "paging": false,
+            "destroy": true,
+            "bLengthChange": false,
+            "aaData": AttachmentList,
+            "columns": [
+                { "data": "srno" },
+                { "data": "DocFileName" },
+                {
+                    "data": "RunningID",
+                    "render": function (data, type, row, meta) {
+                        if (type === 'display') {
+
+                            data = '<a   onclick="DownloadAttachment(' + data + ')"  href="#" class="btn btn-sm btn-primary disabled"  title="Download"><i class="fa fa-download"></i></a>';
+                            //  data = '<a  onclick="SubmitJO(' + data + ')"  href="#" class="submitbtn"  title="Submit"><i class="fa fa-save"></i></a>';
+                        }
+
+                        return data;
+                    }
+
+
+                },
+                {
+                    "data": "RunningID",
+                    "render": function (data, type, row, meta) {
+                        if (type === 'display') {
+
+                            data = '<a   onclick="DeleteAttachment(' + data + ')"  href="#" class="btn btn-sm btn-danger removebutton disabled"  title="Delete"><i class="fa fa-trash"></i></a>';
+                            //  data = '<a  onclick="SubmitJO(' + data + ')"  href="#" class="submitbtn"  title="Submit"><i class="fa fa-save"></i></a>';
+                        }
+
+                        return data;
+                    }
+                }
+
+            ]
+        });
+
+
+        //$('#tblUploadedAttachments').DataTable({
+        //    "destroy": true,
+        //    "bLengthChange": false,
+        //    "aaData": AttachmentList,
+        //    "bPaginate": false,
+        //    "bInfo": false,
+        //    "paging": false,
+        //    "searching": false,
+
+        //    "columns": [
+        //        { "data": "SrNo" },
+        //        { "data": "Remark" },
+        //        { "data": "FileName" },
+        //        { "data": "ContentType" },
+        //        {
+        //            "data": "SrNo",
+        //            "render": function (data, type, row, meta) {
+        //                if (type === 'display') {
+        //                    data = "<button title=\"Delete\" class=\"btn btn-sm btn-danger m-1\" data-toggle=\"tooltip\" data-placement=\"bottom\" data-original-title=\"View\" onclick=\"DeleteFile('" + data + "')\"><i class=\"fa fa-trash\"></i></button>";
+        //                }
+        //                return data;
+        //            }
+        //        },
+        //    ],
+        //});
+    }
+
+
+    function DownloadAttachment(id) {
+        $("#hfFileId").val(id);
+        $("#btnDownload")[0].click();
+
+    }
+    function DeleteAttachment(id) {
+        var r = confirm("Do you want to delete this file?");
+        if (r == true) {
+
+            var table = $('#JOAttachment').DataTable();
+            $('#JOAttachment tbody').on('click', '.removebutton', function () {
+
+                table
+                    .row($(this).parents('tr'))
+                    .remove()
+                    .draw();
+                CountRows();
+            });
+
+            var data = JSON.stringify({
+                'id': id
+            });
+            // alert(data)
+            $.ajax({
+                url: "/Customer/DeleteFile",
+                data: data,
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    AttachmentList = AttachmentList.filter((x) => x.SrNo != SrNo);
+
+                    setAttachmentDataTable();
+
+                },
+                error: function (errormessage) {
+                    //  alert("error");
+                    alert(errormessage.responseText);
+                }
+            });
+
+        }
+        else {
+            // alert("You Pressed Cancel");
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    function LocationDetails(id, Name) {
+        //alert('View');
+        $("#divAddMaster").hide();
+        $("#divPageHeader").hide();
+
+        var data = JSON.stringify({
+            'ID': id,
+            'Name': Name
+        });
+
+        $.ajax({
+            url: "/Customer/LocationDetails",
+            data: data,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            //  dataType: "json",
+            success: function (response) {
+                $("#divSummary").hide()
+                $('#divUpdateCustomerData').show()
+
+                $('#divUpdateCustomerData').html(response);
+                // $('#divUpdateCustomerData :input').attr('disabled', true);
+
+            }
+        });
+    }
+    function DeliveryAddress(id, Name) {
+        //alert('View');
+        $("#divAddMaster").hide();
+        $("#divPageHeader").hide();
+
+        var data = JSON.stringify({
+            'ID': id,
+            'Name': Name
+        });
+
+        $.ajax({
+            url: "/Customer/DeliveryAddresses",
+            data: data,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            //  dataType: "json",
+            success: function (response) {
+                $("#divSummary").hide()
+                $('#divUpdateCustomerData').show()
+
+                $('#divUpdateCustomerData').html(response);
+                // $('#divUpdateCustomerData :input').attr('disabled', true);
+
+            }
+        });
+    }
+
+    function SpaceOccupied(id, Name) {
+        $("#divAddMaster").hide();
+        $("#divPageHeader").hide();
+
+        var data = JSON.stringify({
+            'ID': id,
+            'Name': Name
+        });
+
+        $.ajax({
+            url: "/Customer/SpaceOccupied",
+            data: data,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                $("#divSummary").hide()
+                $('#divUpdateCustomerData').show()
+
+                $('#divUpdateCustomerData').html(response);
+                // $('#divUpdateCustomerData :input').attr('disabled', true);
+
+            }
+        });
+    }
+
+    function TdsMapping(id, Name) {
+
+        $("#divAddMaster").hide();
+        $("#divPageHeader").hide();
+
+        var data = JSON.stringify({
+            'ID': id,
+            'Name': Name
+        });
+
+        $.ajax({
+            url: "/Customer/TdsMapping",
+            data: data,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                $("#divSummary").hide()
+                $('#divUpdateCustomerData').show()
+
+                $('#divUpdateCustomerData').html(response);
+                // $('#divUpdateCustomerData :input').attr('disabled', true);
+
+            }
+        });
+    }
+
+    function ViewAttachmentforviewandedit(id) {
+        //alert('View');
+        debugger
+        //$("#divAttach").modal("show");
+        //$('#divAttach :input').attr('disabled', true);
+
+
+        //$("#divAddMaster").hide();
+        //$("#divPageHeader").hide();
+
+
+
+        var data = JSON.stringify({
+            'ID': id
+        });
+
+        $.ajax({
+            url: "/Customer/GetAttachment", //GetAttachment ViewEditCustattach
+            data: data,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            //  dataType: "json",
+            success: function (Data) {
+                debugger
+                // $("#divAttach").modal("show");
+                //$('#divAttach :input').attr('disabled', true);
+                console.log(Data);
+                AttachmentCounter = 1;
+                Data.srno = AttachmentCounter;
+                Data.DocFileName = Data[0].DocFileName;
+                Data.RunningID = Data[0].RunningID;
+                $('#JOAttachment').dataTable({
+                    "bLengthChange": false,
+                    "bInfo": false,
+                    "bPaginate": false,
+                    "bFilter": false,
+                    "paging": false,
+                    "destroy": true,
+                    "bLengthChange": false,
+                    "aaData": Data,
+                    "columns": [
+                        { "data": "srno" },
+                        { "data": "DocFileName" },
+                        {
+                            "data": "RunningID",
+                            "render": function (data, type, row, meta) {
+                                if (type === 'display') {
+
+                                    data = '<a   onclick="DownloadAttachment(' + data + ')"  href="#" class="btn btn-sm btn-primary disabled" id="Download" title="Download"><i class="fa fa-download"></i></a>';
+                                    //  data = '<a  onclick="SubmitJO(' + data + ')"  href="#" class="submitbtn"  title="Submit"><i class="fa fa-save"></i></a>';
+                                }
+
+                                return data;
+                            }
+
+
+                        },
+                        {
+                            "data": "RunningID",
+                            "render": function (data, type, row, meta) {
+                                if (type === 'display') {
+
+                                    data = '<a   onclick="DeleteAttachment(' + data + ')"  href="#" class="btn btn-sm btn-danger removebutton disabled" id="Delete" title="Delete"><i class="fa fa-trash"></i></a>';
+                                    //  data = '<a  onclick="SubmitJO(' + data + ')"  href="#" class="submitbtn"  title="Submit"><i class="fa fa-save"></i></a>';
+                                }
+
+                                return data;
+                            }
+                        }
+
+                    ]
+                });
+
+
+                //$("#divSummary").hide()
+                //$('#divUpdateCustomerData').show()
+
+                //$('#divUpdateCustomerData').html(response);
+                //$('#divUpdateCustomerData :input').attr('disabled', true);
+
+            }
+        });
+    }
+
+</script>
+
+

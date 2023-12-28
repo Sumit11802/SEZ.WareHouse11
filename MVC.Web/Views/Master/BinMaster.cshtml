@@ -1,0 +1,987 @@
+﻿
+@{ ViewBag.Title = "Bin";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+
+    }
+
+
+
+
+<script src="~/js/GetTableJson.js"></script>
+<div class="page-header">
+    <div class="page-header-title">
+
+    </div>
+    <div class="crumbs">
+        <ul id="breadcrumbs" class="breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="#">Manage Master</a>
+            </li>
+            <li class="current">
+                <a href="#" title="">Bin Master</a>
+            </li>
+        </ul>
+    </div>
+
+</div>
+<div class=" content-area overflow-hidden" id="divCreate">
+    <div class="page-header">
+        <div class="page-title">
+            <h3>STORAGE BIN MASTER</h3>
+        </div>
+        <ul class="page-stats">
+
+            <li>
+                <div class="summary">
+                    <button type="button" class="btn btn-primary waves-effect waves-light f-right d-inline-block md-trigger" onclick="OpenWOSummary();" id="addlocallistbtn" data-modal="modal-13">
+                        STORAGE BIN LIST
+                    </button>
+                </div>
+
+            </li>
+        </ul>
+    </div>
+    <div class="widget box">
+        <div class="widget-header">
+            <h4><i class="icon-reorder"></i> Godown Master</h4>
+        </div>
+        <div class="widget-content">
+         
+                <div class="row">
+                   
+                    <div class="col-lg-3 col-sm-12">
+                       
+                            <label class="form-label">Godown Code <span style="color:red">*</span> </label>
+                       
+                                    @Html.DropDownList("ddltax", (IEnumerable<SelectListItem>)ViewBag.Godownlist, "--Select--", new { @class = "form-control", @id = "ddltax", name = "ddltax", autocomplete = "off", onchange = "jsFunction();" })
+
+
+                               
+                    </div>
+
+
+
+                    <div class="col-lg-3 col-sm-4">
+                       
+                            <label class="form-label mandatory">Center Code  <span style="color:red">*</span></label>
+                         
+                                    @Html.TextBox("txtCenterCode", null, new { @class = "form-control ", @id = "txtCenterCode", Placeholder = "Godown Code", style = "text-transform:uppercase", @autocomplete = "off" })
+                               
+                    </div>
+
+
+                    <div class="col-lg-3 col-sm-12">
+                       
+                            <label class="form-label">Warehouse Code</label>
+                         
+                                    @Html.TextBox("txtwarehouse", null, new { @class = "form-control", @id = "txtwarehouse", Placeholder = "Warehouse Code", style = "text-transform:uppercase", @autocomplete = "off", @disabled = "disabled" })
+
+
+                              
+                    </div>
+                    <div class="col-lg-3 col-sm-12">
+                       
+                            <label class="form-label">Warehouse Description</label>
+                        
+                                    @Html.TextBox("txtWD", null, new { @class = "form-control ", @id = "txtWD", Placeholder = "Series Code", style = "text-transform:uppercase", @autocomplete = "off", @disabled = "disabled" })
+
+
+                              
+                    </div>
+
+                </div>
+
+
+
+
+
+                <h4 >Add Details</h4>
+            <br/>
+
+                <div class="row">
+                    <div class="col-lg-2 col-sm-12">
+                     
+                            <label class="form-label mandatory">No of columns</label>
+                         
+                                    <input type="text" class="form-control" id="NoOfCols" onkeypress="validate(event);" />
+                               
+                    </div>
+                    <div class="col-lg-2 col-sm-12">
+                      
+                            <label class="form-label mandatory">No of rows</label>
+                       
+                                    <input type="text" class="form-control" id="NoOfRows" onkeypress="validate(event);" />
+                                
+                    </div>
+                    <div class="col-lg-3 col-sm-12">
+                        <div class="form-group">
+                            <label class="form-label mandatory">Grid size (sq. mtr.)</label>
+                            <div class="row gutters-xs">
+                                <div class="col">
+                                    <input type="text" class="form-control" id="GridSize" onkeypress="validate(event);" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-2 col-sm-12">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover tbl-cart text-nowrap" id="tblCols">
+                                <thead>
+                                    <tr>
+                                        <th>Cols</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="test-body">
+                                    <tr id="row0">
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-sm-12">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover tbl-cart text-nowrap" id="tblRows">
+                                <thead>
+                                    <tr>
+                                        <th>Rows</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="test-bodyA">
+                                    <tr id="rowA0">
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" style="display:none;">
+                    <div class="col-lg-3 col-sm-12">
+                        <div class="form-group">
+                            <label class="form-label mandatory">Storage Bin</label>
+                            <div class="row gutters-xs">
+                                <div class="col">
+                                    @Html.TextBox("txtstorage", null, new
+                                    {
+                                        @class = "form-control ",
+                                        @id = "txtstorage",
+                                        Placeholder = "Storage Bin",
+                                        @autocomplete = "off"@*, onkeypress = "validate(event);"*@})
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="col-lg-3 col-sm-4">
+                        <div class="form-group">
+                            <label class="form-label mandatory">Total Capacity of Storage Bin/in</label>
+                            <div class="row gutters-xs">
+                                <div class="col">
+                                    @Html.TextBox("txttc", null, new { @class = "form-control ", @id = "txttc", Placeholder = "Total", style = "text-transform:uppercase", @autocomplete = "off", onkeypress = "validate(event);" })
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row" style="display:none;">
+                    <div class="col-lg-3 col-sm-12">
+                        <div class="form-group">
+                            <label class="form-label mandatory">Length</label>
+                            <div class="row gutters-xs">
+                                <div class="col">
+                                    @Html.TextBox("txtlen", null, new { @class = "form-control ", @id = "txtlen", Placeholder = "Length", @autocomplete = "off", onkeypress = "validate(event);" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-12">
+                        <div class="form-group">
+                            <label class="form-label mandatory">Width</label>
+                            <div class="row gutters-xs">
+                                <div class="col">
+                                    @Html.TextBox("txtwidth", null, new { @class = "form-control ", @id = "txtwidth", Placeholder = "Width", style = "text-transform:uppercase", @autocomplete = "off", onkeypress = "validate(event);" })
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+                <div class="row">
+                    <div class="col-lg-3 col-sm-12">
+                       
+                        <button id="btnAdd" class="btn btn-primary" onclick="AddDetails()">Add</button>
+
+                    </div>
+                    <br/>
+                    <div class="col-lg-12 col-sm-12">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover tbl-cart text-nowrap" id="tblAddEmptyDetails">
+                                <thead>
+                                    <tr>
+                                        @*<th>sr no</th>*@
+                                        <th>Select</th>
+                                        <th class="wd-15p sorting">Storage</th>
+                                        <th class="wd-15p sorting">Total</th>
+                                        <th class="wd-15p sorting">Lenghth</th>
+                                        <th class="wd-15p sorting">Width</th>
+
+
+                                    </tr>
+                                </thead>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="row">
+                    <div class="col-lg-3 col-xs-12">
+                        <div class="form-group">
+                            <label class="custom-switch">
+                                <input type="checkbox" name="custom-switch-checkbox" id="chkIsActive" value="true" checked class="custom-switch-input">
+                                <span class="custom-switch-indicator"></span>
+                                <span class="custom-switch-description">IsActive</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3 col-xs-12">
+
+                     
+
+
+                        <button id="btnSave" class="btn btn-primary" onclick="return Save();">Save</button>
+
+
+                    </div>
+                </div>
+           
+        </div>
+    </div>
+</div>
+
+
+
+<div class=" content-area" id="divCreateSummary" style="display:none">
+
+
+    <div class="page-header">
+        <div class="page-title">
+            <h3>STORAGE BIN MASTER</h3>
+        </div>
+        <ul class="page-stats">
+
+            <li>
+                <div class="summary">
+                    <button type="button" class="btn btn-primary waves-effect waves-light f-right d-inline-block md-trigger" onclick="BackToWorkOrder();" id="addlocallistbtn" data-modal="modal-13">
+                        Add STORAGE BIN
+                    </button>
+                </div>
+
+            </li>
+        </ul>
+    </div>
+    <div class="widget box">
+        <div class="widget-header">
+            <h4><i class="icon-reorder"></i> Godown Master</h4>
+        </div>
+        <div class="widget-content">
+            <div class="row">
+
+                <div class="col-lg-3 col-sm-12">
+                  
+                        <label class="form-label mandatory">Search</label>
+                      
+                                @Html.TextBox("txtsearch", null, new { @class = "form-control ", @id = "txtsearch", style = "text-transform:uppercase", name = "txtsearch", autocomplete = "on" })
+                          
+                </div>
+
+                <div class="col-lg-3 col-sm-12" style="padding-top:20px;">
+                   
+                     
+                   
+                                <button class="btn btn-primary" id="TripSearch" type="button" onclick="ShowSSRSummary()">Search</button>
+                           
+                </div>
+            </div>
+            @*@Html.ActionLink("Export To Excel", "ExportToExcelImportAccountMaster", null, new { @class = "btn btn-primary btn-md" })*@
+            <div class="row">
+
+                <div class="col-lg-12 col-sm-12">
+                    <div class="table-responsive">
+                        <table id="example2" class="table table-bordered table-hover tbl-cart text-nowrap" style="width:100%">
+                            <thead>
+                                <tr>
+                                    @*<th>View</th>
+
+
+
+                                        <th class="wd-15p sorting">Entry ID</th>
+                                        <th class="wd-15p sorting">Centre Code</th>*@
+                                    <th class="wd-15p sorting">Godown Code</th>
+                                    <th class="wd-15p sorting">Warehouse code</th>
+                                    <th class="wd-15p sorting">Warehouse Description</th>
+                                    <th class="wd-15p sorting">Lot No</th>
+                                    <th class="wd-15p sorting">Area</th>
+                                    @*<th class="wd-15p sorting">Height</th>
+                                        <th class="wd-15p sorting">Lenght</th>*@
+                                    <th class="wd-15p sorting">Is Active</th>
+
+
+
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#example2').DataTable({
+            "bLengthChange": false,
+            "bInfo": false,
+            "bPaginate": false,
+            //"bFilter": false,
+            "paging": false
+
+        });
+    });
+    $(window).on("load", function (e) {
+        $("#global-loader").fadeOut("slow");
+    });
+</script>
+<script>
+    var MainTable = []
+
+    var CounterForCheckbox = 0;
+    var CounterForCheckbox1 = 0;
+
+        function BackToWorkOrder() {
+            $("#divCreate").show();
+            $("#divCreateSummary").hide();
+            $("#divEditEntry").hide();
+    }
+    debugger;
+    function OpenWOSummary() {
+            $("#divEditEntry").hide();
+            $("#divCreate").hide();
+            $("#divCreateSummary").show();
+        }
+
+
+    function validate(evt) {
+        var theEvent = evt || window.event;
+
+        // Handle paste
+        if (theEvent.type === 'paste') {
+            key = event.clipboardData.getData('text/plain');
+        } else {
+            // Handle key press
+            var key = theEvent.keyCode || theEvent.which;
+            key = String.fromCharCode(key);
+        }
+        var regex = /[0-9]|\./;
+        if (!regex.test(key)) {
+            theEvent.returnValue = false;
+            if (theEvent.preventDefault) theEvent.preventDefault();
+        }
+    }
+
+
+
+
+    function jsFunction() {
+        debugger;
+        var godownCode = $("#ddltax option:selected").text();
+        var data = { 'godownCode': godownCode };
+        var data1 = JSON.stringify(data);
+        /* alert(value);*/
+        $.ajax({
+            type: "POST",
+            url: "/Master/getGodownlistforBin",
+            data: data1,
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                console.log(data);
+                //alert(data);
+                debugger;
+                $("#txtCenterCode").val(data[0].CentreCode);
+                $("#txtwarehouse").val(data[0].Warehousecode);
+                $("#txtWD").val(data[0].Description);
+
+
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        })
+
+    }
+
+    function checkItemcount() {
+
+        var table = $('#tblAddEmptyDetails').DataTable();
+
+        if (table.rows().count() == 0) {
+
+            return false;
+        }
+        return true;
+
+    }
+
+
+    function Save() {
+        debugger
+
+        var itemcount = checkItemcount();
+        if (itemcount == false) {
+
+            alert("No details selected for saving. Cannot proceed");
+            return false;
+        }
+        else {
+            if ($("#txttc").val() == "") {
+
+                for (var i = 0; i < MainTable.length; i++) {
+                    MainTable[i].LotNo = MainTable[i].LotNo + MainTable[i].Cols;
+                    console.log(MainTable[i].Cols);
+                }
+
+                var CenterCode = $("#txtCenterCode").val();
+                var warehouse = $("#txtwarehouse").val();
+                var WD =  $("#txtWD").val();
+                var tax = $("#ddltax").val();
+
+                if (tax == "") {
+                    document.getElementById('ddltax').style.borderColor = "red"
+                    alert("Kindly Select godown code.")
+                    return false;
+                }
+                if (CenterCode == "") {
+                    document.getElementById('txtCenterCode').style.borderColor = "red"
+                    alert("Kindly Select center code.")
+                    return false;
+                }
+
+                debugger
+                var data = { 'TableData': MainTable, 'GridSize': $("#GridSize").val(), 'CenterCode': CenterCode, 'warehouse': warehouse, 'WD': WD, 'tax': tax};
+
+                data = JSON.stringify(data);
+                console.log(MainTable);
+            $.ajax({
+
+                url: "/Master/SaveBinMasterA",
+                data: data,
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    alert("Record Saved Successfully");
+                    window.location.href = '@Url.Action("BinMaster", "Master")';
+                },
+                error: function (error) {
+                    let str = error.responseText;
+                    var a = str.indexOf("<title>") + 7;
+                    var b = str.indexOf("</title>");
+                    str = str.substring(a, b);
+                    alert("Something went wrong: " + str);
+                }
+            });
+            }
+            else {
+            var SelectedData = new Array();
+            var table = document.getElementById("tblAddEmptyDetails");
+            var row = [];
+            console.log(table);
+            for (var i = 1; i <= table.rows.length; i++) {
+                row = table.rows[i];
+
+                //if (($("#ID_" + i).prop('checked') == true)) {
+
+
+                    console.log(row.cells[0].innerText);
+                    EntryID = row.cells[0].innerText;
+                    alert(EntryID);
+                    LotNo = row.cells[1].innerText + EntryID;
+                    console.log(LotNo);
+
+                    alert(LotNo);
+                    Area = row.cells[2].innerText;
+                    Lenghth = row.cells[3].innerText;
+                    Height = row.cells[4].innerText;
+                    SelectedData.push({ 'LotNo': LotNo, 'Area': Area, 'Lenghth': Lenghth, 'Height': Height })
+                //}
+            }
+        }
+
+
+            var GodownCode = document.getElementById('ddltax').value;
+            var CenterCode = document.getElementById('txtCenterCode').value;
+            var WarehouseCode = document.getElementById('txtwarehouse').value;
+            var WarehouseD = document.getElementById('txtWD').value
+           // var chkIsActive = document.getElementById('chkIsActive').value;
+             var chkIsActive = $("#chkIsActive").is(":checked");
+
+            debugger;
+
+        var data = { 'TableData': SelectedData, 'GodownCode': GodownCode, 'CenterCode': CenterCode, 'WarehouseCode': WarehouseCode, 'WarehouseD': WarehouseD, 'chkIsActive': chkIsActive };
+
+
+
+            data = JSON.stringify(data);
+            $.ajax({
+
+                url: "/Master/SaveBinMaster",
+                data: data,
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                  //  alert("Record Saved Successfully");
+                    window.location.href = '@Url.Action("BinMaster", "Master")';
+
+
+                },
+                error: function (error) {
+                    let str = error.responseText;
+                    var a = str.indexOf("<title>") + 7;
+                    var b = str.indexOf("</title>");
+                    str = str.substring(a, b);
+                    alert("Something went wrong: " + str);
+                }
+            });
+        }
+
+    }
+        function ShowSSRSummary() {
+            var search = document.getElementById('txtsearch').value;
+            var data1 = { 'search': search };
+            data = JSON.stringify(data1);
+            $.ajax({
+                url: "/Master/GetBincList",
+                data: data,
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    debugger;
+
+
+
+                    $('#example2').dataTable({
+                        "destroy": true,
+                        "bLengthChange": false,
+                        "aaData": data,
+                        "bInfo": true,
+                        "bPaginate": true,
+                        "bFilter": false,
+                        "aaSorting": [],
+                        "order": [],
+
+
+                        "columns": [
+                            //{
+                            //    "data": "EntryId",
+                            //    "render": function (data, type, row, meta) {
+                            //        data = "<a href=\"#\" class=\"btn btn-sm btn-primary\" title=\"View\" onclick=\"ViewBinMaster('" + row.EntryID + "')\"><i class=\"fa fa-eye\" style=\"font-size: 16px;\"><i></a>";
+                            //        return data;
+                            //    }
+                            //},
+
+
+
+                            //{ "data": "EntryID" },
+                            //{ "data": "CentreCode" },
+                            { "data": "GodownCode" },
+                            { "data": "Warehousecode" },
+                            { "data": "Warehousedesc" },
+                            { "data": "LotNo" },
+                            { "data": "Area" },
+                            //{ "data": "Height" },
+                            //{ "data": "Lenghth" },
+                            { "data": "IsActive" },
+
+
+
+                        ]
+                    })
+                },
+
+
+                error: function (errormessage) {
+                    alert("error");
+                    alert(errormessage.responseText);
+                }
+            });
+
+
+        }
+
+    function ViewBinMaster(EntryID) {
+        debugger;
+            //alert('View');
+            $("#divCreate").show();
+            //$("#divCreate").hide();
+
+            $("#divCreateSummary").hide();
+
+            var data = JSON.stringify({
+                'EntryID': EntryID
+            });
+            debugger;
+            $.ajax({
+                url: "/Master/ViewBinMaster",
+                data: data,
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                //  dataType: "json",
+                success: function (response) {
+                    /*console.log(response);*/
+                    debugger;
+
+                    $("#txtentryid").val(response[0].EntryID);
+                    $("#ddltax").val(response[0].GodownCode);
+                    $("#txtCenterCode").val(response[0].CentreCode);
+                    $("#txtwarehouse").val(response[0].Warehousecode);
+                    $("#txtWD").val(response[0].Warehousedesc);
+                    $("#txtstorage").val(response[0].LotNo);
+                    $("#txttc").val(response[0].Area);
+                    $("#txtlen").val(response[0].Lenghth);
+                    $("#txtWD").val(response[0].Height);
+                    $("#txtwidth").val(response[0].Series_Code);
+                    $("#chkIsActive").val(response[0].IsActive);
+
+                    //var t = $('#tblAddEmptyDetails').DataTable();
+                    //CounterForCheckbox++;
+                    //t.row.add([
+                    //    "<input type=\"checkbox\" class=\"checklist\" name=\"checklist[]\"  checked  id='ID_" + CounterForCheckbox + "'></input>",
+                    //    LotNo,
+                    //    Area,
+                    //    Height,
+                    //    Lenghth,
+                    //]).draw(false);
+
+                    $('#tblAddEmptyDetails').dataTable({
+                        "destroy": true,
+                        "bLengthChange": false,
+                        "aaData": response,
+
+
+                        "columns": [
+                            {
+                                "data": "LotNo",
+                                "render": function (data, type, row, meta) {
+                                    if (type === 'display') {
+
+                                        data = "<input type=\"checkbox\" class=\"checklist\" name=\"checklist[]\"  checked id='ID_" + data + "'></input> ";
+
+                                        // data = '<a  onclick="EditJO(' + data + ')"  href="#" class="btn btn-sm btn-info" title="Edit" ><i class="fa fa-edit"></i></a>';
+                                    }
+
+                                    return data;
+                                }
+                            },
+                            { "data": "LotNo" },
+                            { "data": "Area" },
+                            { "data": "Height" },
+                            { "data": "Lenghth" },
+                           /* { "data": "wt" },*/
+
+
+                        ]
+                    });
+
+                    $('#divCreate :input').attr('disabled', true);
+
+                }
+            });
+
+    }
+
+    var AmountM = [];
+    $("#NoOfCols").on("change", function () {
+        $('#test-body').empty();
+        var NoOfCols = $("#NoOfCols").val();
+        for (var i = 1; i <= NoOfCols; i++) {
+            var newRow = '<tr id="row' + i + '"><td><input type="text" class="form-control" id="dataCols' + i + '"  value="' + i + '"/></td></tr>';
+            $('#test-body').append(newRow);
+        }
+    });
+
+    $("#NoOfRows").on("change", function () {
+        $('#test-bodyA').empty();
+        var NoOfRows = $("#NoOfRows").val();
+        for (var i = 1; i <= NoOfRows; i++) {
+            var newRow = '<tr id="rowA' + i + '"><td><input type="text" class="form-control" id="dataRows' + i + '" /></td></tr>';
+            $('#test-bodyA').append(newRow);
+        }
+    });
+
+    function AddDetails() {
+        debugger;
+        AmountM = [];
+        var TableRowcount = $('#tblAddEmptyDetails').DataTable();
+        //if (TableRowcount.data().count() > 0) {
+        //    $('#tblAddEmptyDetails').empty();
+        //}
+
+        var txttc = $('#txttc').val();
+
+        if (txttc == "") {
+            var cols = $("#NoOfCols").val();
+            var rows = $("#NoOfRows").val();
+
+            if (cols == "") {
+                alert("Please enter no of columns!");
+                return false;
+            }
+            if (rows == "") {
+                alert("Please enter no of rows!");
+                return false;
+            }
+
+            for (var i = 1; i <= rows; i++) {
+                for (var j = 1; j <= cols; j++) {
+                    CounterForCheckbox++;
+                    var elementM = {};
+                    elementM.srno = CounterForCheckbox;
+                    elementM.Cols = $("#dataCols" + j).val();
+                    elementM.LotNo = $("#dataRows" + i).val();
+                    elementM.Area = 0;
+                    elementM.Height = 0;
+                    elementM.Lenghth = 0;
+                    AmountM.push(elementM);
+                }
+            }
+            debugger
+
+            settable();
+            MainTable = AmountM;
+
+            console.log(MainTable);
+            //$('#tblAddEmptyDetails').dataTable({
+            //    "destroy": true,
+            //    "bLengthChange": false,
+            //    "aaData": MainTable,
+            //    "columns": [
+            //        { "data": "Cols" },
+            //        { "data": "LotNo" },
+            //        { "data": "Area" },
+            //        { "data": "Height" },
+            //        { "data": "Lenghth" },
+            //    ]
+            //});
+
+            //for (var i = 0; i <= AmountM.length; i++) {
+            //    console.log(AmountM[i].Cols)
+            //    var t = $('#tblAddEmptyDetails').DataTable();
+            //    t.row.add([
+            //       AmountM[i].Cols,
+
+            //        AmountM[i].Rows,
+            //        0,
+            //        0,
+            //        0,
+            //    ]).draw(false);
+            //}
+        }
+        else {
+            var isValid = true;
+
+            var LotNo = $("#txtstorage").val();
+            var Area = $("#txttc").val();
+            var Lenghth = $("#txtlen").val();
+            var Height = $("#txtwidth").val();
+            var cols = $("#NoOfCols").val();
+
+            if (LotNo == "") {
+                alert("Storage No can't be left blank.");
+                $("#txtstorage").addClass("form-control is-invalid state-invalid");
+                isValid = false;
+            } else {
+                $("#txtstorage").removeClass("is-invalid state-invalid");
+            }
+            if (Area == "") {
+                alert("Capacity can't be left blank.");
+                $("#txttc").addClass("form-control is-invalid state-invalid");
+                isValid = false;
+            } else {
+                $("#txttc").removeClass("is-invalid state-invalid");
+            }
+
+            if (Lenghth == "") {
+                alert("Length cannot be left blank");
+                $("#txtlen").addClass("form-control is-invalid state-invalid");
+                isValid = false;
+            } else {
+                $("#txtlen").removeClass("is-invalid state-invalid");
+
+            } if (Height == "") {
+                alert("Width cannot be left blank");
+                $("#txtwidth").addClass("form-control is-invalid state-invalid");
+                isValid = false;
+            } else {
+                $("#txtwidth").removeClass("is-invalid state-invalid");
+            }
+
+
+
+
+
+
+            //for (var i = 1; i <= t; i++) {
+            //    for (var j = 1; j <= t; j++) {
+            //        var elementM = {};
+            //        // elementM.Cols = $("#dataCols" + j).val();
+            //        elementM.LotNo = LotNo;
+            //        elementM.Area = Area;
+            //        elementM.Height = Lenghth;
+            //        elementM.Lenghth = Height;
+            //        AmountM.push(elementM);
+            //    }
+            //}
+            //debugger
+            //MainTable = AmountM;
+
+
+
+            if (isValid) {
+                CounterForCheckbox++;
+                var t = $('#tblAddEmptyDetails').DataTable();
+                t.row.add([
+                    "<input type=\"checkbox\" class=\"checklist\" name=\"checklist[]\"  checked  id='ID_" + CounterForCheckbox + "'></input>",
+                    LotNo,
+                    Area,
+                    Lenghth,
+                    Height,
+                    cols,
+                ]).draw(false);
+
+
+                CounterForCheckbox1++;
+                //var table = document.getElementById("tblAddEmptyDetails");
+                var cols = $("#NoOfCols").val();
+                //for (var i = 1; i < table.rows.length; i++) {
+                //    for (var j = 1; j <= cols; j++) {
+                //       //CounterForCheckbox;
+                //        row = table.rows[i];
+
+                //        var elementM = {};
+                //        elementM.cols = $("#dataCols" + j).val();
+                //        elementM.CounterForCheckbox = CounterForCheckbox;
+                //        elementM.LotNo = LotNo;
+                //        elementM.Area = Area;
+                //        elementM.Height = Lenghth;
+                //        elementM.Lenghth = Height;
+                //        AmountM.push(elementM);
+                //    }
+                //}
+                // Define an empty array to store the table data
+                var dataArray = [];
+
+                $('#tblAddEmptyDetails tbody tr').each(function () {
+                    // Get the data for each cell in the row
+                    var checkbox = $(this).find('.checklist').prop('checked');
+                    var lotNo = $(this).find('td:eq(1)').text();
+                    var area = $(this).find('td:eq(2)').text();
+                    var length = $(this).find('td:eq(3)').text();
+                    var height = $(this).find('td:eq(4)').text();
+
+                    // Get the 'cols' value directly from the DOM element
+                 //   var Cols = $(this).find('td:eq(5) input').attr('cols');
+                    var cols = $("#NoOfCols").val();
+                    var colsValue = cols;
+                    // Create an object representing the row data
+                    var rowData = {
+                        "Checkbox": checkbox,
+                        "LotNo": lotNo,
+                        "Area": area,
+                        "Length": length,
+                        "Height": height,
+                        "cols": colsValue,
+                    };
+
+                    // Push the row data into the dataArray
+                    dataArray.push(rowData);
+                });
+
+                // Now the dataArray contains all the data from the table
+             /*   console.log(dataArray);*/
+
+                // You can use the dataArray for further processing or manipulation as needed
+
+                MainTable = dataArray;
+                $("#txtstorage").val('');
+                $("#txttc").val('');
+                $("#txtlen").val('');
+                $("#txtwidth").val('');
+                //asking for next entry, if yes set values to blank
+                debugger;
+                //var AddMore = confirm("Do you wish to Add More Details?");
+                //if (AddMore) {
+
+                //    $("#txtstorage").val('');
+                //    $("#txttc").val('');
+                //    $("#txtlen").val('');
+                //    $("#txtwidth").val('');
+
+                //} else {
+                //    debugger;
+                //    $('#txtstorage').attr('disabled', true);
+                //    $("#txtstorage").val('');
+                //    $('#txttc').attr('disabled', true);
+                //    $("#txttc").val('');
+                //    $('#txtlen').attr('disabled', true);
+                //    $("#txtlen").val('');
+                //    $('#txtwidth').attr('disabled', true);
+                //    $("#txtwidth").val('');
+
+                //}
+            }
+        }
+    }
+
+
+    function settable() {
+
+        $('#tblAddEmptyDetails').dataTable({
+            "destroy": true,
+            "bLengthChange": false,
+            "aaData": AmountM,
+            "columns": [
+                //{ "data": "srno" },
+                { "data": "Cols" },
+                { "data": "LotNo" },
+                { "data": "Area" },
+                { "data": "Height" },
+                { "data": "Lenghth" },
+            ]
+        });
+    }
+</script>
+
+
+

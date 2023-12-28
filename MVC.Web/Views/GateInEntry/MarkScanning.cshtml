@@ -1,0 +1,528 @@
+﻿
+@{ ViewBag.Title = "Mark Scanning";
+                Layout = "~/Views/Shared/_MainLayout.cshtml"; }
+
+
+<style>
+
+        /*.table thead th, .text-wrap table thead th {
+            background-color: #009ce7;
+            color: white;
+
+
+
+        }
+        .pagination {
+            display: none;
+        }*/
+        /* bPaginate : false
+       }*/
+        /* .dataTables_length {
+            display: none
+        }
+    */
+        /* .dataTables_info {
+            display: none
+        }*/
+
+        /*.dataTables_paginate paging_simple_numbers {
+            display: none
+        }*/
+
+
+
+</style>
+
+<script src="~/js/GetTableJsonPagging.js"></script>
+<div class="content-area overflow-hidden" id="divImportIn">
+    <div>
+
+        <div class="page-header">
+
+            <div class="crumbs">
+                <ul id="breadcrumbs" class="breadcrumb">
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="index.html">Gate In Entry</a>
+                    </li>
+                    <li class="current">
+                        <a href="pages_calendar.html" title="">Mark Scanning</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="page-header row">
+                <div class="page-title col-6">
+                    <h3>Scanning Upload</h3>
+                </div>
+                <div class="col-6">
+                    <br />
+                    <button type="button" class="btn btn-primary pull-right" id="summarylist" onclick="Getsummaryreport();"> Mark Scanning</button>
+
+                </div>
+            </div>
+
+        </div>
+        <div class="widget box">
+            <div class="widget-header">
+                <h4><i class="icon-reorder"></i> Mark Scanning</h4>
+            </div>
+            <div class="widget-content">
+                <div class="form-horizontal">
+                    <div class="row">
+
+                        <div class="col-lg-4 col-sm-12 col-xs-12">
+
+                            <label class="form-label mandatory">Request No</label>
+                            @Html.TextBox("txtViaNo", null, new { @class = "form-control", @id = "txtViaNo", name = "txtViaNo", autocomplete = "off" })
+
+                        </div>
+
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-4 col-sm-12">
+
+                            <label class="form-label mandatory">Scanning Files To be Updated</label>
+
+                            <input type="file" id="fileImport" name="postedFile" />
+
+                        </div>
+
+                        <div class="col-lg-4 col-sm-12" style="padding-top:20px;">
+
+                            <label class="form-label mandatory" style="visibility:hidden">d</label>
+
+                            <button class="btn btn-primary" id="btnImport" type="button">Import</button>
+
+                        </div>
+                    </div>
+
+                    <br />
+                    <div class="row">
+                        <div class="col-lg-12 col-sm-12">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover tbl-cart text-nowrap" id="example2" style="width:100%;">
+                                    <thead>
+                                        <tr>
+
+                                            @*<th class="wd-10p sorting">Container No</th>
+                                                <th class="wd-10p sorting">Scan Type</th>
+                                                <th class="wd-10p sorting">Scan Status</th>
+                                                <th class="wd-10p sorting">Size</th>
+                                                <th class="wd-10p sorting">JoNo</th>*@
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2 col-xs-4">
+                            <div class="form-group">
+                                <div class="row gutters-xs">
+                                    <div class="col">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="text-end mt-4">
+                    <button class="btn btn-primary" id="btndriverholdpayment" onclick="SaveSlabDetails();">Save</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="content-area overflow-hidden" id="divviewsummary" style="display:none">
+    <div>
+
+
+        <div class="crumbs">
+            <ul id="breadcrumbs" class="breadcrumb">
+                <li>
+                    <i class="icon-home"></i>
+                    <a href="index.html">Gate In Entry</a>
+                </li>
+                <li class="current">
+                    <a href="pages_calendar.html" title="">Mark Scanning</a>
+                </li>
+            </ul>
+        </div>
+        <div class="page-header row">
+            <div class="page-title col-6">
+                <h3>Scanning Upload</h3>
+            </div>
+            <div class="col-6">
+                <br />
+                <button type="button" class="btn btn-primary pull-right" id="summarylist" onclick="getBack();"> Mark Scanning</button>
+
+            </div>
+        </div>
+
+
+        <div class="widget box">
+            <div class="widget-header">
+                <h4><i class="icon-reorder"></i> Mark Scanning</h4>
+            </div>
+            <div class="widget-content">
+                <div class="row">
+                    <div class="col-lg-3 col-sm-12">
+                        <div class="form-group">
+                            <label class="form-label">From Date</label>
+
+                            @Html.TextBox("FromDate", null, new { @class = "form-control form_datetime1", @Value = DateTime.Now.AddDays(-1).ToString("dd MMM yyyy 00:00") })
+
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-12">
+
+                        <label class="form-label"> To Date</label>
+
+                        @Html.TextBox("ToDate", null, new { @class = "form-control form_datetime1", @Value = DateTime.Now.ToString("dd MMM yyyy 23:59") })
+
+                    </div>
+                    <div class="col-md-1 col-lg-1">
+
+                        <label class="form-label" style="visibility:hidden">On</label>
+                        <button class=" btn btn-primary" title="Show" id="btnSearch" onclick="ShowDetails()" type="button">
+                            Search
+                        </button>
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12 col-sm-12">
+                        <button class="btn btn-outline-success" id="btnExcel" title="Export To Excel" type="button"><i class="fa fa-file-excel-o" onclick="GetExcelFile()"></i></button>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover tbl-cart text-nowrap" id="tblReceiptSummaryDet"></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<script>
+    //function Getsummaryreport() {
+    //    $("#divviewsummary").show();
+    //    $("#divImportIn").hide();
+
+    //}
+
+    function getBack() {
+        $("#divviewsummary").hide();
+        $("#divImportIn").show();
+    }
+
+    //$(document).ready(function () {
+    //    debugger;
+
+        $('#btnImport').click(function () {
+            var txtViaNo = $("#txtViaNo").val();
+            if (txtViaNo == '') {
+                alert("Please Enter Via No");
+                return false;
+            }
+            $("#loader").fadeIn("slow");
+            //$("#loader").fadeIn("slow");
+
+            if (window.FormData !== undefined) {
+
+                var fileUpload = $("#fileImport").get(0);
+                var files = fileUpload.files;
+
+                // Create FormData object
+
+                var fileData = new FormData();
+                if (files.length == 0) {
+                    alert("Please select File!")
+                    $("#loader").fadeOut("slow");
+                    return false;
+                }
+
+
+                else {
+                    // Looping over all files and add it to FormData object
+                    for (var i = 0; i < files.length; i++) {
+
+                        fileData.append(files[i].name, files[i]);
+                    }
+
+                    if (txtViaNo == '') {
+                        alert("Please Enter Via No");
+                        return false;
+                    }
+                    txtViaNo = $("#txtViaNo").val();
+                    fileData.append('GATE_PASS_NO', txtViaNo);
+
+
+                    if (txtViaNo == "") {
+                        alert("Please enter Via No!");
+
+                        document.getElementById("txtViaNo").style.borderColor = "red";
+                        $("#loader").fadeOut("slow");
+                        return false;
+                    }
+
+
+
+                    // Adding one more key to FormData object
+                    //  fileData.append('TDSValue', tdstype);
+
+
+                    $.ajax({
+                        url: '/GateInEntry/ImportScanningFile',
+                        type: "POST",
+                        contentType: false, // Not to set any content header
+                        processData: false, // Not to process data
+                        data: fileData,
+                        success: function (data) {
+
+                            alert(data);
+                            alert('File uploaded successfully.');
+                            $("#loader").fadeOut("slow");
+                            RepTableDataJsonwopaging($("#example2"), data, "marksccanning", "scanninglist");
+
+                            //$('#example2').DataTable({
+                            //    "destroy": true,
+                            //    "bLengthChange": false,
+                            //    "aaData": data,
+                            //    "bPaginate": false,
+                            //    "bInfo": true,
+                            //    "paging": false,
+                            //    "columns": [
+
+                            //        { "data": "ContainerNo" },
+                            //        { "data": "ScanType" },
+                            //        { "data": "ScanStatus" },
+                            //        { "data": "Size" },
+                            //        { "data": "JoNo" },
+
+
+
+                            //    ]
+                            //});
+                        },
+                        error: function (error) {
+                            let str = error.responseText;
+                            var a = str.indexOf("<title>") + 7;
+                            var b = str.indexOf("</title>");
+                            str = str.substring(a, b);
+                            alert("Something went wrong: " + str);
+                            $("#loader").fadeIn("slow");
+                        }
+
+                    });
+                }
+
+            }
+            else {
+                alert("FormData is not supported.");
+                $("#loader").fadeOut("slow");
+            }
+            $("#fileImport").val('');
+
+        });
+
+    //});
+
+    function SaveSlabDetails() {
+        debugger;
+        $("#loader").fadeIn("slow");
+        $('#btnSave').prop('disabled', true);
+
+        txtViaNo = $("#txtViaNo").val();
+
+        var SelectedData = new Array();
+        var tablearray = new Array();
+
+        var table = document.getElementById("example2");
+
+        var row;
+        for (var i = 1; i < table.rows.length; i++) {
+
+            row = table.rows[i];
+            ContainerNo = row.cells[1].innerText;
+            ScanType = row.cells[2].innerText;
+            ScanStatus = "Y";
+            Size = row.cells[4].innerText;
+            JoNo = row.cells[5].innerText;
+
+            if (i != 1) {
+                SelectedData.push({
+                    'ContainerNo': ContainerNo, 'ScanType': ScanType, 'ScanStatus': ScanStatus,
+                    'Size': Size, 'JoNo': JoNo
+                })
+            }
+
+
+        }
+
+        var data1 = { 'Invoicedata': SelectedData, 'txtViaNo': txtViaNo };
+        var data = JSON.stringify(data1);
+
+        $.ajax({
+            url: "/Gate/TariffValidation",
+            data: data,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (Data) {
+
+                alert('Record saved successfully!');
+
+                $("#loader").fadeOut("slow");
+                 document.location = '@Url.Action("impscanmark", "Gate")';
+
+
+            },
+            error: function (error) {
+                let str = error.responseText;
+                var a = str.indexOf("<title>") + 7;
+                var b = str.indexOf("</title>");
+                str = str.substring(a, b);
+                alert("Something went wrong: " + str);
+                $("#loader").fadeOut("slow");
+            }
+        });
+
+
+    }
+
+</script>
+<script>
+    $("#txtViaNo").change(function () {
+        $("#loader").fadeIn("slow");
+        ViaNo = $("#txtViaNo").val();
+        $.ajax({
+            type: 'POST',
+            url: '/Gate/USP_View_Scan_detail',
+            data: '{viaNo: ' + JSON.stringify(ViaNo) + '}',
+            //data: JSON.stringify(formData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+
+
+                if (data != "") {
+                    if (data == "For specified via no already upload..Cannot proceed!") {
+                        if (confirm('For Specified via no scanning file already uploaded. Do u want to re-upload?')) {
+
+                            $("#loader").fadeOut("slow");
+                        } else {
+
+                            $("#txtViaNo").val('');
+                        }
+                    } else {
+
+                        alert(data);
+                        $("#txtViaNo").removeClass("form-control is-valid state-valid")
+                        $("#txtViaNo").addClass("form-control is-invalid state-invalid")
+                    }
+                    $("#loader").fadeOut("slow");
+                } else {
+                    //$("#txtViaNo").val('');
+                    $("#txtViaNo").removeClass("form-control is-invalid state-invalid")
+                    $("#txtViaNo").addClass("form-control is-valid state-valid")
+                    $("#loader").fadeOut("slow");
+                }
+
+
+
+
+            },
+            error: function (error) {
+                let str = error.responseText;
+                var a = str.indexOf("<title>") + 7;
+                var b = str.indexOf("</title>");
+                str = str.substring(a, b);
+                alert("Something went wrong: " + str);
+                $("#loader").fadeOut("slow");
+            }
+        });
+
+
+         });
+</script>
+
+
+
+
+<script>
+    $(document).ready(function () {
+        $("#loader").fadeOut("slow");
+        $("#btnExcel").hide();
+    });
+    function GetExcelFile() {
+
+        window.location = '@Url.Action("ExportToExceldetails", "Gate")?';
+
+
+    }
+    function Getsummaryreport() {
+        $("#divviewsummary").show();
+        $("#divImportIn").hide();
+
+
+    };
+
+
+    function ShowDetails() {
+
+        $("#btnExcel").show();
+        $("#loader").fadeIn("slow");
+        var FromDate = $("#FromDate").val();
+        var ToDate = $("#ToDate").val();
+
+
+
+
+        var data1 = { 'Fromdate': FromDate, 'Todate': ToDate };
+        var data = JSON.stringify(data1);
+
+
+        $.ajax({
+            url: '/Gate/GetDetailsreport',
+            type: 'Post',
+            data: data,
+
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                debugger;
+                if (data == "0" || data == "[]") {
+
+                    alert('No data found.');
+                    $("#loader").fadeOut("slow");
+                    return;
+                }
+                $("#tblReceiptSummaryDet").empty();
+                RepTableDataJsonwopaging($("#tblReceiptSummaryDet"), data, "Voucher Details", "VoucherDetails_List");
+                $("#loader").fadeOut("slow");
+                //RepTableDataJson($(ControlCtrl.TableReceiptSummaryDet), data, "Receipt Summary", "ReceiptSummaryDet");
+            },
+            error: function (error) {
+                let str = error.responseText;
+                var a = str.indexOf("<title>") + 7;
+                var b = str.indexOf("</title>");
+                str = str.substring(a, b);
+                alert("Something went wrong: " + str);
+                $("#loader").fadeOut("slow");
+            }
+        });
+    }
+</script>

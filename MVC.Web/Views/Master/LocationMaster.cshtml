@@ -1,0 +1,368 @@
+﻿@*@model TransportEntities.BusinessEntities.Horse*@
+@{
+    ViewBag.Title = "LocationMaster";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<script src="~/js/GetTableJson.js"></script>
+<div class="page-header">
+    <div class="page-header-title">
+    </div>
+    <div class="crumbs">
+        <ul id="breadcrumbs" class="breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="#">Manage Master</a>
+            </li>
+            <li class="current">
+                <a href="#" title="">Location Master</a>
+            </li>
+        </ul>
+    </div>
+
+</div>
+
+
+<div id="Divaddlocation">
+
+    <div class="page-header">
+        <div class="page-title">
+            <h3>Location Master</h3>
+        </div>
+        <ul class="page-stats">
+
+            <li>
+                <div class="summary">
+                    <button type="button" class="btn btn-primary waves-effect waves-light f-right d-inline-block md-trigger" onclick="Viewsummary();" id="addlocallistbtn" data-modal="modal-13">
+                        Location List
+                    </button>
+                </div>
+
+            </li>
+        </ul>
+    </div>
+    <div class="widget box">
+        <div class="widget-header">
+            <h4><i class="icon-reorder"></i> Location Master</h4>
+        </div>
+        <div class="widget-content">
+
+            <div class="row">
+                <div class="col-lg-6 col-sm-12">
+                  
+                        <label class="form-label mandatory">Location ID </label>
+                       
+                                <input ID="txtlocationID" type="text" placeholder="New" readonly="readonly" class="form-control" />
+                          
+                </div>
+            </div>
+            <div class="row">
+
+
+                <div class="col-lg-6 col-sm-12">
+                   
+                        <label class="form-label mandatory">Location</label>
+                     
+                                <input ID="txtLocation" type="text" placeholder="Location" class="form-control" />
+                            </div>
+                       
+            </div>
+            <div class="row" style="display:none;">
+
+
+                <div class="col-lg-12 col-sm-12">
+                    <div class="form-group">
+                        <label class="form-label">Kilometer (KM's)</label>
+                        <div class="row gutters-xs">
+                            <div class="col">
+                                <input ID="txtKiloMeter" type="text" placeholder="Location" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6 col-xs-12">
+                    <div class="form-group">
+                        <label class="form-label mandatory" style="visibility:hidden">.</label>
+                        <label class="custom-switch">
+                            <input type="checkbox" name="custom-switch-checkbox" id="chkIsActiveEdit" checked class="custom-switch-input">
+                            <span class="custom-switch-indicator"></span>
+                            <span class="custom-switch-description">Is Active?</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-sm-12">
+
+                    @*<input type="submit" id="Save" name="save" value="Save" class="btn btn-success" />*@
+                    <button id="btnSave" class="btn btn-info" onclick="return Save();">Save</button>
+                    <input type="button" name="clear" value="Clear" class="btn btn-danger" title="clear" id="clearValue" />
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+
+
+<div class=" content-area" id="DivShowLocation" style="display:none">
+
+    <div class="page-header">
+        <div class="page-title">
+            <h3>Location Master</h3>
+        </div>
+        <ul class="page-stats">
+
+            <li>
+                <div class="summary">
+                    <button type="button" class="btn btn-primary waves-effect waves-light f-right d-inline-block md-trigger" onclick="getBack();" id="addlocallistbtn" data-modal="modal-13">
+                        <i class="fa-solid fa-plus "></i> Add Location
+                    </button>
+                </div>
+
+            </li>
+        </ul>
+    </div>
+    <div class="widget box">
+        <div class="widget-header">
+            <h4><i class="icon-reorder"></i> Location Master</h4>
+        </div>
+        <div class="widget-content">
+
+
+            <button class="btn btn-success float-right" id="btnSearch" title="Export To Excel" type="button" onclick="GetExcelFile()">Export</button> <br />
+            <br />
+
+            <div class="table-responsive">
+                <table id="example2" class="table table-bordered table-hover tbl-cart text-nowrap" style="width:100%">
+                    <thead>
+
+                        <tr>
+                        </tr>
+                    </thead>
+
+                </table>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+
+
+<script>
+
+    function Save() {
+
+
+        var ID = $("#txtlocationID").val();
+            var Location = $('#txtLocation').val();
+
+        var element = {}
+        var isvalid = true;
+        element.Location = $('#txtLocation').val();
+        if (element.Location == "") {
+            $("#txtLocation").removeClass("is-valid state-valid");
+            $("#txtLocation").addClass("is-invalid state-invalid");
+            isvalid = isvalid && false;
+        } else {
+            $("#txtLocation").removeClass("is-invalid state-invalid");
+            $("#txtLocation").addClass("is-valid state-valid");
+        }
+
+        element.IsActive = $('#chkIsActive').is(':checked');
+
+        if (isvalid == false) {
+            alert("Please enter required fields!");
+            return false;
+        }
+
+            var LocationMaster = {};
+            //LocationMaster.EntryDate = txtentryDate;
+            LocationMaster.Location = Location;
+
+            LocationMaster.ID = ID;
+
+    
+
+                $.ajax({
+                    url: "/Master/AddLocationDetails",
+                    data: '{LocationDetails: ' + JSON.stringify(LocationMaster) + '}',
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                    success: function (data) {
+                        if (data == "Location already present! please check") {
+                            alert(data);
+                        }
+                        else {
+                            swal("Good Job!", "Location Added Successfully!!", "success").then(function () {
+                                window.location.href = '@Url.Action("LocationMaster", "Master")';
+                            });
+
+
+                        }
+                    },
+                error: function (errormessage) {
+                alert(errormessage.responseText);
+                }
+                });
+        }
+
+
+</script>
+
+
+
+
+
+<script type="text/javascript">
+
+     function GetExcelFile() {
+           window.location = '@Url.Action("ExportToExcel", "Master")?';
+     }
+
+    function getBack() {
+        $("#Divaddlocation").show();
+        $("#DivShowLocation").hide();
+    }
+    function ShowVoucherDetails() {
+
+
+        $.ajax({
+            type: 'POST',
+            url: '/LoadingPlan/AjaxGetLocationDetails',
+            //  data: data,
+            // data: "",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            success: function (jsonResult) {
+                $("#example2").empty();
+                RepTableDataJson($("#example2"), jsonResult, "Voucher Details", "VoucherDetails_List");
+
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+
+            }
+        });
+    }
+</script>
+
+<script>
+    function AddLocation() {
+        $("#txtDistance").val("")
+        $("#TxtLocationGroup").val("")
+        $("#divaddLocation").show();
+        $("#DivaddDistance").hide();
+    }
+    function AddDistance() {
+        $("#txtDistance").val("")
+        $("#TxtLocationGroup").val("")
+        $("#divaddLocation").hide();
+        $("#DivaddDistance").show();
+    }
+
+
+   
+
+
+</script>
+
+
+<script type="text/javascript">
+
+    function Viewsummary() {
+        $("#Divaddlocation").hide();
+        $("#DivShowLocation").show();
+
+
+        $.ajax({
+            type: 'POST',
+            url: '/Master/AjaxGetLocationDetails',
+            //  data: data,
+            // data: "",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            success: function (jsonResult) {
+                $("#example2").empty();
+                RepTableDataJson($("#example2"), jsonResult, "Voucher Details", "VoucherDetails_List");
+                $("#global-loader").fadeOut("slow");
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+                $("#global-loader").fadeOut("slow");
+            }
+        });
+    }
+
+
+    function EditLocationDetails1(LocationID) {
+        $("#Divaddlocation").show();
+        $("#DivShowLocation").hide();
+
+        var data1 = { 'LocationID': LocationID };
+        var data = JSON.stringify(data1);
+
+        $.ajax({
+            type: 'POST',
+            url: '/LocationMaster/GetLocationDetails',
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+
+                $('#txtLocation').val(data[0].Location);
+                $('#ddlDistancegroup').val(data[0].DistanceGroupID);
+                $('#ddlLocationList').val(data[0].LocationGroupID);
+                $('#txtOnWayKM').val(data[0].OnWayKM);
+                $('#txtTwoWayKM').val(data[0].TwoWayKM);
+                $('#txtlocationID').val(data[0].ID);
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+                $("#global-loader").fadeOut("slow");
+            }
+        });
+    }
+
+
+
+    function EditLocationDetails(LocationID) {
+        $.ajax({
+            url: "/Master/CheckuserrightsForLocationEdit",
+            //   data: data,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            // dataType: "json",
+            success: function (response) {
+                if (response == 0) {
+                    alert("you are not authorized to perform this operation!");
+                }
+                else {
+
+
+                    EditLocationDetails1(LocationID);
+
+
+                }
+
+            },
+            error: function (errormessage) {
+                alert("error");
+                alert(errormessage.responseText);
+            }
+        });
+    }
+
+</script>

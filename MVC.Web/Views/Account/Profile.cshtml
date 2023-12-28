@@ -1,0 +1,127 @@
+﻿@model MvcBondEntities.BusinessEntities.CreateUser
+@{
+    ViewBag.Title = "Create User";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+
+<script src="~/js/GetTableJsonwopaging.js"></script>
+
+
+
+<div class=" content-area overflow-hidden" id="divCreate">
+    <div class="page-header">
+        <h4 class="page-title">Change Password</h4>
+
+    </div>     
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-horizontal">
+          
+                        <form>
+                            <div class="row mb-3">
+                                <label for="currentPassword" class="">User Name</label>
+                                <div class="col-md-6 col-lg-6"> <input name="password" type="text" class="form-control" id="firstname" readonly value="@Model.USerName"></div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="newPassword" class="">User Type</label>
+                                <div class="col-md-6 col-lg-6"> <input name="newpassword" type="text" class="form-control" minlength="8" id="lastname" readonly value="@Model.userType"></div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="newPassword" class="">Gender</label>
+                                <div class="col-md-6 col-lg-6"> <input name="newpassword" type="text" class="form-control" minlength="8" id="lastname" readonly value="@Model.gender"></div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="newPassword" class="">Date Of Birth</label>
+                                <div class="col-md-6 col-lg-6">    <input ID="txtDOB" type="text" class="form-control datePickerD" value="@Model.DOB"></div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="newPassword" class="">Mobile Number</label>
+                                <div class="col-md-6 col-lg-6"> <input name="newpassword" type="text" class="form-control" minlength="8" id="txtcontact" value="@Model.Contact"></div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="renewPassword" class="">Email ID</label>
+                                <div class="col-md-6 col-lg-6"> <input name="renewpassword" type="text" class="form-control" minlength="8" id="txtemailid" value="@Model.emailid"></div>
+                            </div>
+                            <div class=""> <button type="button" onclick="ChangeProfile();" class="btn btn-primary">Change Profile</button></div>
+                        </form>
+                    
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+
+    function ChangeProfile() {
+
+        if (ProfileValidation()) {
+            var DOB = document.getElementById('txtDOB').value;
+            var emailid = document.getElementById('txtemailid').value;
+            var Contact = document.getElementById('txtcontact').value;
+
+            /* alert(expno);*/
+
+            var CreateUser = {};
+
+            CreateUser.DOB = DOB;
+            CreateUser.emailid = emailid;
+            CreateUser.Contact = Contact;
+
+            //element.Year = workyear;
+
+            //var data = { element }
+            data = JSON.stringify(CreateUser);
+
+            /* $('#myModal').modal('show');*/
+
+            $.ajax({
+                type: "POST",
+                url: "/CreateUser/ChangeProfile",
+                data: data,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+
+                       if(JSON.stringify(result) > 0)
+                        
+                        {
+                            alert('Record saved successfully');
+                            window.location.href = '@Url.Action("Profile", "CreateUser")';
+                        }
+                },
+                failure: function (response) {
+                    alert("error occured");
+                }
+            });
+
+        }
+
+    }
+
+    function ProfileValidation() {
+        var result = true;
+        var DOB = document.getElementById('txtDOB').value;
+        var emailid = document.getElementById('txtemailid').value;
+        var Contact = document.getElementById('txtcontact').value;
+
+        if (DOB =="") {
+            alert("Date Of Birth Can not blank");
+            return false;
+        }
+        if (emailid == "") {
+            alert("emailid Can not blank");
+            return false;
+        }
+        if (Contact == "") {
+            alert("Contact Can not blank");
+            return false;
+        }
+        return true;
+    }
+</script>

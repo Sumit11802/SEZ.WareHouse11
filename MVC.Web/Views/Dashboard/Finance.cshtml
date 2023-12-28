@@ -1,0 +1,227 @@
+﻿
+@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="crumbs">
+    <ul id="breadcrumbs" class="breadcrumb">
+        <li> <i class="icon-home"></i> <a href="/Dashboard/Dashboard">Finance Dashboard</a> </li>
+        @*<li class="current"> <a href="pages_calendar.html" title="">Calendar</a> </li>*@
+    </ul>
+    <ul class="crumb-buttons">
+        <li><a href="#" title=""><i class="icon-signal"></i><span>Statistics</span></a></li>
+        @*<li class="dropdown">
+                <a href="#" title="" data-toggle="dropdown"><i class="icon-tasks"></i><span>Users <strong>(+3)</strong></span><i class="icon-angle-down left-padding"></i></a>
+                <ul class="dropdown-menu pull-right">
+                    <li><a href="form_components.html" title=""><i class="icon-plus"></i>Add new User</a></li>
+                    <li><a href="tables_dynamic.html" title=""><i class="icon-reorder"></i>Overview</a></li>
+                </ul>
+            </li>*@
+        <li class="range"><a href="#"> <i class="icon-calendar"></i> <span></span> <i class="icon-angle-down"></i> </a></li>
+    </ul>
+</div>
+
+<div class="page-header">
+    <div class="page-title">
+        <h3>Finance</h3>
+
+        @if (Session["username"] != null)
+        {
+            <span> Hello @Session["username"].ToString()</span> }
+        else
+        {
+            <span> Hello @Session["username"].ToString()</span>}
+    </div>
+    <ul class="page-stats">
+
+        <li>
+            <div class="summary">
+                <span>Payments</span>
+                <h3>0</h3>
+            </div>
+            <div id="sparkline-bar2" class="graph sparkline hidden-xs">20,15,8,10,20,30,50,30,20,25,20</div>
+        </li>
+        <li>
+            <div class="summary">
+                <span>OutStandings</span>
+                <h3>0</h3>
+            </div>
+            <div id="sparkline-bar" class="graph sparkline hidden-xs">20,15,8,50,20,40,20,30,20,15,30,20,25,20</div>
+        </li>
+    </ul>
+</div>
+<div class="row row-bg">
+
+    <div class="col-sm-6 col-md-3">
+        <div class="statbox widget box box-shadow">
+            <div class="widget-content">
+                <div class="visual cyan">
+                    <div class="statbox-sparkline">30,20,15,30,22,25,26,30,27</div>
+                </div>
+                <div class="title">SALES</div>
+                <div class="value">0</div> <a class="more" href="javascript:void(0);">View More <i class="pull-right icon-angle-right"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-3">
+        <div class="statbox widget box box-shadow">
+            <div class="widget-content">
+                <div class="visual green">
+                    <div class="statbox-sparkline">20,30,30,29,22,15,20,30,32</div>
+                </div>
+                <div class="title">RECEIPT</div>
+                <div class="value">0</div> <a class="more" href="javascript:void(0);">View More <i class="pull-right icon-angle-right"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-3">
+        <div class="statbox widget box box-shadow">
+            <div class="widget-content">
+                <div class="visual yellow">
+                    <div class="statbox-sparkline">30,20,15,30,22,25,26,30,27</div>
+                </div>
+                <div class="title">CREDIT NOTE</div>
+                <div class="value">0</div> <a class="more" href="javascript:void(0);">View More <i class="pull-right icon-angle-right"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-3">
+        <div class="statbox widget box box-shadow">
+            <div class="widget-content">
+                <div class="visual red">
+                    <div class="statbox-sparkline">20,30,30,29,22,15,20,30,32</div>
+                </div>
+                <div class="title">OUTSTANDING</div>
+                <div class="value">0</div> <a class="more" href="javascript:void(0);">View More <i class="pull-right icon-angle-right"></i></a>
+            </div>
+        </div>
+    </div>
+    @*<div class="col-sm-6 col-md-3 hidden-xs">
+            <div class="statbox widget box box-shadow">
+                <div class="widget-content">
+                    <div class="visual yellow"> <i class="icon-dollar"></i> </div>
+                    <div class="title">OutBound</div>
+                    <div class="value">$42,512.61</div> <a class="more" href="javascript:void(0);">View More <i class="pull-right icon-angle-right"></i></a>
+                </div>
+            </div>
+        </div>*@
+
+</div>
+
+
+@*<style>
+        /* .card-deck:hover > .card:not(:hover) {
+            opacity: 0.5;
+        }
+    */
+
+        .l-bg-cherry {
+            background: linear-gradient(to right, #f1c40f, #f7e288) !important;
+            color: #fff;
+        }
+
+        .l-bg-blue-dark {
+            background: linear-gradient(to right, #7287b5, #abc2f5) !important;
+            color: #fff;
+        }
+
+        .l-bg-green-dark {
+            background: linear-gradient(to right, #24968d, #38ef7d) !important;
+            color: #fff;
+        }
+
+        .l-bg-red-dark {
+            background: linear-gradient(to right, #ff0000, #ffa07a) !important;
+            color: #fff;
+        }
+
+        .card {
+            border-top: hidden;
+            aspect-ratio: 12/5;
+            margin-bottom: 15px;
+            border-radius: 1rem;
+            transition: opacity .5s;
+        }
+
+        .card-deck {
+            display: grid;
+            gap: 0.5rem;
+            grid-template-columns: repeat( 4, 1fr);
+            padding: 1rem;
+        }
+
+        .card .count-numbers {
+            position: absolute;
+            right: 35px;
+            top: 20px;
+            font-size: 32px;
+            display: block;
+        }
+
+        .card .count-name {
+            position: absolute;
+            right: 35px;
+            top: 65px;
+            font-style: italic;
+            text-transform: capitalize;
+            font-weight: 700;
+            display: block;
+            font-size: 18px;
+        }
+
+        .card .fas {
+            position: absolute;
+            top: 43px;
+            display: block;
+            font-size: 35px;
+            left: 20px;
+        }
+</style>
+
+
+<div class="page-header">
+    <div class="page-header-title">
+        <h4> Finance</h4>
+    </div>
+    <div class="page-header-breadcrumb">
+        <ul class="breadcrumb-title">
+            <li class="breadcrumb-item">
+                <a href="#home">
+                    <i class="icofont icofont-home"></i>
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="#!">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="#!">Finance Dashboard</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="card-deck">
+
+    <div class="card l-bg-cherry">
+        <i class='fas fa-chart-line'></i>
+        <span class="count-numbers">0</span>
+        <span class="count-name">SALES</span>
+    </div>
+    <div class="card l-bg-blue-dark">
+        <i class='fas fa-receipt'></i>
+        <span class="count-numbers">0</span>
+        <span class="count-name">RECEIPT</span>
+    </div>
+    <div class="card l-bg-green-dark">
+        <i class='fas fa-credit-card'></i>
+        <span class="count-numbers">0</span>
+        <span class="count-name">CREDIT NOTE</span>
+    </div>
+    <div class="card l-bg-red-dark">
+        <i class='fas fa-exclamation-circle'></i>
+        <span class="count-numbers">0</span>
+        <span class="count-name">OUTSTANDING</span>
+    </div>
+
+</div>*@

@@ -1,0 +1,174 @@
+﻿@{
+    Layout = null;
+}
+
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>Login | SEZ WareHouse</title>
+    <link href="~/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="~/assets/css/main.css" rel="stylesheet" type="text/css">
+    <link href="~/assets/css/plugins.css" rel="stylesheet" type="text/css">
+    <link href="~/assets/css/responsive.css" rel="stylesheet" type="text/css">
+    <link href="~/assets/css/icons.css" rel="stylesheet" type="text/css">
+    <link href="~/assets/css/login.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="~/assets/css/fontawesome/font-awesome.min.css"> <!--[if IE 7]><link rel="stylesheet" href="~/assets/css/fontawesome/font-awesome-ie7.min.css"><![endif]--> <!--[if IE 8]><link href="~/assets/css/ie8.css" rel="stylesheet" type="text/css"/><![endif]-->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet" type="text/css">
+    <script type="text/javascript" defer="" async="" src="https://analytics.stammtec.de/piwik.js"></script>
+    <script type="text/javascript" src="~/assets/js/libs/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="~/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="~/assets/js/libs/lodash.compat.min.js"></script> <!--[if lt IE 9]><script src="~/assets/js/libs/html5shiv.js"></script><![endif]-->
+    @*<script type="text/javascript" src="~/assets/css/plugins/uniform/jquery.uniform.min.js"></script>
+        <script type="text/javascript" src="~/assets/css/plugins/validation/jquery.validate.min.js"></script>*@
+
+    <script src="~/assets/js/jquery.validate.min.js"></script>
+    <script src="~/assets/js/jquery.uniform.min.js"></script>
+    <script type="text/javascript" src="~/assets/css/plugins/nprogress/nprogress.js"></script>
+
+    <script src="~/assets/js/login.js"></script>
+    <link href="~/assets/css/toastr.css" rel="stylesheet" />
+
+    <script src="~/assets/js/toastr.min.js"></script>
+
+</head>
+<body class="login" style="">
+    <div class="logo"> @*<img src="#" alt="logo">*@ <strong>SEZ</strong>WareHouse </div>
+    <div class="box">
+        <div class="content">
+         
+                <h3 class="form-title">Sign In to your Account</h3>
+                <div class="alert fade in alert-danger" id="dvError" style="display: none;"> <i class="icon-remove close" data-dismiss="alert"></i> Enter any username and password. </div>
+                <div class="form-group">
+                    <div class="input-icon"> <i class="icon-user"></i> 
+                    <input type="text" name="username" class="form-control" id="txtusername" placeholder="Username" autofocus="autofocus" data-rule-required="true" data-msg-required="Please enter your username."> </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-icon"> <i class="icon-lock"></i> 
+                    <input type="password" name="password" id="txtPassword" class="form-control" placeholder="Password" data-rule-required="true" data-msg-required="Please enter your password."> </div>
+                </div>
+                <div class="form-actions">
+                    <label class="checkbox pull-left">
+                        <div class="checker"><span><input type="checkbox" class="uniform" name="remember"></span></div> Remember me
+                    </label> <button  onclick="LoginUser();" class="submit btn btn-primary pull-right"> Sign In <i class="icon-angle-right"></i> </button>
+                </div>
+           
+            @*<form class="form-vertical register-form" action="index.html" method="post" style="display: none;" novalidate="novalidate">
+                <h3 class="form-title">Sign Up for Free</h3>
+                <div class="form-group">
+                    <div class="input-icon"> <i class="icon-user"></i> <input type="text" name="username" class="form-control" placeholder="Username" autofocus="autofocus" data-rule-required="true"> </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-icon"> <i class="icon-lock"></i> <input type="password" name="password" class="form-control" placeholder="Password" id="register_password" data-rule-required="true"> </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-icon"> <i class="icon-ok"></i> <input type="password" name="password_confirm" class="form-control" placeholder="Confirm Password" data-rule-required="true" data-rule-equalto="#register_password"> </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-icon"> <i class="icon-envelope"></i> <input type="text" name="Email" class="form-control" placeholder="Email address" data-rule-required="true" data-rule-email="true"> </div>
+                </div>
+                <div class="form-group spacing-top">
+                    <label class="checkbox">
+                        <div class="checker"><span><input type="checkbox" class="uniform" name="remember" data-rule-required="true" data-msg-required="Please accept ToS first."></span></div> I agree to the <a href="javascript:void(0);">Terms of Service</a>
+                    </label> <label for="remember" class="has-error help-block" generated="true" style="display:none;"></label>
+                </div>
+                <div class="form-actions"> 
+                <button type="button" class="back btn btn-default pull-left">
+                    <i class="icon-angle-left"></i> Back </button> 
+                <button type="submit" class="submit btn btn-primary pull-right"> Sign Up <i class="icon-angle-right"></i> </button> </div>
+            </form>*@
+        </div>
+        <div class="inner-box">
+            <div class="content">
+                <i class="icon-remove close hide-default"></i> <a href="#" class="forgot-password-link">Forgot Password?</a>
+                <form class="form-vertical forgot-password-form hide-default" action="login.html" method="post" novalidate="novalidate">
+                    <div class="form-group">
+                        <div class="input-icon"> <i class="icon-envelope"></i> <input type="text" name="email" class="form-control" placeholder="Enter email address" data-rule-required="true" data-rule-email="true" data-msg-required="Please enter your email."> </div>
+                    </div> <button type="submit" class="submit btn btn-default btn-block"> Reset your Password </button>
+                </form>
+                <div class="forgot-password-done hide-default"> <i class="icon-ok success-icon"></i> <span>Great. We have sent you an email.</span> </div>
+            </div>
+        </div>
+    </div>
+
+    @*<div class="single-sign-on">
+            <span>or</span>
+            <button class="btn btn-facebook btn-block">
+                <i class="icon-facebook"></i> Sign in with Facebook
+            </button> <button class="btn btn-twitter btn-block">
+                <i class="icon-twitter"></i> Sign in with Twitter
+            </button> <button class="btn btn-google-plus btn-block">
+                <i class="icon-google-plus"></i> Sign in with Google
+            </button>
+        </div>*@
+    <div class="footer"> <a href="#" class="sign-up">Don't have an account yet? <strong>Sign Up</strong></a> </div>
+
+    <script>
+        function LoginUser() {
+
+            var isvalid = true;
+            var User = $("#txtusername").val();
+            var Password = $("#txtPassword").val();
+
+            if (User == "") {
+                $("#txtusername").removeClass("form-control");
+                $("#txtusername").addClass("form-control required has-error");
+                isvalid = isvalid && false;
+            } else {
+                $("#txtusername").removeClass("form-control required has-error");
+                $("#txtusername").addClass("form-control");
+            }
+            if (Password == "") {
+                $("#txtPassword").removeClass("form-control");
+                $("#txtPassword").addClass("form-control required has-error");
+                isvalid = isvalid && false;
+            } else {
+                $("#txtPassword").removeClass("form-control required has-error");
+                $("#txtPassword").addClass("form-control");
+            }
+
+
+
+            if (isvalid == false) {
+                toastr.error('Please fill required fields!');
+                //alert("Error! Please fill required fields!");
+                /* return false;*/
+               $('#dvError').show();
+               return false;
+            }
+         $('#dvError').hide();
+            var data = { "UserName": User, "Password": Password  };
+            data = JSON.stringify(data);
+
+            $.ajax({
+                url: "/Account/LoginSubmit",
+                data: data,
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                   if (response.status == "0" ) {
+                        toastr.error('Incorrect Username or Password');
+
+                    }
+                    else {
+                        toastr.success('Login Attempt made succesffull!')
+
+                         window.location.href = '@Url.Action("Dashboard", "Dashboard")';
+
+                    }
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>
+
+

@@ -1,0 +1,365 @@
+﻿@*@model TransportEntities.BusinessEntities.Horse*@
+@{
+    ViewBag.Title = "Equipment Master";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<script src="~/js/GetTableJson.js"></script>
+
+<div class="page-header">
+    <div class="page-header-title">
+    </div>
+    <div class="crumbs">
+        <ul id="breadcrumbs" class="breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="#">Manage Master</a>
+            </li>
+            <li class="current">
+                <a href="#" title="">Equipment Master</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div id="DivaddEquipment">
+    <div class="page-header">
+        <div class="page-title">
+            <h3>Equipment Master</h3>
+        </div>
+        <ul class="page-stats">
+
+            <li>
+                <div class="summary">
+                    <button type="button" class="btn btn-primary waves-effect waves-light f-right d-inline-block md-trigger" onclick="Viewsummary();" id="addlocallistbtn" data-modal="modal-13">
+                        Equipment List
+                    </button>
+                </div>
+
+            </li>
+        </ul>
+    </div>
+    <div class="widget box">
+        <div class="widget-header">
+            <h4><i class="icon-reorder"></i> Equipment Master</h4>
+        </div>
+        <div class="widget-content">
+
+            <div class="row">
+                <div class="col-lg-6 col-sm-12">
+                    <label class="form-label mandatory">Equipment ID </label>
+
+                    <input ID="txtEquipmentID" type="text" placeholder="New" readonly="readonly" class="form-control" />
+
+                </div>
+            </div>
+            <div class="row">
+
+
+                <div class="col-lg-6 col-sm-12">
+                    <label class="form-label mandatory">Equipment Name</label>
+
+                    <input ID="txtEquipment" type="text" placeholder="Equipment" class="form-control" />
+
+                </div>
+            </div>
+            <div class="row" style="display:none;">
+
+
+                <div class="col-lg-6 col-sm-12">
+                    <div class="form-group">
+                        <label class="form-label">Kilometer (KM's)</label>
+                        <div class="row gutters-xs">
+                            <div class="col">
+                                <input ID="txtKiloMeter" type="text" placeholder="Equipment" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6 col-xs-12">
+                    <div class="form-group">
+                        <label class="form-label mandatory" style="visibility:hidden">.</label>
+                        <label class="custom-switch">
+                            <input type="checkbox" name="custom-switch-checkbox" id="chkIsActiveEdit" checked class="custom-switch-input">
+                            <span class="custom-switch-indicator"></span>
+                            <span class="custom-switch-description">Is Active?</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-sm-12">
+
+                    @*<input type="submit" id="Save" name="save" value="Save" class="btn btn-success" />*@
+                    <button id="btnSave" class="btn btn-info" onclick="return Save();">Save</button>
+                    <input type="button" name="clear" value="Clear" class="btn btn-danger" title="clear" id="clearValue" />
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+
+
+<div class=" content-area" id="DivShowEquipment" style="display:none">
+    <div class="page-header">
+        <div class="page-title">
+            <h3>Equipment Master</h3>
+        </div>
+        <ul class="page-stats">
+
+            <li>
+                <div class="summary">
+                    <button type="button" class="btn btn-primary waves-effect waves-light f-right d-inline-block md-trigger" onclick="getBack();" id="addlocallistbtn" data-modal="modal-13">
+                     Add Equipment
+                    </button>
+                </div>
+
+            </li>
+        </ul>
+    </div>
+    <div class="widget box">
+        <div class="widget-header">
+            <h4><i class="icon-reorder"></i> Equipment Master</h4>
+        </div>
+        <div class="widget-content">
+
+            <button class="btn btn-success float-right" id="btnSearch" title="Export To Excel" type="button" onclick="GetExcelFile()"> Export</button> <br />
+            @*<a  href="/EquipmentMaster/ExportToExcel" class="btn btn-success float-right"><i class="fa-solid fa-file-excel">  </i>Export</a>*@
+            @*<button type="button" class="float-right vicon"><i class="fa-solid fa-print"></i></button>*@
+
+            @*@Html.ActionLink("Export To Excel", "ExportToExcel", null, new { @class = "btn btn-success btn-md" })*@
+            <!-- Add Contact Start Model start-->
+            <br/>
+            <div class="table-responsive">
+                <table id="example2" class="table table-bordered table-hover tbl-cart text-nowrap" style="width:100%">
+                    <thead>
+
+                        <tr>
+
+                            @*<th class="wd-10p sorting">Sr No</th>
+                                <th class="wd-10p sorting">Paid ID</th>*@
+                        </tr>
+                    </thead>
+
+                </table>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+</div>
+
+
+
+<script>
+
+    function Save() {
+
+
+        var ID = $("#txtEquipmentID").val();
+            var Equipment = $('#txtEquipment').val();
+
+        var element = {}
+        var isvalid = true;
+        element.Equipment = $('#txtEquipment').val();
+        if (element.Equipment == "") {
+            $("#txtEquipment").removeClass("is-valid state-valid");
+            $("#txtEquipment").addClass("is-invalid state-invalid");
+            isvalid = isvalid && false;
+        } else {
+            $("#txtEquipment").removeClass("is-invalid state-invalid");
+            $("#txtEquipment").addClass("is-valid state-valid");
+        }
+
+        element.IsActive = $('#chkIsActive').is(':checked');
+
+        if (isvalid == false) {
+            alert("Please enter required fields!");
+            return false;
+        }
+
+            var EquipmentMaster = {};
+            //EquipmentMaster.EntryDate = txtentryDate;
+        EquipmentMaster.EquipmentName = Equipment;
+
+        EquipmentMaster.EquipmentID = ID;
+
+                $.ajax({
+                    url: "/Master/SaveEquipment",
+                    data: '{EquipmentMaster: ' + JSON.stringify(EquipmentMaster) + '}',
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                    success: function (data) {
+                        if (data == "Equipment already present! please check") {
+                            alert(data);
+                        }
+                        else {
+                            swal("Good Job!", "Equipment Added Successfully!!", "success").then(function () {
+                                window.location.href = '@Url.Action("EquipmentMaster", "Master")';
+                            });
+
+
+                        }
+                    },
+                error: function (errormessage) {
+                alert(errormessage.responseText);
+                }
+                });
+        }
+
+
+</script>
+
+
+
+
+
+<script type="text/javascript">
+
+     function GetExcelFile() {
+           window.Equipment = '@Url.Action("ExportToExcel", "EquipmentMaster")?';
+     }
+
+    function getBack() {
+        $("#DivaddEquipment").show();
+        $("#DivShowEquipment").hide();
+    }
+    function ShowVoucherDetails() {
+
+
+        $.ajax({
+            type: 'POST',
+            url: '/Master/AjaxGetEquipmentDetails',
+            //  data: data,
+            // data: "",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            success: function (jsonResult) {
+                $("#example2").empty();
+                RepTableDataJson($("#example2"), jsonResult, "Voucher Details", "VoucherDetails_List");
+
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+
+            }
+        });
+    }
+</script>
+
+<script>
+    function AddEquipment() {
+        $("#txtDistance").val("")
+        $("#TxtEquipmentGroup").val("")
+        $("#divaddEquipment").show();
+        $("#DivaddDistance").hide();
+    }
+    function AddDistance() {
+        $("#txtDistance").val("")
+        $("#TxtEquipmentGroup").val("")
+        $("#divaddEquipment").hide();
+        $("#DivaddDistance").show();
+    }
+
+
+
+</script>
+
+
+<script type="text/javascript">
+
+    function Viewsummary() {
+        $("#DivaddEquipment").hide();
+        $("#DivShowEquipment").show();
+
+
+        $.ajax({
+            type: 'POST',
+            url: '/Master/AjaxGetEquipmentDetails',
+            //  data: data,
+            // data: "",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            success: function (jsonResult) {
+                $("#example2").empty();
+                RepTableDataJson($("#example2"), jsonResult, "Voucher Details", "VoucherDetails_List");
+                $("#global-loader").fadeOut("slow");
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+                $("#global-loader").fadeOut("slow");
+            }
+        });
+    }
+
+
+    function EditEquipmentDetails1(EquipmentID) {
+        $("#DivaddEquipment").show();
+        $("#DivShowEquipment").hide();
+
+        var data1 = { 'EquipmentID': EquipmentID };
+        var data = JSON.stringify(data1);
+
+        $.ajax({
+            type: 'POST',
+            url: '/EquipmentMaster/GetEquipmentDetails',
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+
+                $('#txtEquipment').val(data[0].Equipment);
+                $('#ddlDistancegroup').val(data[0].DistanceGroupID);
+                $('#ddlEquipmentList').val(data[0].EquipmentGroupID);
+                $('#txtOnWayKM').val(data[0].OnWayKM);
+                $('#txtTwoWayKM').val(data[0].TwoWayKM);
+                $('#txtEquipmentID').val(data[0].ID);
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+                $("#global-loader").fadeOut("slow");
+            }
+        });
+    }
+
+
+
+    function EditEquipmentDetails(EquipmentID) {
+        $.ajax({
+            url: "/EquipmentMaster/CheckuserrightsForEquipmentEdit",
+            //   data: data,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            // dataType: "json",
+            success: function (response) {
+                if (response == 0) {
+                    alert("you are not authorized to perform this operation!");
+                }
+                else {
+
+
+                    EditEquipmentDetails1(EquipmentID);
+
+
+                }
+
+            },
+            error: function (errormessage) {
+                alert("error");
+                alert(errormessage.responseText);
+            }
+        });
+    }
+
+</script>

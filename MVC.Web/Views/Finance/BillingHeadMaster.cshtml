@@ -1,0 +1,138 @@
+﻿
+@{
+    ViewBag.Title = "BillingHeadMaster";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="crumbs">
+    <ul id="breadcrumbs" class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            <a href="index.html">General Entry</a>
+        </li>
+        <li class="current">
+            <a href="pages_calendar.html" title="">Billing Head Master</a>
+        </li>
+    </ul>
+</div>
+
+<div class="page-header row">
+    <div class="page-title col-6">
+        <h3>Billing Head Master</h3>
+    </div>
+    <div class="col-6">
+        <br />
+        <button type="button" class="btn btn-primary float-right" id="AddBtn" onclick="Show();">Summary</button>
+        <button type="button" class="btn btn-primary float-right" id="HideBtn" onclick="Hide();" style="display:none">Add New</button>
+    </div>
+</div>
+
+
+
+<div class="col-md-12">
+    <div class="widget box" id="BillingAdd">
+        <div class="widget-header">
+            <h4><i class="icon-reorder"></i> Billing Head Forms</h4>
+        </div>
+        <div class="widget-content">
+            <div class="form-group">
+                <div class="row">
+
+                    <div class="col-md-3">
+                        <label class="form-label mandatory">Account-ID </label>
+                        <input ID="txtentryid" type="text" placeholder="New" readonly="readonly" class="form-control" />
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="control-label">Charges Head</label>
+                        <input type="text" id="txtChargesHead" placeholder="Charges Head" name="regular" class="form-control">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label">Tally Ledger</label>
+                        <input type="text" id="txtTallyLedger" placeholder="Tally Ledger" name="regular" class="form-control">
+                    </div>
+
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-3">
+                        <label class="control-label">HSN Code</label>
+                        <input type="text" id="txtHSNCode" placeholder="HSN Code" name="regular" class="form-control">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label">Group</label>
+                        <input type="text" id="txtGroup" name="regular" placeholder="Group" class="form-control">
+                    </div>
+                    <div class="col-md-3">
+                     
+                        <label class="control-label">TDS</label>
+                        <select class="form-control" id="ddlTDS">
+                            <option value="0" selected="selected"></option>
+                            <option value="Handling">Handling</option>
+                            <option value="Storage">Storage</option>
+                        </select>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+
+                    <div class="col-md-3">
+                    
+                        <label class="control-label">Based On</label>
+                        <select class="form-control" id="ddlBasedOn">
+                            <option value="0" selected="selected"></option>
+                            <option value="F">Fixed</option>
+                            <option value="S">Slab</option>
+                            <option value="H">Hours</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="checkbox pull-left">
+                        <span><input type="checkbox" class="uniform" name="remember"></span> IsActive
+                    </label>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 col-lg-6">
+                        <button class="btn btn-info" onclick="SaveBilling();" id="btnSave">Save</button>
+                        <button class="btn btn-danger" id="btnCancel">CANCEL</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function SaveBilling() {
+       
+        debugger;
+
+        
+        var Charges_Head = $('#txtChargesHead').val();
+        var Tally_Ledger = $('#txtTallyLedger').val();
+        var HSN_Code = $('#txtHSNCode').val();
+        var Group = $('#txtGroup').val();
+        var TDS = $('#ddlTDS').val();
+        var Based_ON = $('#ddlBasedOn').val();
+        
+        var data1 = { 'Charges_Head': Charges_Head, 'Tally_Ledger': Tally_Ledger, 'HSN_Code': HSN_Code, 'Group': Group, 'TDS': TDS, 'Based_ON': Based_ON };
+        var data = JSON.stringify(data1);
+
+        return $.ajax({
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            type: 'POST',
+            url: "/InBound/BillingHeadSave",
+            data: data,
+            success: function (result) {
+                alert('Record saved successfully.')
+            },
+            error: function () {
+                alert("Error!");
+            }
+        });
+    }
+</script>
+

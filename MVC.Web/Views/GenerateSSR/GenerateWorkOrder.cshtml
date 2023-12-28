@@ -1,0 +1,622 @@
+﻿
+@{
+    ViewBag.Title = "Generate Work Order";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<link href="~/assets1/css/all.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="~/js/GetTableJsonPagging.js"></script>
+<style>
+
+    .hiderow {
+        display: none;
+    }
+
+
+
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+
+    .close {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+</style>
+
+<script src="~/js/GetTableJsonPagging.js"></script>
+<style>
+
+
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+
+
+
+    .required {
+        content: "*";
+        color: red;
+        font: bold;
+        font-size: larger;
+        padding-bottom: -50px;
+        vertical-align: middle;
+    }
+</style>
+<div class="crumbs">
+    <ul id="breadcrumbs" class="breadcrumb">
+        <li> <i class="icon-home"></i> <a href="index.html">Generate Work Order</a> </li>
+        <li class="current"> <a href="pages_calendar.html" title="">Generate Work Order</a> </li>
+    </ul>
+</div>
+
+<div class="page-header">
+    <div class="page-title">
+        <h3>Generate Work Order</h3>
+    </div>
+    <div class="col-6">
+        <br />
+        <button type="button" class="btn btn-primary float-right" id="CustomerAddBtn" onclick="AddSummary();">Summary</button>
+    </div>
+</div>
+
+<div class="col-md-12" id="diventryfrom">
+    <div class="widget box">
+        <div class="widget-header">
+            <h4><i class="icon-reorder"></i> Generate Work Order</h4>
+        </div>
+
+        <div class="widget-content">
+            <div class="form-group">
+                <div class="row">
+
+                    <div class="col-md-2">
+                        <label class="control-label">SSR No.</label>
+
+                        <input type="text" id="txtssno" readonly="readonly" name="regular" class="form-control">
+                    </div>
+
+                    <div class="col-md-2">
+                        <label class="control-label">SSR Date</label>
+                        <input type="date" id="txtSSrDate" name="regular" class="form-control">
+
+                    </div>
+
+                    <div class="col-md-2">
+                        <label class="control-label">SSR Type</label>
+
+                        @Html.DropDownList("txtSSRType", (IEnumerable<SelectListItem>)ViewBag.GetWotype, new { @class = "form-control", onchange = "TypeChange()" })
+                    </div>
+
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-2">
+                        <label class="control-label">Search On</label>
+
+                        <select id="txtSearchOn" class="form-control" onchange="Searchtype()">
+                            <option value="0">select</option>
+                            <option value="ContainerNo">Container No</option>
+                            <option value="BLNumber">BL Number</option>
+                            <option value="JONo">JO No</option>
+                            <option value="RequestID">Request ID</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2" id="lblContainer" style="display:none">
+                        <label class="control-label">Container No</label>
+                        @Html.TextBox("txtContainerNo", null, new { @class = "form-control ", @id = "txtContainerNo", autocomplete = "off", @placeholder = "Container No", @style = "text-transform: uppercase;", maxlength = 11 })
+                    </div>
+                    <div class="col-md-2" id="lblBL" style="display:none">
+                        <label class="control-label">BL Number</label>
+                        @Html.TextBox("txtBLNumber", null, new { @class = "form-control ", @id = "txtBLNumber", autocomplete = "off", @placeholder = "BL Number", @style = "text-transform: uppercase;", maxlength = 11 })
+                    </div>
+                    <div class="col-md-2" id="lblJono" style="display:none">
+                        <label class="control-label">JO No</label>
+                        @Html.TextBox("txtJONo", null, new { @class = "form-control ", @id = "txtJONo", autocomplete = "off", @placeholder = "JO No", @style = "text-transform: uppercase;", maxlength = 11 })
+                    </div>
+                    <div class="col-md-2" id="lblRequest" style="display:none">
+                        <label class="control-label">Request ID</label>
+                        @Html.TextBox("txtRequestID", null, new { @class = "form-control ", @id = "txtRequestID", autocomplete = "off", @placeholder = "Request ID", @style = "text-transform: uppercase;", maxlength = 11 })
+                    </div>
+
+                    <br />
+                    <button class="btn btn-info" onclick="AddContainerDetails();" style="background-color:#2f96b4">Show</button>
+
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-3">
+                        <label class="control-label">CHA Name</label>
+                        <input type="text" id="txtCHAName" readonly="readonly" name="regular" class="form-control">
+
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label">Jo No</label>
+                        <input type="text" id="txtJoNo" readonly="readonly" name="regular" class="form-control">
+
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label">Customer</label>
+                        <input type="text" id="txtCustomer" readonly="readonly" name="regular" class="form-control">
+
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label">Vendor Name</label>
+                        <input type="text" id="txtVendorName" readonly="readonly" name="regular" class="form-control">
+
+                    </div>
+                </div>
+                <br />
+
+                <br />
+                <div class="row">
+                    <div class="col-lg-12 col-sm-12">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover tbl-cart text-nowrap" id="tblContainerList">
+                                <thead>
+                                    <tr>
+                                        <th style="width:7px"><input type="checkbox" id="flowcheckall" value="" />#</th>
+                                        <th style="width:7px">Container/Cargo No</th>
+
+                                        <th style="width:3px">Size</th>
+
+                                        <th style="width:1px">PKGS</th>
+                                        <th style="width:1px">Weight</th>
+                                        <th style="width:1px">Destuff/Stuff PKGS</th>
+                                        <th style="width:1px">Destuff/Stuff Weight</th>
+                                        <th style="width:1px">Vehicle No</th>
+                                        <th style="width:1px">Equipment Type</th>
+                                        <th style="width:1px">Equipment No</th>
+
+
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button class="btn btn-info" onclick="SaveGenerateSSREntry()">Submit</button> <button class="btn btn-info">
+        Cancel
+    </button>
+</div>
+<div class="page-body" id="divAwaitingSummary" style="display:none">
+
+    <div class="page-header">
+
+        <div class="crumbs">
+            <ul id="breadcrumbs" class="breadcrumb">
+                <li>
+                    <i class="icon-home"></i>
+                    <a href="index.html">SSR Summary</a>
+                </li>
+                <li class="current">
+                    <a href="pages_calendar.html" title="">SSR Summary</a>
+                </li>
+            </ul>
+        </div>
+        <div class="page-header row">
+            <div class="page-title col-6">
+                <h3>SSR Summary</h3>
+            </div>
+            <div class="col-6">
+                <br />
+                <button type="button" class="btn btn-primary float-right" id="btnBackButton" onclick="getBack();">Back</button>
+            </div>
+        </div>
+
+    </div>
+    <div class="card col-sm-12 col-lg-12">
+        <div class="card-header">
+
+
+            <div class="card-header-right">
+                <i class="icofont icofont-rounded-down"></i>
+                <i class="icofont icofont-refresh"></i>
+                <i class="icofont icofont-close-circled"></i>
+            </div>
+        </div>
+
+
+        <div class="card-block col-sm-12 col-lg-12">
+            <div class="row" style="display:none;">
+                <div class="col-lg-3 col-sm-12">
+                    <div class="form-group">
+                        <label class="form-label" style="visibility:hidden"> No</label>
+                        <div class="row gutters-xs">
+                            <div class="col">
+                                @Html.TextBox("TXtSearchOn", null, new { @class = "form-control ", @id = "TXtSearchOn", autocomplete = "off" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-sm-12">
+                    <div class="form-group">
+                        <label class="form-label" style="visibility:hidden">.</label>
+                        <div class="row gutters-xs">
+                            <div class="col">
+                                <button type="button" id="btnShow" value="Show" class="btn btn-primary" onclick="GetDetailsForTariffSearch()"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 col-sm-12">
+                    <div class="table-responsive">
+                        <table id="example3" class="table table-bordered table-hover tbl-cart text-nowrap" style="width:100%">
+                            <thead>
+                                <tr></tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<script>
+        var EquipmentNoL = [];
+
+          EquipmentNoLs = @Html.Raw(Json.Encode(@ViewBag.EquipmentNoList));
+    EquipmentNoL = JSON.parse(EquipmentNoLs);
+
+    function AddSummary() {
+
+        $("diventryfrom").hide();
+        $("divAwaitingSummary").show();
+    }
+
+    function getBack() {
+        $("diventryfrom").show();
+        $("divAwaitingSummary").hide();
+    }
+
+
+
+
+    function Searchtype() {
+        var Search = $("#txtSearchOn").val();
+        if (Search == "ContainerNo") {
+            $("#lblContainer").show();
+            $("#lblBL").hide();
+            $("#lblJono ").hide();
+            $("#RequestID").hide();
+        }
+        if (Search == "BLNumber") {
+            $("#lblBL").show();
+            $("#lblContainer").hide();
+            $("#lblJono ").hide();
+            $("#RequestID").hide();
+        }
+        if (Search == "JONo") {
+            $("#lblJono ").show();
+            $("#lblBL").hide();
+            $("#lblContainer").hide();
+            $("#RequestID").hide();
+        }
+        if (Search == "RequestID") {
+            $("#RequestID").show();
+
+            $("#lblJono ").hide();
+            $("#lblBL").hide();
+            $("#lblContainer").hide();
+
+        }
+
+    }
+
+</script>
+
+<script>
+    function AddContainerDetails() {
+        debugger;
+        try {
+
+            var SearchOn = document.getElementById("txtSearchOn").value;
+            var ContainerNo = $("#txtContainerNo").val();
+            var BLNumber = $("#txtBLNumber").val();
+            var JONo = $("#txtJONo").val();
+
+            var RequestID = $("#txtRequestID").val();
+
+
+
+            var data1 = "";
+            var data2 = "";
+
+
+
+
+
+            if (SearchOn == 0 || SearchOn == "select") {
+                alert("Please select search on.");
+                return false;
+            }
+
+
+
+
+            if (SearchOn == 'BLNumber') {
+                data1 = $("#txtBLNumber").val();
+                data2 = "";
+                if (data1 == '') {
+                    alert("Please enter BL no.");
+                    return false;
+                }
+            }
+
+            if (SearchOn == 'JONo') {
+                data1 = $("#txtJONo").val();
+                data2 = "";
+                if (data1 == '') {
+                    alert("Please enter Jo no.");
+                    return false;
+                }
+
+            }
+
+
+
+            if (SearchOn == 'ContainerNo') {
+                data1 = "";
+                data2 = $("#txtContainerNo").val();
+                if (data2 == '') {
+                    alert("Please enter Container no.");
+                    return false;
+                }
+
+            }
+
+
+            if (SearchOn == 'RequestID') {
+                data1 = $("#txtRequestID").val();
+                data2 = "";
+                if (data1 == '') {
+                    alert("Please enter RequestID.");
+                    return false;
+                }
+
+            }
+
+
+
+
+
+
+            var dataAll = { 'data2': data2 };
+
+
+            data = JSON.stringify(dataAll);
+
+
+
+            $.ajax({
+                url: "/GenerateSSR/GetWorkOrderlist",
+                data: data,
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+
+                success: function (response) {
+                    debugger;
+                    console.log(response);
+
+
+
+                    $("#txtCHAName").val(response.ContainerData[0].CHAName);
+
+                    $("#txtVendorName").val(response.ContainerData[0].VendorID);
+                    $("#txtCustomer").val(response.ContainerData[0].AgencyName);
+
+                    $('#tblContainerList').dataTable({
+                        "destroy": true,
+                        "bDestroy": true,
+                        "bLengthChange": false,
+                        "bInfo": false,
+                        "bPaginate": true,
+                        "bFilter": true,
+                        "paging": false,
+                        "aaSorting": [],
+                        "order": [],
+                        "aoColumnDefs": [
+                            {
+                                'bSortable': false,
+                                'aTargets': [0]
+                            }
+
+                        ],
+
+                        "aaData": response.ContainerData,
+                        "columns": [
+                            {
+                                "data": "ContainerNo",
+                                "render": function (data, type, row, meta) {
+
+                                    data = '<input type=\"checkbox\" name=\"checklist[]\" class=\"checklist\" \"id=\"checklist\" ' + row.selected + '  checked value="' + data + '">';
+                                    return data;
+                                }
+                            },
+
+                            { "data": "ContainerNo" },
+                            { "data": "Size" },
+                            { "data": "Quantity" },
+                            { "data": "Weight" },
+
+
+                            {
+                                "data": "Quantity",
+                                "render": function (data, type, row, meta) {
+                                    input = '<input type=\"text\" name=\"Quantity\" class=\" form-control \" \" id=\"Quantity\" style=\"width: 80px\"  value="' + response.ContainerData[0].Quantity + '">';
+
+                                    return input;
+                                }
+                            },
+                            {
+                                "data": "Weight",
+                                "render": function (data, type, row, meta) {
+                                    input = '<input type=\"number\" name=\"txtWeight\" class=\" form-control Weight\" \" id=\"txtWeight\" \" onchange=\"CalcIt(this)\"  value="' + response.ContainerData[0].Weight + '">';
+
+                                    return input;
+                                }
+                            },
+                            {
+                                "data": "VehicleNo",
+                                "render": function (data, type, row, meta) {
+                                    input = '<input type=\"number\" name=\"txtVehicleNo\" class=\" form-control\" \" id=\"txtVehicleNo\" \"    value="' + response.ContainerData[0].VehicleNo + '">';
+
+                                    return input;
+                                }
+                            },
+                     
+                            {
+
+                                "data": "Equipment_NO",
+                                "render": function (data, type, row, meta) {
+                                    data = '<select  class="form-control" id="txtEquipmentType' + row.ContainerNo + '"  style="width:250px">'
+                                    data += '<option>--Select--</option>';
+                                    for (j = 0; j < EquipmentNoL.length; j++) {
+
+                                        data += '<option value="' + EquipmentNoL[j].trailerid + '" selected> ' + EquipmentNoL[j].trailername + '</option>'
+
+
+
+                                    }
+                                    data += '</select>';
+                                    return data;
+
+
+
+
+                                }
+                            },
+                            {
+                                "data": "VehicleNo",
+                                "render": function (data, type, row, meta) {
+                                    input = '<input type=\"number\" name=\"txtEquipmentNo\" class=\" form-control\" \" id=\"txtEquipmentNo\" \"    value="' + response.ContainerData[0].VehicleNo + '">';
+
+                                    return input;
+                                }
+                            },
+
+                        ],
+                        "rowCallback": function (row, data, dataIndex) {
+
+                        }
+
+                    });
+
+
+
+
+                },
+
+
+            });
+        }
+        catch (ex) {
+
+        }
+
+
+    }
+</script>
+<script>
+    function SaveGenerateSSREntry() {
+        debugger;
+
+
+        var GENERATESSR = new Object();
+
+        GENERATESSR.SSR_TYPE = $("#txtSSRType").val();
+        GENERATESSR.SEARCH_ON = $("#txtSearchOn").val();
+
+        GENERATESSR.CUSTOMER = $("#txtCustomer").val();
+        GENERATESSR.CHA = $("#txtCHA").val();
+        GENERATESSR.VENDOR_NAME = $("#txtVendorName").val();
+        GENERATESSR.JoNo = $("#txtJoNo").val();
+        var SelectedData = new Array();
+        var tablearray = new Array();
+
+        var table = document.getElementById("tblContainerList");
+
+        var row;
+        var t = $('#tblContainerList').DataTable();
+
+
+        for (var i = 1; i < table.rows.length; i++) {
+            debugger;
+            row = table.rows[i];
+
+            ContainerNo = row.cells[1].innerText;
+            ContainerSize = row.cells[2].innerText;
+            Qty = row.cells[4].innerText;
+            Weight = row.cells[5].innerText;
+            VehicleNo = row.cells[7].innerText;
+
+
+            EquipmentType = $("#txtEquipmentType" + ContainerNo + " option:selected").val();
+            EquipmentNo = $("#txtEquipmentNo" + ContainerNo + " option:selected").val();
+
+            SelectedData.push({
+                'ContainerNo': ContainerNo, 'ContainerSize': ContainerSize, 'Weight': Weight, 'Weight': Weight, 'VehicleNo': VehicleNo,
+               'EquipmentType':EquipmentType,'EquipmentNo':EquipmentNo
+            })
+        }
+
+
+        var data1 = {
+            'generatessr': GENERATESSR, 'SelectedData': SelectedData
+        };
+
+        var data = JSON.stringify(data1);
+
+        return $.ajax({
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            type: 'POST',
+            url: "/GenerateSSR/SaveWorkOrder",
+            data: data,
+            success: function (result) {
+
+                if (result == 'SUCCESS') {
+
+                    alert("Saved");
+                    window.location = "/GenerateSSR/GenerateWorkOrder"
+
+                }
+                else {
+                    alert("Save failed!");
+                }
+            },
+            error: function () {
+                alert("Error!")
+            }
+        });
+    }
+</script>

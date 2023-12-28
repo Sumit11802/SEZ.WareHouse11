@@ -1,0 +1,1426 @@
+﻿@model MVC.Domain.Model.MasterEntities
+
+<div class="page-header">
+    <div class="page-header-title">
+
+    </div>
+    <div class="crumbs">
+        <ul id="breadcrumbs" class="breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="index.html">Customer</a>
+            </li>
+            <li class="current">
+                <a href="pages_calendar.html" title="">Customer Master</a>
+            </li>
+        </ul>
+    </div>
+    <div class="page-header row">
+        <div class="page-title col-6">
+            <h3>Customer Master</h3>
+        </div>
+        <div class="col-6">
+            <br />
+            <button type="button" class="btn btn-primary float-right" id="btnBackButton" onclick="getBack();">Back</button>
+        </div>
+    </div>
+</div>
+ 
+
+@*@using (Html.BeginForm("UpdateMasterData", "Master", FormMethod.Post))
+    {
+    @Html.AntiForgeryToken()*@
+<div class="page-body" id="divCustomerEditData">
+    <!-- Add Contact Start Model start-->
+    <div class="widget box">
+        <div class="widget-header">
+            <h4><i class="icon-reorder"></i> Customer Details</h4>
+        </div>
+        <div class="widget-content">
+            <div class="row">
+                <div class="col-lg-12 col-sm-12">
+
+                    <div class="row">
+                        <div class="col-lg-12 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label mandatory">Customer type (tick the checkbox for the multiple selections)</label>
+                                <div class="custom-controls-stacked">
+                                    <label class="custom-control custom-checkbox">
+                                        @* <input type="checkbox" class="custom-control-input" name="example-checkbox1" value="@Model.CHA" checked="@Model.CHA">*@
+                                        @Html.CheckBoxFor(m => m.CHA, new { @id = "chkcha", @class = "" })
+                                        <span class="custom-control-label">  &nbsp;CHA</span>
+                                    </label>
+                                    <label class="custom-control custom-checkbox">
+                                        @*<input type="checkbox" class="" name="example-checkbox1" value="@Model.shippers" checked="@Model.shippers">*@
+                                        @Html.CheckBoxFor(m => m.Importer, new { @id = "chkImporter", @class = "" })
+                                        <span class="custom-control-label">  &nbsp;Importer</span>
+                                    </label>
+                                    <label class="custom-control custom-checkbox">
+                                        @*<input type="checkbox" class="" name="example-checkbox1" value="@Model.ShipLines" checked="@Model.ShipLines">*@
+                                        @Html.CheckBoxFor(m => m.IsFreightForwarder, new { @id = "chkFreightForwarder", @class = "" })
+                                        <span class="custom-control-label">  &nbsp;Forwarder</span>
+                                    </label>
+                                    <!--<label class="custom-control custom-checkbox">-->
+                                    @*  <input type="checkbox" class="" name="example-checkbox1" value="@Model.Importer" checked="@Model.Importer">*@
+                                    <!--@Html.CheckBoxFor(m => m.Importer, new { @id = "chkImporter", @class = "" })
+
+                <span class="custom-control-label">Importer</span>
+            </label>-->
+                                    <label class="custom-control custom-checkbox">
+                                        @*  <input type="checkbox" class="" name="example-checkbox1" value="@Model.Customer" checked="@Model.Customer">*@
+                                        @Html.CheckBoxFor(m => m.Customer, new { @id = "chkCustomer", @class = "" })
+                                        <span class="custom-control-label">  &nbsp;CUSTOMER</span>
+                                    </label>
+                                    <label class="custom-control custom-checkbox">
+                                        @*  <input type="checkbox" class="" name="example-checkbox1" value="@Model.Customer" checked="@Model.Customer">*@
+                                        @Html.CheckBoxFor(m => m.ShipLines, new { @id = "chkShipLines", @class = "" })
+                                        <span class="custom-control-label">  &nbsp;ShipLines</span>
+                                    </label>
+                                    <label class="custom-control custom-checkbox">
+                                        @*  <input type="checkbox" class="" name="example-checkbox1" value="@Model.Customer" checked="@Model.Customer">*@
+                                        @Html.CheckBoxFor(m => m.Vendor, new { @id = "chkvendor", @class = "" })
+                                        <span class="custom-control-label"> &nbsp;Vendor</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label mandatory">Code</label>
+                                <div class="col">
+                                    @Html.HiddenFor(model => model.AGID, new { htmlAttributes = new { @class = "form-control", @id = "hdID", autocomplete = "off", maxlength = 50 } })
+                                    @Html.EditorFor(model => model.AGaID, new { htmlAttributes = new { @class = "form-control code", @id = "custCode", autocomplete = "off", maxlength = 50, @readonly = true, placeholder = "NEW" } })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-sm-12" style="display:none">
+                            <div class="form-group">
+                                <label class="form-label"> Code</label>
+
+                                <div class="col">
+                                    @Html.EditorFor(model => model.LineAgentCode, new { htmlAttributes = new { @class = "form-control", @id = "CHACode", maxlength = 50 } })
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label mandatory"> Name</label>
+
+                                <div class="col">
+                                    @Html.EditorFor(model => model.AGName, new { htmlAttributes = new { @class = "form-control", @id = "custName", autocomplete = "on", maxlength = 50 } })
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                        <div class="row">
+                          
+                        </div>
+                        <div class="row">
+
+                            <div class="col-lg-6 col-sm-12" style="display:none">
+                                <div class="form-group">
+                                    <label class="form-label"> Tally Ledger</label>
+
+                                    <div class="col">
+                                        @Html.EditorFor(model => model.TallyLedger, new { htmlAttributes = new { @class = "form-control", @id = "txtTallyLedger", maxlength = 50 } })
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Full Address</label>
+
+                                    <div class="col">
+                                        @* @Html.EditorFor(model => model.shipperid, new { htmlAttributes = new { @class = "form-control Number", @id = "shipperid" } })*@
+                                        @Html.EditorFor(model => model.AGAddress, new { htmlAttributes = new { @class = "form-control", @id = "custAddress", maxlength = 500, onblur = "myRequiredValidation('custAddress')" } })
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">Contact</label>
+
+                                    <div class="col">
+                                        @Html.EditorFor(model => model.AGAuthPerson, new { htmlAttributes = new { @class = "form-control", @id = "contactPerson", autocomplete = "on", maxlength = 50 } })
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-12" style="display:none">
+                                <div class="form-group">
+                                    <label class="form-label">Contact Number I</label>
+
+                                    <div class="col">
+                                        @Html.EditorFor(model => model.AGTelI, new { htmlAttributes = new { @class = "form-control", @id = "contactNo1", autocomplete = "off", maxlength = 50, onkeydown = "numericOnly(this,event)" } })
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-12" style="display:none">
+                                <div class="form-group">
+                                    <label class="form-label">Person Designation I</label>
+
+                                    <div class="col">
+                                        @Html.EditorFor(model => model.AGAuthPersonDesig, new { htmlAttributes = new { @class = "form-control", @id = "designation", autocomplete = "on", maxlength = 50 } })
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">Email ID</label>
+
+                                    <div class="col">
+                                        @Html.EditorFor(model => model.AGEMail, new { htmlAttributes = new { @class = "form-control", @id = "emailID", maxlength = 255 } })
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">NSDL MAKER ID</label>
+
+                                    <div class="col">
+                                        @Html.EditorFor(model => model.AGRemarks, new { htmlAttributes = new { @class = "form-control", @id = "makerid", maxlength = 50 } })
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">IEC NO</label>
+
+                                    <div class="col">
+                                        @Html.EditorFor(model => model.AGRemarks, new { htmlAttributes = new { @class = "form-control", @id = "iecno", maxlength = 50 } })
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="control-label">Agreement Date</label>
+                                <input type="date" id="txtInDate" name="regular" class="form-control">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="control-label">Agreement Expiry Date</label>
+                                <input type="date" id="txtExDate" name="regular" class="form-control">
+                            </div>
+
+                            <div class="col-lg-6 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">Remarks</label>
+
+                                    <div class="col">
+                                        @Html.EditorFor(model => model.AGRemarks, new { htmlAttributes = new { @class = "form-control", @id = "remarks", maxlength = 50 } })
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                         
+                        </div>
+                            <div class="row" style="display:none">
+                                <div class="col-lg-3 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Contact Person II</label>
+
+                                        <div class="col">
+                                            @Html.EditorFor(model => model.AGAuthPersonII, new { htmlAttributes = new { @class = "form-control", @id = "contactPerson2", autocomplete = "on", maxlength = 50 } })
+                                        </div>
+
+                                    </div>
+                                </div>
+                                @*</div>
+            <div class="row">*@
+                                <div class="col-lg-3 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Contact Number II</label>
+
+                                        <div class="col">
+                                            @Html.EditorFor(model => model.AGTelII, new { htmlAttributes = new { @class = "form-control", @id = "contactNo2", autocomplete = "off", maxlength = 50, onkeydown = "numericOnly(this,event)" } })
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Person Designation II</label>
+
+                                        <div class="col">
+                                            @Html.EditorFor(model => model.AGAuthPersonDesigII, new { htmlAttributes = new { @class = "form-control", @id = "designationII", autocomplete = "on", maxlength = 50 } })
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Email Address II</label>
+
+                                        <div class="col">
+                                            @Html.EditorFor(model => model.AGEMailII, new { htmlAttributes = new { @class = "form-control", @id = "emailIDII", maxlength = 255 } })
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" @*style="display:none"*@>
+                                @*</div>
+            <div class="row">*@
+                            </div>
+                            <div class="row" style="display:none">
+                                <div class="col-lg-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Fax Number</label>
+
+                                        <div class="col">
+                                            @Html.EditorFor(model => model.AGFax, new { htmlAttributes = new { @class = "form-control", @id = "fax", autocomplete = "off", maxlength = 50, onkeydown = "numericOnly(this,event)" } })
+                                        </div>
+
+                                    </div>
+                                </div>
+                                @*</div>
+            <div class="row">*@
+                                <div class="col-lg-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Mobile Number</label>
+
+                                        <div class="col">
+                                            @Html.EditorFor(model => model.AGCellNo, new { htmlAttributes = new { @class = "form-control", @id = "cellNO", autocomplete = "off", maxlength = 50, onkeydown = "numericOnly(this,event)" } })
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-5 col-sm-12" style="display:none">
+                                    <div class="form-group">
+                                        <label class="form-label">Customer Business</label>
+
+                                        <div class="col">
+                                            @Html.EditorFor(model => model.Business, new { htmlAttributes = new { @class = "form-control", @id = "Business", maxlength = 50 } })
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row" style="display:none">
+                                <div class="col-lg-12 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Website</label>
+
+                                        <div class="col">
+                                            @Html.EditorFor(model => model.AGWebsite, new { htmlAttributes = new { @class = "form-control", @id = "website", maxlength = 50 } })
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4 col-sm-12" style="display:none">
+                                    <div class="form-group">
+                                        <label class="form-label">Grade</label>
+                                        <div class="row gutters-xs">
+                                            <div class="col">
+                                                @*@Html.EditorFor(model => model.FL, new { htmlAttributes = new { @class = "form-control", @id = "FL" } })*@
+                                                @Html.DropDownListFor(model => model.AGGrade, new List<SelectListItem>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             { new SelectListItem { Text = "--Select--", Value = ""},
+                                     new SelectListItem { Text = "A", Value = "A"},
+                                   new SelectListItem { Text = "B", Value = "B"},
+                                   new SelectListItem { Text = "C", Value = "C"},
+                                   new SelectListItem { Text = "D", Value = "D"},
+                                   new SelectListItem { Text = "E", Value = "E"},
+                                   }, new { @class = "form-control", autocomplete = "off", @id = "ddlGrade" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-sm-12" style="display:none">
+                                    <div class="form-group">
+                                        <label class="form-label" style="visibility:hidden">Is Active</label>
+                                        <div class="row gutters-xs">
+                                            <div class="col">
+                                                <div class="custom-controls-stacked">
+                                                    <label class="custom-control custom-checkbox">
+                                                        @* <input type="checkbox" class="custom-control-input" name="example-checkbox1" value="@Model.CHA" checked="@Model.CHA">*@
+                                                        @Html.CheckBoxFor(m => m.IsContract, new { @id = "chkIsContract", @class = "", @checked = "checked" })
+                                                        <span class="custom-control-label">Is Contractual?</span>
+                                                    </label>
+                                                </div>
+                                                @*  @Html.CheckBoxFor(m => m.IsContract, new { @id = "isContract", @class = "custom-control-input" }) Is Contractual?*@
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12 col-sm-12">
+                                    <label class="custom-control custom-checkbox">
+                                        @Html.CheckBoxFor(m => m.IsActive, new { @id = "chkIsActive", @class = "", @checked = "checked" })
+                                        <span class="custom-control-label">Is Active?</span>
+                                    </label>
+                                </div>
+
+
+                            </div>
+
+                        </div>
+                    <div class="col-lg-2 col-sm-12">
+                        <div class="row">
+                            <div class="col-lg-12 col-sm-12">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <div class="row">
+                <div class="col-lg-3 col-sm-12">
+                    @*<input type="submit" id="btnSave" name="saveProfile" onclick="savedata();" value="Save" class="btn btn-primary" />*@
+                    <input type="submit" id="btnSaveRecord" name="saveProfileDetials" onclick="SaveCustomerDetails();" value="Save" class="btn btn-primary" />
+                </div>
+                <div class="col-lg-7 col-sm-12">
+
+                </div>
+                <div class="col-lg-2 col-sm-12" style="display:none;">
+                    <div class="form-group">
+                        <div class="row gutters-xs">
+                            <button type="button" class="btn btn-info" id="btnUploadAttachment" onclick="AddAttachment(1)"><i class="feather mr-2 icon-info"></i>Uploads</button>
+                            <label id="lblAttachment_1"></label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="divAttach1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog   modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"> Upload Document</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="Doneclosed();">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class=" content-area">
+                    <div class="page-header">
+
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label">Upload Documents </label>
+                                <div class="col">
+                                    @Html.DropDownList("ddlUploadDocument", new List<SelectListItem>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       {  new SelectListItem { Text = "--Select--", Value = "0"},
+            new SelectListItem { Text = "GST Registration/ Address", Value = "GST Registration/ Address"},
+            new SelectListItem { Text = "Cancel Check Copy", Value = "Cancel Check Copy"},
+            new SelectListItem { Text = "TDS Certificate", Value = "TDS Certificate"},
+
+
+            }, new { @class = "form-control", autocomplete = "off", @id = "ddlUploadDocument" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label">Upload</label>
+                                <span class="required"></span>
+                                <div class="row gutters-xs">
+                                    <div class="col">
+                                        <input type="file" id="addAttachment" name="postedFile" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label" style="display:none">.</label>
+                                <div class="row gutters-xs">
+                                    <div class="col" style=" margin-top: 28px">
+                                        <button id="btnUpload" class="btn btn-primary" title="Upload" onclick="AddAttachmentNoWise()"><span class="fa fa-upload"></span></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="table-responsive">
+                            <table id="JOAttachment" class="table table-striped table-bordered" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th class="p-3 mb-2 bg-transparent text-dark">#</th>
+                                        <th class="p-3 mb-2 bg-transparent text-dark">File Name</th>
+                                        <th class="p-3 mb-2 bg-transparent text-dark">Download</th>
+                                        <th class="p-3 mb-2 bg-transparent text-dark">Delete</th>
+                                    </tr>
+                                </thead>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnDone" value="Done" class="btn btn-primary pull-right" data-dismiss="modal" onclick="Doneclosed();" aria-label="Close">Done</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*}*@
+<div class="modal fade" id="divAttach" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog   modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"> Upload Document</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="Doneclosed();">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class=" content-area">
+                    <div class="page-header">
+
+                    </div>
+                    <div class="row" id="divUploadDocSection">
+                        <div class="col-lg-4 col-sm-12">
+                            <label class="form-label">Upload Documents </label>
+                            @Html.DropDownList("ddlUploadDocument", new List<SelectListItem>
+                                                                                                                                                                                                                                                                                                                                   {  new SelectListItem { Text = "--Select--", Value = "0"},
+                                            new SelectListItem { Text = "GST Registration/ Address", Value = "GST Registration/ Address"},
+                                            new SelectListItem { Text = "Cancel Check Copy", Value = "Cancel Check Copy"},
+                                            new SelectListItem { Text = "TDS Certificate", Value = "TDS Certificate"},
+                                               new SelectListItem { Text = "Invoice", Value = "Invoice"},
+                                                  new SelectListItem { Text = "Receipt", Value = "Receipt"},
+
+                                            }, new { @class = "form-control", autocomplete = "off", @id = "ddlUploadDocument" })
+
+                        </div>
+                        <div class="col-lg-4 col-sm-12">
+
+                            <label class="form-label">Upload</label>
+                            <span class="required"></span>
+                            <div class="row gutters-xs">
+                                <div class="col">
+                                    <input type="file" id="addAttachment" name="postedFile" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-sm-12">
+                            <label class="form-label" style="display:none">.</label>
+                            <div class="row gutters-xs">
+                                <div class="col" style=" margin-top: 28px">
+                                    <button id="btnUpload" class="btn btn-primary" title="Upload" onclick="AddAttachmentNoWise()"><span class="fa fa-upload"></span></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="table-responsive">
+                            <table id="JOAttachment" class="table table-striped table-bordered" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th class="p-3 mb-2 bg-transparent text-dark">#</th>
+                                        <th class="p-3 mb-2 bg-transparent text-dark">File Name</th>
+                                        <th class="p-3 mb-2 bg-transparent text-dark">Download</th>
+                                        <th class="p-3 mb-2 bg-transparent text-dark">Delete</th>
+                                    </tr>
+                                </thead>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnDone" value="Done" class="btn btn-primary pull-right" data-dismiss="modal" onclick="Doneclosed();" aria-label="Close">Done</button>
+            </div>
+        </div>
+    </div>
+</div>
+@using (Html.BeginForm("DownLoadFile", "Master", FormMethod.Post))
+{
+    <input type="hidden" id="hfFileId" name="id" />
+    <input type="submit" id="btnDownload" value="Download" style="display:none" />
+}
+
+<script>
+
+    function SaveCustomerDetails() {
+
+        if (IsValidCustomerData()) {
+
+            var chkcha = $("#chkcha").is(":checked");
+            var chkShipper = $("#chkShipper").is(":checked")
+            var chkFreightForwarder = $("#chkFreightForwarder").is(":checked")
+            var chkImporter = $("#chkImporter").is(":checked")
+            var chkCustomer = $("#chkCustomer").is(":checked")
+            var chkShipLines = $("#chkShipLines").is(":checked")
+            var chkvendor = $("#chkvendor").is(":checked")
+            var chkIsActive = $("#chkIsActive").is(":checked")
+
+            var txtcustAddress = document.getElementById('custAddress').value;
+            var custCode = document.getElementById('custCode').value;
+            var custName = document.getElementById('custName').value;
+
+            var element = {};
+            //
+            element.AGID = $("#hdID").val();
+            element.AGaID = $("#custCode").val();
+            element.LineAgentCode = $("#CHACode").val();
+            element.AGName = $("#custName").val();
+            element.TallyLedger = $("#txtTallyLedger").val();
+            element.AGAddress = $("#custAddress").val();
+
+            element.AGAuthPerson = $("#contactPerson").val();
+            element.AGAuthPersonDesig = $("#designation").val();
+
+            element.AGTelI = $("#contactNo1").val();
+            element.AGEMail = $("#emailID").val();
+            element.AGFax = $("#fax").val();
+            element.AGCellNo = $("#cellNO").val();
+
+
+            element.AGAuthPersonDesigII = $("#designationII").val();
+            element.AGTelII = $("#contactNo2").val();
+            element.AGAuthPersonII = $("#contactPerson2").val();
+
+            element.AGEMailII = $("#emailIDII").val();
+            element.AGWebsite = $("#website").val();
+
+            element.AGRemarks = $("#remarks").val();
+            element.IsActive = $("#chkIsActive").val();
+
+
+            element.CHA = chkcha;
+            element.shippers = chkShipper;
+            element.ShipLines = chkShipLines;
+            element.Importer = chkImporter;
+            element.Customer = chkCustomer;
+
+           // element.JV = $("#AGID").val();
+            element.Vendor = chkvendor;
+            element.IsFreightForwarder = chkFreightForwarder;
+
+            element.CHACode = $("#CHACode").val();
+
+
+            //element.RunningID = $("#AGID").val();
+            //element.DocFileName = $("#AGID").val();
+            //element.srno = $("#AGID").val();
+
+
+
+            var data1 = { "Master": element };
+            var data = JSON.stringify(data1);
+
+
+
+            $.ajax({
+                type: 'post',
+                url: '/Customer/UpdateMasterData',
+                data: data,
+                async: false,
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+
+                    if (response.Status == 1) {
+                        {
+                            swal("Customer Details", "Record Saved Successfully!!", "success").then(function () {
+                                window.location = "/Customer/CustomerEntry"
+                            });
+
+                        }
+                    }
+                    else if (response.Status == 0)
+
+                        alert('failed to saved customer details');
+                },
+                error: function (error) {
+                    let str = error.responseText;
+                    var a = str.indexOf("<title>") + 7;
+                    var b = str.indexOf("</title>");
+                    str = str.substring(a, b);
+                    alert("Something went wrong.");
+                }
+            });
+
+
+
+
+        }
+
+    }
+
+    function IsValidCustomerData() {
+
+        var chkcha = $("#chkcha").is(":checked");
+        var chkShipper = $("#chkShipper").is(":checked")
+        var chkFreightForwarder = $("#chkFreightForwarder").is(":checked")
+        var chkImporter = $("#chkImporter").is(":checked")
+        var chkCustomer = $("#chkCustomer").is(":checked")
+        var chkShipLines = $("#chkShipLines").is(":checked")
+        var chkvendor = $("#chkvendor").is(":checked")
+
+        if (chkcha == true || chkShipper == true || chkShipLines == true || chkImporter == true || chkCustomer == true || chkvendor == true || chkFreightForwarder == true) {
+
+
+        }
+        else {
+            alert("Please select at least one master!");
+            return false;
+        }
+
+        if ($("#custCode").val() != "") {
+
+
+            var res = checkCodeExist();
+            // alert(res);
+            if (res == 1) {
+                alert("Code already Exists");
+                return false;
+            }
+
+        }
+        var res1 = CheckNameExist();
+        // alert(res1);
+
+        if (res1 == 1) {
+            alert("Name already Exist");
+            return false;
+        }
+
+
+        var txtcustAddress = document.getElementById('custAddress').value;
+        var custCode = document.getElementById('custCode').value;
+        var custName = document.getElementById('custName').value;
+
+        var blResult = Boolean;
+        blResult = true;
+
+        //if (custCode == "") {
+        //    //  document.getElementById('ContainerNo').style.borderColor = "red"
+        //    $("#custCode").removeClass("form-control is-valid state-valid")
+        //    $("#custCode").addClass("form-control is-invalid state-invalid")
+        //    blResult = blResult && false;
+        //}
+        if (custName == "") {
+            //  document.getElementById('ContainerNo').style.borderColor = "red"
+            $("#custName").removeClass("form-control is-valid state-valid")
+            $("#custName").addClass("form-control is-invalid state-invalid")
+            blResult = blResult && false;
+        }
+        if (txtcustAddress == "") {
+            //  document.getElementById('ContainerNo').style.borderColor = "red"
+            $("#custAddress").removeClass("form-control is-valid state-valid")
+            $("#custAddress").addClass("form-control is-invalid state-invalid")
+            blResult = blResult && false;
+        }
+
+
+
+        if (blResult == false) { alert('Please fill the required fields!'); }
+        return blResult;
+
+
+    }
+
+    $('#btnSave').click(function () {
+        //debugger;
+        //var RunningId;
+        //RunningId = RunningID;
+        //var DocfileName;
+        //DocfileName = DocFileName;
+        //AttachmentList
+
+
+        var chkcha = $("#chkcha").is(":checked");
+        var chkShipper = $("#chkShipper").is(":checked")
+        var chkFreightForwarder = $("#chkFreightForwarder").is(":checked")
+        var chkImporter = $("#chkImporter").is(":checked")
+        var chkCustomer = $("#chkCustomer").is(":checked")
+        var chkShipLines = $("#chkShipLines").is(":checked")
+        var chkvendor = $("#chkvendor").is(":checked")
+
+        if (chkcha == true || chkShipper == true || chkShippline == true || chkImporter == true || chkCustomer == true || chkvendor == true || chkFreightForwarder == true) {
+
+
+        }
+        else {
+            alert("Please select at least one master!");
+            return false;
+        }
+
+        //if ($("#AGID").val() == "") {
+
+
+        //    var res = checkCodeExist();
+        //    // alert(res);
+        //    if (res == 1) {
+        //        alert("Code already Exists");
+        //        return false;
+        //    }
+
+        //}
+        var res1 = CheckNameExist();
+        // alert(res1);
+
+        if (res1 == 1) {
+            alert("Name already Exist");
+            return false;
+        }
+
+
+        var txtcustAddress = document.getElementById('custAddress').value;
+        var custCode = document.getElementById('custCode').value;
+        var custName = document.getElementById('custName').value;
+        var ChaCode = document.getElementById('CHACode').value;
+
+        var blResult = Boolean;
+        blResult = true;
+
+
+
+        if (ChaCode == "") {
+            //  document.getElementById('ContainerNo').style.borderColor = "red"
+            $("#CHACode").removeClass("form-control is-valid state-valid")
+            $("#CHACode").addClass("form-control is-invalid state-invalid")
+            blResult = blResult && false;
+        }
+        if (custName == "") {
+            //  document.getElementById('ContainerNo').style.borderColor = "red"
+            $("#custName").removeClass("form-control is-valid state-valid")
+            $("#custName").addClass("form-control is-invalid state-invalid")
+            blResult = blResult && false;
+        }
+        if (txtcustAddress == "") {
+            //  document.getElementById('ContainerNo').style.borderColor = "red"
+            $("#custAddress").removeClass("form-control is-valid state-valid")
+            $("#custAddress").addClass("form-control is-invalid state-invalid")
+            blResult = blResult && false;
+        }
+
+
+
+        if (blResult == false) {
+            alert('Please fill the required fields!');
+        }
+
+        swal("Good Job!", "Record Edited Successfully!!", "success").then(function () {
+            // window.location = "/Master/CustomerMaster"
+
+
+        });
+
+        return blResult;
+
+
+
+        //$('#btnRemoveCSS').click(function () {
+
+
+
+    });
+
+    function checkCodeExist() {
+
+        var str = "";
+
+        $.ajax(
+            {
+                url: '/Master/CheckExisitMasterCode?Code=' + $("#CHACode").val(),
+                type: 'Post',
+                data: "",
+                async: false,
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    $("#CHACode").removeClass();
+
+                    //alert(data);
+                    str = data;
+
+                    if (data == 0) {
+
+                        $("#CHACode").addClass("form-control is-valid state-valid");
+
+                    } else {
+
+                        $("#CHACode").addClass("form-control is-invalid state-invalid");
+
+                    }
+                },
+
+                //error: function () {
+                //    alert("error");
+                //}
+            });
+
+        //alert(str);
+        return str;
+    }
+</script>
+
+
+<script>var AttachmentList = [];
+    var TableData = [];
+    var RequestDtls = [];
+
+    //for closing doc model
+    function Doneclosed() {
+        $("#divAttach").modal("hide");
+    }
+
+    //to show doc model
+    function AddAttachment() {
+
+        $("#divAttach").modal("show");
+    }
+    function CountRows() {
+        var table = $('#JOAttachment').DataTable();
+
+        var RowCount = table.rows().count()
+        document.getElementById('lblCount').innerHTML = RowCount;
+        //  alert(RowCount)
+    }
+    function HideColumns() {
+        //  alert($('#hdMode').val())
+        if ($('#hdMode').val() == "ViewMode") {
+            // alert("hi")
+            var table = $('#JOAttachment').DataTable();
+
+            table.column(3).visible(false);
+            $('#divAttach').hide()
+        }
+        else {
+
+            table.column(3).visible(true);
+            $('#divAttach').show()
+        }
+    }
+    //to upload attachment
+    /*$(document).ready(function () {*/
+    $('#btnUpload').click(function () {
+        debugger
+
+        // Checking whether FormData is available in browser
+        if (window.FormData !== undefined) {
+            var txtcustAddress = document.getElementById('custAddress').value;
+            var custCode = document.getElementById('custCode').value;
+            var custName = document.getElementById('custName').value;
+
+            var blResult = Boolean;
+            blResult = true;
+
+
+            if (custName == "") {
+                //  document.getElementById('ContainerNo').style.borderColor = "red"
+                $("#custName").removeClass("form-control is-valid state-valid")
+                $("#custName").addClass("form-control is-invalid state-invalid")
+                blResult = blResult && false;
+            }
+            if (txtcustAddress == "") {
+                //  document.getElementById('ContainerNo').style.borderColor = "red"
+                $("#custAddress").removeClass("form-control is-valid state-valid")
+                $("#custAddress").addClass("form-control is-invalid state-invalid")
+                blResult = blResult && false;
+            }
+
+            if (blResult == false) {
+                alert('Please fill the required fields!');
+                return blResult;
+            }
+
+            var res1 = CheckNameExist();
+            // alert(res1);
+
+            if (res1 == 1) {
+                alert("Name already Exist");
+                return false;
+            }
+
+            var chkcha = $("#chkcha").is(":checked");
+            //    var chkShipper = $("#chkShipper").is(":checked")
+            //  var chkFreightForwarder = $("#chkFreightForwarder").is(":checked")
+            var chkImporter = $("#chkImporter").is(":checked")
+            var chkCustomer = $("#chkCustomer").is(":checked")
+            var chkShipLines = $("#chkShipLines").is(":checked")
+            var chkvendor = $("#chkvendor").is(":checked")
+
+            if (chkcha == true || chkShipLines == true || chkImporter == true || chkCustomer == true || chkvendor == true) {
+
+
+            }
+            else {
+                alert("Please select at least one master!");
+                return false;
+            }
+
+
+            var fileUpload = $("#addAttachment").get(0);
+            var files = fileUpload.files;
+
+            // Create FormData object
+            var fileData = new FormData();
+            if (files.length == 0) {
+                alert("Please select File!")
+                return false;
+            }
+            else {
+
+                var iSize = document.getElementById('addAttachment').files[0].size / 1024
+                iSize = (Math.round((iSize / 1024) * 100) / 100)
+                //alert(iSize)
+                if (iSize > 5) {
+                    alert("Selected file size more than 5 MB")
+                    return false;
+                }
+                // Looping over all files and add it to FormData object
+                for (var i = 0; i < files.length; i++) {
+                    fileData.append(files[i].name, files[i]);
+                }
+
+                // Adding one more key to FormData object
+                //fileData.append('username', 'M');
+                fileData.append('custName', custName);
+                fileData.append('custAddress', txtcustAddress);
+
+                $("#global-loader").fadeIn("slow");
+                // alert("hi")
+                $.ajax({
+                    url: '/Master/UploadJOAttachment',
+                    type: "POST",
+                    contentType: false, // Not to set any content header
+                    processData: false, // Not to process data
+                    data: fileData,
+                    dataType: "json",
+                    success: function (Data) {
+                        // alert(JSON.stringify(Data))
+                        debugger
+
+
+
+                        $("#divAttach").show();
+                        console.log(Data);
+                        if (AttachmentList.length == 0) {
+                            AttachmentCounter = 1;
+                            Data.srno = AttachmentCounter;
+                            Data.DocFileName = Data[0].DocFileName;
+                            Data.RunningID = Data[0].RunningID;
+
+                        } else {
+                            AttachmentCounter++;
+                            Data.srno = AttachmentCounter;
+                            Data.DocFileName = Data[0].DocFileName;
+                            Data.RunningID = Data[0].RunningID;
+                        }
+
+
+                        AttachmentList.push(Data);
+
+                        setAttachmentDataTable();
+                        $("#global-loader").fadeOut("slow");
+                        console.log(AttachmentList);
+
+                        // CountRows();
+
+                    }
+
+
+                });
+
+
+            }
+        }
+        else {
+            alert("FormData is not supported.");
+        }
+        $("#addAttachment").val('');
+    });
+
+
+    /*});*/
+
+    function setAttachmentDataTable() {
+        debugger
+        $('#JOAttachment').dataTable({
+            "bLengthChange": false,
+            "bInfo": false,
+            "bPaginate": false,
+            "bFilter": false,
+            "paging": false,
+            "destroy": true,
+            "bLengthChange": false,
+            "aaData": AttachmentList,
+            "columns": [
+                { "data": "srno" },
+                { "data": "DocFileName" },
+                {
+                    "data": "RunningID",
+                    "render": function (data, type, row, meta) {
+                        if (type === 'display') {
+
+                            data = '<a   onclick="DownloadAttachment(' + data + ')"  href="#" class="btn btn-sm btn-primary"  title="Download"><i class="fa fa-download"></i></a>';
+                            //  data = '<a  onclick="SubmitJO(' + data + ')"  href="#" class="submitbtn"  title="Submit"><i class="fa fa-save"></i></a>';
+                        }
+
+                        return data;
+                    }
+
+
+                },
+                {
+                    "data": "RunningID",
+                    "render": function (data, type, row, meta) {
+                        if (type === 'display') {
+
+                            data = '<a   onclick="DeleteAttachment(' + data + ')"  href="#" class="btn btn-sm btn-danger removebutton"  title="Delete"><i class="fa fa-trash"></i></a>';
+                            //  data = '<a  onclick="SubmitJO(' + data + ')"  href="#" class="submitbtn"  title="Submit"><i class="fa fa-save"></i></a>';
+                        }
+
+                        return data;
+                    }
+                }
+
+            ]
+        });
+
+
+        //$('#tblUploadedAttachments').DataTable({
+        //    "destroy": true,
+        //    "bLengthChange": false,
+        //    "aaData": AttachmentList,
+        //    "bPaginate": false,
+        //    "bInfo": false,
+        //    "paging": false,
+        //    "searching": false,
+
+        //    "columns": [
+        //        { "data": "SrNo" },
+        //        { "data": "Remark" },
+        //        { "data": "FileName" },
+        //        { "data": "ContentType" },
+        //        {
+        //            "data": "SrNo",
+        //            "render": function (data, type, row, meta) {
+        //                if (type === 'display') {
+        //                    data = "<button title=\"Delete\" class=\"btn btn-sm btn-danger m-1\" data-toggle=\"tooltip\" data-placement=\"bottom\" data-original-title=\"View\" onclick=\"DeleteFile('" + data + "')\"><i class=\"fa fa-trash\"></i></button>";
+        //                }
+        //                return data;
+        //            }
+        //        },
+        //    ],
+        //});
+    }
+
+
+    function DownloadAttachment(id) {
+        $("#hfFileId").val(id);
+        $("#btnDownload")[0].click();
+
+    }
+    function DeleteAttachment(id) {
+        var r = confirm("Do you want to delete this file?");
+        if (r == true) {
+
+            var table = $('#JOAttachment').DataTable();
+            $('#JOAttachment tbody').on('click', '.removebutton', function () {
+
+                table
+                    .row($(this).parents('tr'))
+                    .remove()
+                    .draw();
+                CountRows();
+            });
+
+            var data = JSON.stringify({
+                'id': id
+            });
+            // alert(data)
+            $.ajax({
+                url: "/Master/DeleteFile",
+                data: data,
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    AttachmentList = AttachmentList.filter((x) => x.SrNo != SrNo);
+
+                    setAttachmentDataTable();
+
+                },
+                error: function (errormessage) {
+                    //  alert("error");
+                    alert(errormessage.responseText);
+                }
+            });
+
+        }
+        else {
+            // alert("You Pressed Cancel");
+        }
+    }
+
+
+
+    function GetAttachment() {
+        $('#JOAttachment').dataTable({
+            "bLengthChange": false,
+            "bInfo": false,
+            "bPaginate": false,
+            "bFilter": false,
+            "paging": false
+
+        })
+        $.ajax({
+            url: '/Master/GetAttachment',
+            type: "POST",
+            contentType: false, // Not to set any content header
+            processData: false, // Not to process data
+
+            success: function (Data) {
+                // alert(JSON.stringify(Data))
+
+                $('#JOAttachment').dataTable({
+                    "bLengthChange": false,
+                    "bInfo": false,
+                    "bPaginate": false,
+                    "bFilter": false,
+                    "paging": false,
+                    "destroy": true,
+                    "bLengthChange": false,
+                    "aaData": Data,
+                    "columns": [
+                        { "data": "srno" },
+                        { "data": "DocFileName" },
+                        {
+                            "data": "RunningID",
+                            "render": function (data, type, row, meta) {
+                                if (type === 'display') {
+
+                                    data = '<a   onclick="DownloadAttachment(' + data + ')"  href="#" class="btn btn-sm btn-primary"  title="Download"><i class="fa fa-download"></i></a>';
+                                    //  data = '<a  onclick="SubmitJO(' + data + ')"  href="#" class="submitbtn"  title="Submit"><i class="fa fa-save"></i></a>';
+                                }
+
+                                return data;
+                            }
+
+
+                        },
+                        {
+                            "data": "RunningID",
+                            "render": function (data, type, row, meta) {
+                                if (type === 'display') {
+
+                                    data = '<a   onclick="DeleteAttachment(' + data + ')"  href="#" class="btn btn-sm btn-danger removebutton"  title="Delete"><i class="fa fa-trash"></i></a>';
+                                    //  data = '<a  onclick="SubmitJO(' + data + ')"  href="#" class="submitbtn"  title="Submit"><i class="fa fa-save"></i></a>';
+                                }
+
+                                return data;
+                            }
+
+
+                        }
+
+                    ]
+                });
+                CountRows();
+                HideColumns();
+
+            }
+
+
+        });
+
+    }
+
+
+
+    //--------------------------------------------------------------------------------------
+    //for counting rows which requires in uploading</script>
+<script>function myRequiredValidation(TextField) {
+
+        // alert("#" + TextField);
+
+        if ($("#" + TextField).val() == "") {
+            $("#" + TextField).removeClass("form-control is-valid state-valid")
+            $("#" + TextField).addClass("form-control is-invalid state-invalid")
+            //  document.getElementById(TextField).style.borderColor = "red"
+        } else {
+            // alert("hi")
+            $("#" + TextField).removeClass("form-control is-invalid state-invalid")
+            $("#" + TextField).addClass("form-control is-valid state-valid")
+            // document.getElementById(TextField).style.borderColor = "Gainsboro"
+        }
+    };</script>
+
+<script>function getBack() {
+        // alert("hi")
+        $("#divSummary").show()
+        $('#divUpdateCustomerData').hide()
+        $("#divAddMaster").show();
+        $("#divPageHeader").show();
+
+    }</script>
+<script>$("#emailID").on("blur", function () {
+        isEmail($("#emailID").val());
+
+    });
+    function isEmail(email) {
+        var regex = /^([\w-\.]+@@([\w-]+\.)+[\w-]{2,4})?$/;
+        var res1 = regex.test(email);
+        $("#emailID").removeClass();
+        if (email == "") {
+            alert('Please Enter Email Id!');
+            $("#emailID").addClass("form-control is-invalid state-invalid")
+            // document.getElementById('email').value = ""
+            return false;
+        }
+        if (res1 == false) {
+            alert('Please Enter valid Email Id!');
+            $("#emailID").addClass("form-control is-invalid state-invalid")
+            //  document.getElementById('Email').value = ""
+            return res1;
+        }
+        else {
+
+            $("#emailID").addClass("form-control is-valid state-valid")
+        }
+    }
+
+    function isNumber(contactID, contactNO) {
+        console.log(contactNO)
+        var regex = /^(\+\d{1,3}[- ]?)?\d{10}$/;
+        var res2 = regex.test(parseInt(contactNO));
+        $(contactID).removeClass();
+        if (contactNO == "") {
+            $(contactID).addClass("form-control is-invalid state-invalid")
+            alert('Please Enter valid Contact Number!');
+        }
+        if (res2 == false) {
+            $(contactID).addClass("form-control is-invalid state-invalid")
+            alert('Please Enter valid Contact Number!');
+        }
+        else {
+            $(contactID).addClass("form-control is-valid state-valid")
+        }
+    }
+
+    function numericOnly(element, e) {
+        console.log(e.keyCode)
+        // Allow: backspace, delete, tab, escape, enter and . - , ;
+        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190, 45, 44, 59, 189, 109, 188, 186]) !== -1 ||
+            // Allow: Ctrl+A
+            (e.keyCode == 65 && e.ctrlKey === true) ||
+            // Allow: home, end, left, right
+            (e.keyCode >= 35 && e.keyCode <= 39)) {
+            console.log(e.keyCode)
+            // let it happen, don't do anything
+            return;
+        }
+        // Ensure that it is a number and stop the keypress
+        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+            e.preventDefault();
+        }
+
+    }</script>
+
+<script>
+
+    $("#custName").on("blur", function () {
+
+        CheckNameExist()
+    });
+
+    function CheckNameExist() {
+        // alert("hi")
+        var data = JSON.stringify({
+            'Name': $("#custName").val(),
+            'ID': $("#AGID").val()
+
+        });
+        var str = "";
+
+        $.ajax(
+            {
+                url: '/Master/CheckExisitMasterName',
+                type: 'Post',
+                data: data,
+                contentType: 'application/json; charset=utf-8',
+                async: false,
+                success: function (data) {
+                    $("#custName").removeClass();
+
+                    //alert(data);
+                    str = data;
+
+                    if (data == 0) {
+
+                        $("#custName").addClass("form-control is-valid state-valid");
+
+                    } else {
+
+                        $("#custName").addClass("form-control is-invalid state-invalid");
+
+                    }
+                },
+
+                //error: function () {
+                //    alert("error");
+                //}
+            });
+
+        // alert(str);
+        return str;
+
+
+    }
+
+//    $(document).ready(function() {
+//  $("form").submit(function(e) {
+//    e.preventDefault(); // Prevent the default form submission
+
+//    // Perform any additional actions or validations here
+
+//    // Manually submit the form using AJAX
+//    $.ajax({
+//      url: $(this).attr("action"), // Get the form action URL
+//      type: $(this).attr("method"), // Get the form submission method
+//      data: new FormData(this),
+//      processData: false,
+//      contentType: false,
+//      success: function(response) {
+//        // Handle the success response if needed
+
+//        // Optionally, display a success message or update the UI
+
+//        // You can choose to redirect to a new page after successful upload if required
+//        // window.location.href = "/success-page";
+//      },
+//      error: function(xhr, status, error) {
+//        // Handle the error response if needed
+
+//        // Optionally, display an error message or update the UI
+//      }
+//    });
+//  });
+//});
+    $(document).ready(function () {
+        console.log("ready!");
+        $('#divAttach :input').attr('disabled', false);
+        $('#btnBackButton').attr('disabled', false);
+    });
+</script>

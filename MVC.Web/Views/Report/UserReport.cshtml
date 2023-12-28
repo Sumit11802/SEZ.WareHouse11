@@ -1,0 +1,274 @@
+﻿
+@{
+    ViewBag.Title = "Report";
+    Layout = "~/Views/Shared/_MainMasterLayout.cshtml";
+}
+
+
+<script src="~/js/GetTableJsonPagging.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+<!--datatable js-->
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+            <h4 class="mb-sm-0">Report</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Report</a></li>
+                    <li class="breadcrumb-item active">Customer Report</li>
+                </ol>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="card" id="Summary">
+    <div class="card-header align-items-center d-flex vertical-navs-step">
+        <h4 class="card-title mb-0 flex-grow-1">Customer</h4>
+        <div class="nav flex-column custom-nav nav-pills" role="tablist" aria-orientation="vertical">
+            <button class="btn btn-success" onclick="GetExcelFile();">
+                Export To Excel
+            </button>
+        </div>
+    </div>
+    <!-- end card header -->
+
+    <div class="card-body">
+        <div class="form-horizontal">
+            <div class="row">
+                <div class="col-lg-3 col-sm-12">
+                    <div class="form-group">
+                        <label class="form-label">Search Criteria</label>
+                        <div class="row gutters-xs">
+                            <div class="col">
+                                @Html.DropDownList("ddlSearchCriteria", new List<SelectListItem>
+                            {
+                                new SelectListItem { Text = "All Users", Value = "0"},
+                               //new SelectListItem { Text = "Specific Users", Value = "1"},
+                                new SelectListItem { Text = "Custom", Value = "1"},
+                              }, new { @class = "form-control", autocomplete = "off", @id = "ddlSearchCriteria", @onchange = "CategoryChange()" })
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-12" id="dvFrom" style="display:none;">
+                    <div class="form-group">
+                        <label class="form-label"> From Date</label>
+                        <div class="row gutters-xs">
+                            <div class="col">
+                                @*@Html.TextBox("FromDate", null, new { @class = "form-control datePicker1", @Value = DateTime.Now.AddDays(-7).ToString("dd MMM yyyy") })*@
+                                <input type="text" class="form-control" data-provider="flatpickr" id="FromDate" data-date-format="d M, Y">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-12" id="dvTo" style="display:none;">
+                    <div class="form-group">
+                        <label class="form-label"> To Date</label>
+                        <div class="row gutters-xs">
+                            <div class="col">
+                                @*@Html.TextBox("ToDate", null, new { @class = "form-control form_datetime1", @Value = DateTime.Now.ToString("dd MMM yyyy HH:mm") })*@
+                                <input type="text" class="form-control" data-provider="flatpickr" id="ToDate" data-date-format="d M, Y">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @*<div class="col-lg-3 col-sm-12" id="dvMobileNo" style="display:none;">
+                    <div class="form-group">
+                        <label class="form-label"> To Date</label>
+                        <div class="row gutters-xs">
+                            <div class="col">
+                                @Html.TextBox("ToDate", null, new { @class = "form-control form_datetime1", @Value = DateTime.Now.ToString("dd MMM yyyy HH:mm") })
+                            </div>
+                        </div>
+                    </div>
+                </div>*@
+                <div class="col-lg-3 col-sm-12">
+                    <div class="form-group">
+                        <label class="form-label" style="visibility:hidden"> '</label>
+                        <div class="row gutters-xs">
+                            <div class="col">
+                                <input type="button" id="btnShow" value="Show" onclick="Show()" class="btn btn-primary" />
+                                @*<input type="button" value="Print" class="btn btn-primary" onclick="PrintRevenueReport();" />*@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br />
+        <div class="row">
+            <div class="col-md-12 col-lg-12">
+                <div class="table-responsive">
+                    @*<table class="table table-bordered table-hover tbl-cart text-nowrap" id="tblWorkOrderOpenList" style="width:100%;"></table>*@
+                    <table class="table table-bordered table-hover tbl-cart text-nowrap" id="tblWorkOrderOpenList" style="width:100%;">
+                        <thead>
+                            <tr>
+                            </tr>
+                        </thead>
+                    </table>
+
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+<script>
+     $(document).ready(function () {
+      Show();
+    })
+</script>
+
+<script>
+
+
+    function Show()
+    {
+
+        var fromdate = $("#FromDate").val(); //ddlSearchCriteria
+        var todate = $("#ToDate").val();
+        var Criteria = $("#ddlSearchCriteria").val();
+        var isvalid = true;
+
+
+
+        if (isvalid == false) {
+            alert("Error! Please fill required fields!");
+            return false;
+        }
+
+        var data1 = { 'Criteria': Criteria,'fromdate': fromdate, 'todate': todate,  };
+        var data = JSON.stringify(data1);
+
+
+
+         $.ajax({
+            type: 'POST',
+            url: '/Report/GetUserReport',
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            success: function (jsonResult) {
+                 console.log(jsonResult.length)
+                  if(jsonResult.length == 2)
+                  {
+
+                      alert('No Records Found');
+                      $("#tblWorkOrderOpenList").empty();
+                            RepTableDataJsonwopaging($("#tblWorkOrderOpenList"), jsonResult, "GateIN Details", "GateIN_list");
+                            $("#global-loader").fadeOut("slow");
+
+                  }
+                  else
+                  {
+                         $("#tblWorkOrderOpenList").empty();
+                            RepTableDataJsonwopaging($("#tblWorkOrderOpenList"), jsonResult, "GateIN Details", "GateIN_list");
+                            $("#global-loader").fadeOut("slow");
+
+                  }
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+                $("#global-loader").fadeOut("slow");
+            }
+        });
+    }
+
+    function CategoryChange() {
+
+      var Criteria = $("#ddlSearchCriteria").val();
+          if (Criteria == "1") {
+            $("#dvFrom").show();
+            $("#dvTo").show();
+
+        } else {
+            $("#dvFrom").hide();
+            $("#dvTo").hide();
+        }
+
+    }
+
+     function GetExcelFile() {
+                window.location = '@Url.Action("GetUserReportExcel", "Report")';
+    }
+
+    function UserAction(userid,action)
+    {
+
+
+
+         Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: !0,
+            confirmButtonText: "Yes, Confirm!",
+            cancelButtonText: "No, cancel!",
+            confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+            cancelButtonClass: "btn btn-danger w-xs mt-2",
+            buttonsStyling: !1,
+            showCloseButton: !0
+        }).then(function(t) {
+
+             if(t.value)
+             {
+
+                  var data1 = { 'UserID': userid,'Action': action,};
+                    var data = JSON.stringify(data1);
+
+                     $.ajax({
+                        type: 'POST',
+                        url: '/Report/ActionOnUserAccount',
+                        data: data,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        async: true,
+                        success: function (jsonResult) {
+                               
+                        },
+                        error: function (errormessage) {
+                            alert(errormessage.responseText);
+                            $("#global-loader").fadeOut("slow");
+                        }
+                    });
+
+
+                   Swal.fire({
+                    title: "Success!",
+                    text: "Action Completed Successfully.",
+                    icon: "success",
+                    confirmButtonClass: "btn btn-primary w-xs mt-2",
+                    buttonsStyling: !1
+                   }) 
+                 Show();
+            }
+        })
+    }
+
+    function ActivateOrDeActivateUser()
+    {
+        
+    
+    }
+
+</script>
+
+
+
+<!-- App js -->

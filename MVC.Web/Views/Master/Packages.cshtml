@@ -1,0 +1,304 @@
+﻿
+@{ ViewBag.Title = "Package Master";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+
+    }
+<style>
+
+    .required {
+        content: "*";
+        color: red;
+        font: bold;
+        font-size: small;
+        padding-bottom: -50px;
+        vertical-align: middle;
+    }
+
+
+</style>
+
+<div class="page-header">
+    <div class="page-header-title">
+
+    </div>
+    <div class="crumbs">
+        <ul id="breadcrumbs" class="breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="index.html">Manage Master</a>
+            </li>
+            <li class="current">
+                <a href="pages_calendar.html" title="">Package Master</a>
+            </li>
+        </ul>
+    </div>
+
+</div>
+
+<div class=" content-area overflow-hidden" id="divCreate">
+
+    <div class="page-header">
+        <div class="page-title">
+            <h3>Package Master</h3>
+        </div>
+        <ul class="page-stats">
+
+            <li>
+                <div class="summary">
+                    <button type="button" class="btn btn-primary waves-effect waves-light f-right d-inline-block md-trigger" onclick="Summary();" id="addlocallistbtn" data-modal="modal-13">
+                        Summary
+                    </button>
+                </div>
+
+            </li>
+        </ul>
+    </div>
+    <div class="widget box">
+        <div class="widget-header">
+            <h4><i class="icon-reorder"></i> Package Master</h4>
+        </div>
+        <div class="widget-content">
+            <div class="row" style="display: none;">
+                <div class="col-lg-6 col-sm-12">
+                  
+                        <label class="form-label mandatory">Package ID <span class="required">*</span></label>
+                      
+                                <input id="txtentryid" type="text" value="0" placeholder="New" readonly="readonly" class="form-control" />
+                       
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-sm-12">
+                  
+                        <label class="form-label mandatory">Package Code <span class="required">*</span></label>
+                     
+                                <input id="txtpkgCode" type="text" placeholder="Package Code" class="form-control" />
+                       
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-sm-12">
+                
+                        <label class="form-label mandatory">Package Desc <span class="required">*</span></label>
+                 
+                                <input id="txtpkgs" type="text" placeholder="Package Desc" class="form-control" />
+                            </div>
+                      
+            </div>
+            <div class="row">
+                <div class="col-lg-12 col-sm-12">
+                    <div class="form-group">
+                        <label class="custom-switch">
+                            <input type="checkbox" name="custom-switch-checkbox" id="chkIsActive" value="true" checked="" class="custom-switch-input">
+                            <span class="custom-switch-indicator"></span>
+                            <span class="custom-switch-description">Is Active?</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+           
+                        <button id="btnSave" class="btn btn-info" onclick="return Save();">Save</button>
+                        <input type="button" name="clear" value="Clear" class="btn btn-danger" onclick="Clear()" title="clear" id="clearValue" />
+                   
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="content-area" id="divCreateSummary" style="display:none">
+
+
+    <div class="page-header">
+        <div class="page-title">
+            <h3>Package Master</h3>
+        </div>
+        <ul class="page-stats">
+
+            <li>
+                <div class="summary">
+                    <button type="button" class="btn btn-primary waves-effect waves-light f-right d-inline-block md-trigger" onclick="Back();" id="addlocallistbtn" data-modal="modal-13">
+                        <i class="fa-solid fa-list-ul"></i>  Summary
+                    </button>
+                </div>
+
+            </li>
+        </ul>
+    </div>
+    <div class="widget box">
+        <div class="widget-header">
+            <h4><i class="icon-reorder"></i> Package Master</h4>
+        </div>
+        <div class="widget-content">
+            <div class="row">
+                <div class="col-lg-3 col-sm-12">
+                  
+                        <label class="form-label mandatory">Search</label>
+                     
+                                @*@Html.EditorFor(model => model.CHACode, new { htmlAttributes = new { @class = "form-control", @id = "chaCode", autocomplete = "off", maxlength = 20 } })*@
+                                @Html.TextBox("txtsearch", null, new { @class = "form-control ", @id = "txtsearch", name = "txtsearch", autocomplete = "on" })
+                         
+                </div>
+                <div class="col-lg-3 col-sm-12">
+                    <div class="form-group">
+                        <label class="form-label" style="visibility:hidden"> '</label>
+                        <div class="row gutters-xs">
+                            <div class="col">
+                                <button class="btn btn-primary" id="btnShow" title="Show" data-toggle="tooltip" data-placement="bottom" onclick="ShowSSRSummary();">Search</button>
+                                <button class="btn btn-success" title="Export To Excel" data-toggle="tooltip" data-placement="bottom" onclick="GetExcelFile()">Export</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12 col-sm-12">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover tbl-cart text-nowrap" id="tblWorkOrderOpenList" style="width:100%;"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<script src="~/js/GetTableJson.js"></script>
+<script>
+    function Back() {
+        $("#divCreate").show();
+        $("#divCreateSummary").hide();
+    }
+
+    function Summary() {
+        $("#divCreate").hide();
+        $("#divCreateSummary").show();
+        ShowSSRSummary();
+    }
+
+    function Save() {
+        var element = {}
+        var isvalid = true;
+        element.EntryID = $('#txtentryid').val();
+        element.PKGCode = $('#txtpkgCode').val();
+        if (element.PKGCode == "") {
+            $("#txtpkgCode").removeClass("is-valid state-valid");
+            $("#txtpkgCode").addClass("is-invalid state-invalid");
+            isvalid = isvalid && false;
+        } else {
+            $("#txtpkgCode").removeClass("is-invalid state-invalid");
+            $("#txtpkgCode").addClass("is-valid state-valid");
+        }
+        element.PKGSName = $('#txtpkgs').val();
+        if (element.PKGSName == "") {
+            $("#txtpkgs").removeClass("is-valid state-valid");
+            $("#txtpkgs").addClass("is-invalid state-invalid");
+            isvalid = isvalid && false;
+        } else {
+            $("#txtpkgs").removeClass("is-invalid state-invalid");
+            $("#txtpkgs").addClass("is-valid state-valid");
+        }
+        element.IsActive = $('#chkIsActive').is(':checked');
+
+        if (isvalid == false) {
+            alert("Please enter required fields!");
+            return false;
+        }
+
+        var data = { "element": element };
+        data = JSON.stringify(data);
+
+        $.ajax({
+            type: "POST",
+            url: "/Master/SavePKGSDetails",
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response.Status != 0) {
+                    swal("Good Job!", "Record Added Successfully!!", "success").then(function () {
+                               location.reload();
+                            });
+                    //location.reload();
+                } else {
+
+                    alert(response.Message);
+                }
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        });
+    }
+
+    function ShowSSRSummary() {
+        var search = document.getElementById('txtsearch').value;
+
+        var data1 = { 'search': search };
+        data = JSON.stringify(data1);
+
+        $.ajax({
+            url: "/Master/PKGSList",
+            data: data,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                //alert(jsonResult)
+                $("#reportTable").empty();
+                RepTableDataJson($("#tblWorkOrderOpenList"), data, "ExpensesTypeMaster", "ExpensesTypeMaster")
+                //  alert(jsonResult)
+            },
+            error: function (errormessage) {
+                alert("error");
+                alert(errormessage.responseText);
+            }
+        });
+
+
+    }
+
+    function Clear() {
+        location.reload();
+    }
+
+    function Update(Id) {
+        var data = { 'CodeID': Id };
+        data = JSON.stringify(data);
+
+        $.ajax({
+            type: 'POST',
+            url: '/Master/GetUpdatePackageMaster',
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                $("#txtentryid").val(response.EntryID);
+                $("#txtpkgCode").val(response.PKGCode);
+                $("#txtpkgs").val(response.PKGSName);
+                if (response.IsActive == true) {
+                    $('#chkIsActive').attr('checked', true);
+                } else {
+                    $('#chkIsActive').attr('checked', false);
+                }
+                $("#divCreateSummary").hide();
+                $("#divCreate").show();
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+                $("#global-loader").fadeOut("slow");
+            }
+        });
+    }
+
+    $("input").on('input', function () {
+        $(this).val($(this).val().replace(/[^A-Za-z0-9_./ ]/g, ''));
+    });
+
+    function GetExcelFile() {
+        window.location = "/Master/ExportToExcelPackages";
+    }
+</script>

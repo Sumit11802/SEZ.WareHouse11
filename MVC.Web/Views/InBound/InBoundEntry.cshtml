@@ -1,0 +1,741 @@
+﻿
+@{
+    ViewBag.Title = "InBoundEntry";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+@*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.jqueryui.min.js"></script>
+    <script src="https://cdn.datatables.net/scroller/2.3.0/js/dataTables.scroller.min.js"></script>*@
+<div class="crumbs">
+    <ul id="breadcrumbs" class="breadcrumb">
+        <li> <i class="icon-home"></i> <a href="index.html">General Entry</a> </li>
+        <li class="current"> <a href="pages_calendar.html" title="">InBound Entry</a> </li>
+    </ul>
+</div>
+
+<div class="col-md-12" id="newEntry">
+    <div class="page-header">
+        <div class="page-header">
+            <div class="page-title">
+                <h3>InBound Entry</h3>
+            </div>
+            <ul class="page-stats">
+
+                <li>
+                    <div class="summary">
+                        <button type="button" class="btn btn-primary waves-effect waves-light f-right d-inline-block md-trigger" onclick="Summary();" id="addlocallistbtn" data-modal="modal-13">
+                            @*<i class="fa-solid fa-list-ul"></i>*@  InBound Summary
+                        </button>
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="widget box">
+        <div class="widget-header">
+            <h4><i class="icon-reorder"></i> Inbound Entry</h4>
+        </div>
+        <div class="widget-content">
+
+            <div class="form-group">
+
+                <div class="row">
+                    <div class="col-md-3">
+                        <label class="control-label">Inbound Type</label>
+                        <select class="form-control" id="ddlInboundType">
+                            <option value="0" selected="selected">--Select--</option>
+                            <option value="ZONE TO ZONE">ZONE TO ZONE</option>
+                            <option value="BOND TO SEZ">BOND TO SEZ</option>
+                            <option value="DTA TO SEZ">DTA TO SEZ</option>
+                            <option value="PORT TO SEZ">PORT TO SEZ</option>
+                            <option value="AIR TO SEZ">AIR TO SEZ</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label">Mode</label>
+                        <select class="form-control" id="ddlModeType">
+                            <option value="0" selected="selected">--Select--</option>
+                            <option value="Export">Export</option>
+                            <option value="Import">Import</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label">Activity Type</label>
+                        <select class="form-control" id="ddlActivityType">
+                            <option value="0" selected="selected">--Select--</option>
+                            <option value="Container">Container</option>
+                            <option value="Cargo">Cargo</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label">Request No</label>
+                        <input type="text" id="txtRequestNo" name="regular" class="form-control">
+                    </div>
+
+                    <div class="col-md-3">
+                        <br />
+                        <label class="control-label">BOE NO</label>
+                        <input type="text" id="txtBoeNo" name="regular" class="form-control">
+
+                    </div>
+
+
+                    <div class="col-md-3">
+                        <br />
+                        <label class="control-label">BOE Date</label>
+                        <input type="date" id="txtBoedate" name="regular" class="form-control">
+
+                    </div>
+                    <div class="col-md-3">
+                        <br />
+                        <label class="control-label">Invoice No.</label>
+                        <input type="text" id="txtInvoiceNo" name="regular" class="form-control">
+
+                    </div>
+                    <div class="col-md-3">
+                        <br />
+                        <label class="control-label">Invoice Date</label>
+                        <input type="date" id="txtInvoiceDate" name="regular" class="form-control">
+
+                    </div>
+                </div>
+                <div class="row">
+                    <br />
+                    <div class="col-md-3">
+                        <label class="control-label">TP NO.</label>
+                        <input type="text" id="txtTPno" name="regular" class="form-control">
+
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label">TP Date</label>
+                        <input type="date" id="txtTPDate" name="regular" class="form-control">
+
+                    </div>
+                    @*<div class="col-md-3">
+                            <label class="control-label">Shipping Line</label>
+                            <input type="text" id="txtShippingL" name="regular" class="form-control">
+
+                        </div>*@
+
+                    <div class="col-md-3">
+                        <label class="control-label">Port OF Ship</label>
+                        <input type="text" id="txtPOS" name="regular" class="form-control">
+
+                    </div>
+
+                    <div class="col-md-3">
+
+                        <label class="control-label"> Country Of Origin </label>
+                        <input type="text" id="txtCOOR" name="regular" class="form-control">
+
+                    </div>
+
+                    <div class="col-md-3">
+                        <br />
+                        <label class="control-label">Master BL</label>
+                        <input type="text" id="txtMaster" name="regular" class="form-control">
+
+                    </div>
+
+                    <div class="col-md-3">
+                        <br />
+                        <label class="control-label">House BL</label>
+                        <input type="text" id="txtHouse" name="regular" class="form-control">
+
+                    </div>
+
+                    <div class="col-md-3">
+                        <br />
+                        <label class="control-label">Cargo Description</label>
+                        <input type="text" id="txtCargo" name="regular" class="form-control">
+
+                    </div>
+
+                    <div class="col-md-3">
+                        <br />
+                        <label class="control-label">Packages</label>
+                        <input type="text" id="txtPackages" name="regular" class="form-control">
+
+                    </div>
+
+                    <div class="col-md-3">
+                        <br />
+                        <label class="control-label">Package Type</label>
+                        <input type="text" id="txtPackagesType" name="regular" class="form-control">
+
+                    </div>
+
+                    <div class="col-md-3">
+                        <br />
+                        <label class="control-label">Weight in KGS</label>
+                        <input type="text" id="txtWeight" name="regular" class="form-control">
+
+                    </div>
+
+                    <div class="col-md-3">
+                        <br />
+                        <label class="control-label">Duty Forgone</label>
+                        <input type="text" id="txtDuty" name="regular" class="form-control">
+
+                    </div>
+
+                    <div class="col-md-3">
+                        <br />
+                        <label class="control-label">Accessible Value</label>
+                        <input type="text" id="txtAccessible" name="regular" class="form-control">
+
+                    </div>
+
+                    <div class="col-md-3">
+                        <br />
+                        <label class="control-label">Importer</label>
+                        @Html.DropDownList("txtImporter", (IEnumerable<SelectListItem>)ViewBag.Importerlist, "--Select--", new { @class = "form-control", @id = "txtImporter", name = "txtImporter" })
+                        @*<input type="text" id="txtImporter" name="regular" class="form-control">
+                            <input type="hidden" class="form-control" id="hdnddlImporte" />*@
+                    </div>
+
+                    <div class="col-md-3">
+                        <br />
+                        <label class="control-label">CHA</label>
+                        @Html.DropDownList("txtCHA", (IEnumerable<SelectListItem>)ViewBag.CHAlist, "--Select--", new { @class = "form-control", @id = "txtCHA", name = "txtCHA" })
+                        @*<input type="text" id="txtCHA" name="regular" class="form-control">
+                            <input type="hidden" class="form-control" id="hdnddlCHA" />*@
+                    </div>
+
+                    <div class="col-md-3">
+                        <br />
+                        <label class="control-label">Exporter</label>
+                        @Html.DropDownList("txtExporter", (IEnumerable<SelectListItem>)ViewBag.Shipperlist, "--Select--", new { @class = "form-control", @id = "txtExporter", name = "txtExporter" })
+                        @*<input type="text" id="txtExporter" name="regular" class="form-control">
+                            <input type="hidden" class="form-control" id="hdnddlExporter" />*@
+                    </div>
+
+                    <div class="col-md-3">
+                        <br />
+                        <label class="control-label">IGM No</label>
+                        <input type="text" id="txtIGMNo" name="regular" class="form-control">
+
+                    </div>
+
+                    <div class="col-md-3">
+                        <br />
+                        <label class="control-label">IGM Date</label>
+                        <input type="date" id="txtIGMDate" name="regular" class="form-control">
+
+
+                    </div>
+
+                    <div class="col-md-3">
+                        <br />
+                        <label class="control-label">Item No</label>
+                        <input type="text" id="txtItemNo" name="regular" class="form-control">
+
+
+                    </div>
+
+                    @*<div class="col-md-">
+                            <label class="control-label">DOCs</label>
+                            <select class="form-control" id="ddDOCs">
+                                <option value="en-EN" selected="selected"></option>
+                                <option value="de-DE">IGM</option>
+                                <option value="de-DE">Excel</option>
+                            </select>
+                        </div>*@
+
+                    <div class="col-md-3">
+                        <br />
+                        <label class="control-label">Vehicle No</label>
+                        <input type="text" id="txtVehicleNo" name="regular" class="form-control">
+
+
+                    </div>
+
+                    <div>
+
+                    </div>
+
+                    <div class="col-md-3">
+                        <br />
+                        <label class="control-label">Remarks</label>
+                        <input type="text" id="txtRemarks" name="regular" class="form-control">
+
+
+                    </div>
+
+
+                    <style>
+                        .error-message {
+                            color: red;
+                        }
+                    </style>
+
+
+                </div>
+                <br />
+                <h4>Manual File Upload (Bulk Container Upload)</h4>
+                <div class="row">
+                    <div class="col-md-3">
+                        <label class="control-label">DOCs</label>
+                        <select class="form-control" id="ddDOCs">
+                            <option value="0" selected="selected">--Select--</option>
+                            <option value="de-DE">IGM</option>
+                            <option value="de-DE">Excel</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3" style="padding-top:20px;">
+                        <input type="file" id="fileInput" name="fileInput">
+                    </div>
+                    <div class="col-md-3" style="padding-top:20px;">
+                        <button onclick="" class="btn btn-info">Upload</button>
+                    </div>
+                    <div class="col-md-3" style="padding-top:20px;">
+                        <button onclick="downloadTemplate()">Download Template</button>
+                    </div>
+
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-12">
+                        <button class="btn btn-info" onclick="SaveInbound();">Submit</button>
+                        <button class="btn btn-info" style="background-color:red">Cancel</button>
+
+                    </div>
+
+                </div>
+
+                <div class="widget-content">
+
+                    <div class="form-group">
+
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label class="control-label"> Container No </label>
+                                <input type="text" id="txtContainerno" name="regular" class="form-control" maxlength="11" placeholder="Max Length 11">
+                            </div>
+                            <div class="col-md-2">
+                                <label class="control-label">Container Size</label>
+                                <select class="form-control" id="ddlContainerSize">
+                                    <option value="0" selected="selected">--Select--</option>
+                                    <option value="20">20</option>
+                                    <option value="40">40</option>
+                                    <option value="45">45</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="control-label">Container Type</label>
+                                @*<input type="text" id="txtcargotype" name="regular" class="form-control">*@
+                                @Html.DropDownList("ddlContianerType", (IEnumerable<SelectListItem>)ViewBag.ContainerType, null, new { @class = "form-control", @id = "ddlContianerType" })
+                            </div>
+                            <div class="col-md-2">
+                                <label class="control-label">Cargo Type</label>
+                                @*<input type="text" id="txtcargotype" name="regular" class="form-control">*@
+                                @Html.DropDownList("ddlCargoType", (IEnumerable<SelectListItem>)ViewBag.CargoType, null, new { @class = "form-control", @id = "ddlCargoType" })
+                            </div>
+
+                            <div class="col-md-2">
+                                <label class="control-label">Seal NO</label>
+                                <input type="text" id="txtSealNo" name="regular" class="form-control">
+
+                            </div>
+
+                            <br />
+                            <button class="btn btn-info" onclick="AddContainerDetails();" style="background-color:#2f96b4">+ADD</button>
+
+                        </div>
+                        <br />
+
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-lg-12 col-sm-12">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover tbl-cart text-nowrap" id="tblContianerDetails" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th class="wd-15p sorting">#</th>
+                                            <th class="wd-15p sorting">Container No</th>
+
+                                            <th class="wd-15p sorting">Container Size</th>
+                                            <th class="wd-15p sorting">Container Type</th>
+                                            <th class="wd-15p sorting">Cargo Type</th>
+                                            <th class="wd-15p sorting">Seal No</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class=" content-area overflow-hidden" id="dvSummary" style="display:none;">
+    <div class="page-header">
+        <div class="page-title">
+            <h3>InBound Summary</h3>
+        </div>
+        <ul class="page-stats">
+
+            <li>
+                <div class="summary">
+                    <button type="button" class="btn btn-primary waves-effect waves-light f-right d-inline-block md-trigger" onclick="BackToWorkOrder();" id="addlocallistbtn" data-modal="modal-13">
+                        @*<i class="fa-solid fa-list-ul"></i>*@  InBound Summary
+                    </button>
+                </div>
+
+            </li>
+        </ul>
+    </div>
+
+
+    <div class="widget box">
+        <div class="widget-header">
+            <h4><i class="icon-reorder"></i> InBound Summary Details</h4>
+        </div>
+        <div class="widget-content">
+            <div class="form-horizontal">
+          
+               
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+<script>
+    $(window).on("load", function (e) {
+
+        AutoCom_CommonMaster();
+
+    })
+    function AutoCom_CommonMaster() {
+
+        $("#txtExporter").autocomplete({
+
+            source: function (request, response) {
+
+                $.ajax({
+                    url: "/InBound/getAutoExporterList",
+                    data: "{ 'prefixText': '" + request.term + "'}",
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        if (data == "") {
+                            alert("Specified exporter not found in master.");
+
+                            $("#txtExporter").val('');
+                            return false;
+                        }
+                        //
+                        response($.map(data, function (item) {
+                            //
+                            return {
+                                label: item.shippername,
+                                val: item.shipperID
+                            };
+                        }))
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+                })
+            },
+            select: function (e, i) {
+                //
+                $("#txtExporter").val(i.item.label);
+                $("#hdnddlExporter").val(i.item.val);
+            },
+            minLength: 1
+        });
+    }
+
+</script>
+
+<script>
+                function SaveInbound() {
+
+                debugger;
+
+
+                var InBoundModel = new Object();
+
+                    InBoundModel.INBOUND_TYPE_ID = $("#ddlInboundType").val();
+                    InBoundModel.MODE_CATEGORY = $("#ddlModeType").val();
+                    InBoundModel.ACTIVITY_TYPE = $("#ddlActivityType").val();
+                    InBoundModel.REQUEST_NO = $("#txtRequestNo").val();
+                    InBoundModel.BOE_NO = $("#txtBoeNo").val();
+                    InBoundModel.BOE_DATE = $("#txtBoedate").val();
+                    InBoundModel.INVOICE_NO = $("#txtInvoiceNo").val();
+                    InBoundModel.INVOICE_DATE = $("#txtInvoiceDate").val();
+                    InBoundModel.TP_NO = $("#txtTPno").val();
+                    InBoundModel.TP_DATE = $("#txtTPDate").val();
+                    InBoundModel.POL = $("#txtPOS").val();
+                    InBoundModel.COUNTRY_OF_ORIGIN = $("#txtCOOR").val();
+                    InBoundModel.BL_NO = $("#txtMaster").val();
+                    InBoundModel.HBL_NO = $("#txtHouse").val();
+                    InBoundModel.CARGO_DESC = $("#txtCargo").val();
+                    InBoundModel.QTY = $("#txtPackages").val();
+                    InBoundModel.PACKAGE_TYPE = $("#txtPackagesType").val();
+                    InBoundModel.WEIGHT = $("#txtWeight").val();
+                    InBoundModel.DUTY = $("#txtDuty").val();
+                    InBoundModel.VALUE = $("#txtAccessible").val();
+                    InBoundModel.IMPORTER_ID = $("#txtImporter").val();
+                    InBoundModel.CHA_ID = $("#txtCHA").val();
+                    InBoundModel.CUSTOMER_ID = $("#val_Visitcharges").val();
+                    InBoundModel.EXPORTER_ID = $("#txtExporter").val();
+                    InBoundModel.IGM_NO = $("#txtIGMNo").val();
+                    InBoundModel.IGM_DATE = $("#txtIGMDate").val();
+                    InBoundModel.ITEM_NO = $("#txtItemNo").val();
+                    InBoundModel.REMARKS = $("#txtRemarks").val();
+
+
+                    var SelectedData = new Array();
+                    var tablearray = new Array();
+
+
+
+
+                    // saving Inbound_D table data
+                    var table = document.getElementById("tblContianerDetails");
+
+                    var row;
+                    var t = $('#tblInbound').DataTable();
+
+
+                    for (var i = 1; i < table.rows.length; i++) {
+                        debugger;
+                        row = table.rows[i];
+
+                        ContainerNo = row.cells[1].innerText;
+                        ContainerSize = row.cells[2].innerText;
+                        ContainerType = row.cells[3].innerText;
+                        CargoType = row.cells[4].innerText;
+                        SealNo = row.cells[4].innerText;
+
+
+                        SelectedData.push({
+                            'ContainerNo': ContainerNo, 'ContainerSize': ContainerSize, 'ContainerType': ContainerType, 'CargoType': CargoType, 'SealNo': SealNo
+                        })
+                    }
+
+
+                    var data1 = {
+                        'inboundModel': InBoundModel, 'SelectedData': SelectedData
+                    };
+
+
+                    var data = JSON.stringify(data1);
+
+
+
+            return $.ajax({
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                type: 'POST',
+                url: "/InBound/AddInboundEntry",
+                data: data,
+                success: function (result) {
+
+                    if (result == 'SUCCESS') {
+                        alert("Saved");
+                        window.location = "/Inbound/InboundEntry"
+
+                    }
+                    else {
+                        alert("Save failed!");
+                    }
+                },
+                error: function () {
+                    alert("Error!")
+                }
+            });
+        }
+</script>
+
+<script>
+                function addUser() {
+                // Get the user information (you can modify this part based on your requirements)
+                var userName = prompt("Enter user name:");
+                var userEmail = prompt("Enter user email:");
+
+                // Create a new user element
+                var newUserElement = document.createElement("div");
+                newUserElement.innerHTML = "<strong>User:</strong> " + userName + " | <strong>Email:</strong> " + userEmail;
+
+                // Append the new user element to the user list
+                    document.getElementById("userList").appendChild(newUserElement);
+                }
+</script>
+
+<script>
+     function AddContainerDetails() {
+    debugger
+        var isValid = true;
+
+        var ContainerNo = $("#txtContainerno").val();
+        var ContainerSize = $("#ddlContainerSize").val();
+        var ContainerType = $("#ddlContianerType").val();
+        var CargoType = $("#ddlCargoType").val();
+        var SealNo = $("#txtSealNo").val();
+
+        if (isValid) {
+
+
+
+            t = $('#tblContianerDetails').DataTable();
+            t.row.add([
+                "<input type='button' id='btnDelete' value='Delete'  class='btn btn-danger' />",
+                ContainerNo,
+                ContainerSize,
+                ContainerType,
+                CargoType,
+                SealNo,
+            ]).draw(false);
+
+          //  t.column(2).visible(false); // if any id that need to hide then use this
+        }
+    }
+</script>
+
+
+
+<script>
+
+
+
+        function Submit() {
+        debugger
+        if (IsValid() == true) {
+            debugger;
+
+            var SelectedData = new Array();
+            var tablearray = new Array();
+
+
+
+
+            // saving Inbound_D table data
+            var table = document.getElementById("tblContianerDetails");
+
+            var row;
+            var t = $('#tblInbound').DataTable();
+
+
+            for (var i = 1; i < table.rows.length; i++) {
+                debugger;
+                row = table.rows[i];
+
+                ContainerNo = row.cells[1].innerText;
+                ContainerSize = row.cells[2].innerText;
+                ContainerType = row.cells[3].innerText;
+                CargoType = row.cells[4].innerText;
+                SealNo = row.cells[4].innerText;
+
+
+                SelectedData.push({
+                    'ContainerNo': containerno, 'ContainerSize': containersize, 'ContainerType': containertype, 'CargoType': cargotype, 'SealNo': sealno
+                })
+            }
+
+
+            var data1 = {
+                'SelectedData': SelectedData
+            };
+
+
+            var data = JSON.stringify(data1);
+
+
+
+            return $.ajax({
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                type: 'POST',
+                url: "/InBound/AddInboundEntry",
+                data: data,
+                success: function (result) {
+
+                    if (result == 'SUCCESS') {
+                        alert("Saved");
+                        window.location = "/Inbound/InboundEntry"
+
+                    }
+                    else {
+                        alert("Save failed!");
+                    }
+                },
+                error: function () {
+                    alert("Error!")
+                }
+            });
+        }
+    }
+
+    function IsValid() {
+
+        var ContainerNo = $("#containerno").val();
+        var ContainerSize = $("#containersize").val();
+        var ContainerType = $("#containertype").val();
+        var CargoType = $("#cargotype").val();
+        var SealNo = $("#sealno").val();
+
+
+
+
+        var blResult = Boolean;
+        blResult = true;
+
+        if (ContainerNo == "") {
+            document.getElementById('containerno').style.borderColor = "red"
+            blResult = blResult && false;
+        }
+
+        if (ContainerSize == "") {
+            document.getElementById('containersize').style.borderColor = "red"
+            blResult = blResult && false;
+        }
+
+        if (ContainerType == "") {
+            document.getElementById('containertype').style.borderColor = "red"
+            blResult = blResult && false;
+        }
+
+        if (CargoType == "") {
+            document.getElementById('cargotype').style.borderColor = "red"
+            blResult = blResult && false;
+        }
+        if (SealNo == "") {
+            document.getElementById('sealno').style.borderColor = "red"
+            blResult = blResult && false;
+        }
+
+
+
+        if (blResult == false) { alert('Please fill the required fields!'); }
+        return blResult;
+    }
+
+
+        function FetchUserDetails(ContainerNo, ContainerSize, ContainerType, CargoType, SealNo) {
+    }
+
+</script>
+
+
+

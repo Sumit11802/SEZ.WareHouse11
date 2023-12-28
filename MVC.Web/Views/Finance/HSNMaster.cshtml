@@ -1,0 +1,109 @@
+﻿
+@{
+    ViewBag.Title = "HSNMaster";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="crumbs">
+    <ul id="breadcrumbs" class="breadcrumb">
+        <li> <i class="icon-home"></i> <a href="index.html">General Entry</a> </li>
+        <li class="current"> <a href="pages_calendar.html" title="">HSN Master</a> </li>
+    </ul>
+
+</div>
+<div class="page-header">
+    <div class="page-title">
+        <h3>HSN Master</h3>
+    </div>
+</div>
+
+<div class="col-md-10">
+    <div class="widget box">
+        <div class="widget-header">
+            <h4><i class="icon-reorder"></i> HSN Master Forms</h4>
+        </div>
+        <div class="widget-content">
+
+            <div class="form-group">
+
+                <div class="row">
+
+                    <div class="col-md-3">
+                        <label class="control-label">HSN ID</label>
+                        <input type="text" id="txtHSNID" placeholder="HSN Code" readonly="readonly" name="regular" class="form-control">
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="control-label">HSN Code</label>
+                        <input type="text" id="txtHSNCode" placeholder="HSN Code" name="regular" class="form-control">
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="control-label">HSN Description</label>
+                        <input type="text" id="txtHSNDescription" placeholder="HSN Description" name="regular" class="form-control">
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="control-label">HSN Tax Group ID</label>
+                        <input type="text" id="txtTaxGrpIdT" name="regular" placeholder="GST in %" class="form-control">
+                    </div>
+
+                </div>
+                    <div class="row">
+
+                        <label class="checkbox pull-left">
+                        <span><input type="checkbox" class="uniform" name="remember"></span> IsActive
+                        </label>
+                    </div>
+
+                    <div>
+                        <button onclick="SaveHNCMaster()" class="btn btn-info">Save</button>                       <button class="btn btn-info" style="background-color:red">Cancel</button>
+                    </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+<script>
+function SaveHNCMaster() {
+            
+                debugger;
+
+
+                var Finance = new Object();
+
+               
+                var  HSN_CODE = $("#txtHSNCode").val();
+                var  HSN_DESCRIPTION = $("#txtHSNDescription").val();
+                var   HSN_TAX_GROUP_ID = $("#txtTaxGrpIdT").val();
+
+ 
+    var Finance = {
+        'HSN_CODE': HSN_CODE, 'HSN_DESCRIPTION': HSN_DESCRIPTION, 'HSN_TAX_GROUP_ID': HSN_TAX_GROUP_ID
+    };
+
+    var data1 = {
+        'Finance': Finance 
+    };
+
+    var data = JSON.stringify(data1);
+
+            return $.ajax({
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                type: 'POST',
+                url: "/Finance/AddHSNDetails",
+                data: data,
+                success: function (result) {
+                },
+                error: function () {
+                    alert("Error!")
+                }
+            });
+        }</script>

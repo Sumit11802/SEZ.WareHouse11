@@ -1,0 +1,446 @@
+﻿@{ ViewBag.Title = "Gate In Entry";
+    Layout = "~/Views/Shared/_MainLayout.cshtml"; }
+
+<style>
+
+    .hiderow {
+        display: none;
+    }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+
+    .close {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+</style>
+
+<script src="~/js/GetTableJsonPagging.js"></script>
+<div class="page-body" id="divAwaitingSummary">
+
+    <div class="page-header">
+
+        <div class="crumbs">
+            <ul id="breadcrumbs" class="breadcrumb">
+                <li>
+                    <i class="icon-home"></i>
+                    <a href="index.html">Awaiting Gate In Entry</a>
+                </li>
+                <li class="current">
+                    <a href="pages_calendar.html" title="">Awaiting Gate In Entry</a>
+                </li>
+            </ul>
+        </div>
+        <div class="page-header row">
+            <div class="page-title col-6">
+                <h3>Awaiting Gate In Entry</h3>
+            </div>
+
+        </div>
+
+    </div>
+    <div class="card col-sm-12 col-lg-12">
+        <div class="card-header">
+
+
+            <div class="card-header-right">
+                <i class="icofont icofont-rounded-down"></i>
+                <i class="icofont icofont-refresh"></i>
+                <i class="icofont icofont-close-circled"></i>
+            </div>
+        </div>
+
+
+        <div class="card-block col-sm-12 col-lg-12">
+            <div class="row" style="display:none;">
+                <div class="col-lg-3 col-sm-12">
+                    <div class="form-group">
+                        <label class="form-label" style="visibility:hidden"> No</label>
+                        <div class="row gutters-xs">
+                            <div class="col">
+                                @Html.TextBox("TXtSearchOn", null, new { @class = "form-control ", @id = "TXtSearchOn", autocomplete = "off" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-sm-12">
+                    <div class="form-group">
+                        <label class="form-label" style="visibility:hidden">.</label>
+                        <div class="row gutters-xs">
+                            <div class="col">
+                                <button type="button" id="btnShow" value="Show" class="btn btn-primary" onclick="GetDetailsForTariffSearch()"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 col-sm-12">
+                    <div class="table-responsive">
+                        <table id="example3" class="table table-bordered table-hover tbl-cart text-nowrap" style="width:100%">
+                            <thead>
+                                <tr></tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="col-md-12"  id="divEntryfrom" style="display:none">
+    <div class="crumbs">
+        <ul id="breadcrumbs" class="breadcrumb">
+            <li> <i class="icon-home"></i> <a href="index.html">General Entry</a> </li>
+            <li class="current"> <a href="pages_calendar.html" title="">GateInEntry Entry</a> </li>
+        </ul>
+        
+    </div>
+    <div class="widget box">
+        <div class="widget-header">
+            <br />
+            <h4><i class="icon-reorder"></i>Gate In Entry</h4>
+            <div class="col-6">
+            
+                <button type="button" class="btn btn-primary float-right" id="CustomerAddBtn" onclick="AddMaster();">Summary</button>
+            </div>
+        </div> 
+        <div class="widget-content">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label class="control-label">Gate Pass No</label>
+                        <input type="text" id="txtGTNo" name="regular" readonly="readonly" placeholder="New" class="form-control">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label">Indate & Time</label>
+                        <input type="date" id="txtInDate" name="regular" class="form-control">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label">Customer Name</label>
+                        <input type="text" id="txtCustomer" name="regular"  readonly="readonly" class="form-control">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label">Cargo/Container No</label>
+                        <input type="text" id="txtContainerno" name="regular" class="form-control">
+                    </div>
+                    <div class="col-md-3">
+                        <br>
+                        <label class="control-label"> Size</label>
+                        <select class="form-control" id="txtSize">
+                            <option selected="selected"></option>
+                            <option value="20">20</option>
+                            <option value="40">40</option>
+                            <option value="45">45</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3">
+                        <br />
+                        <label class="control-label">Type</label>
+                        @Html.DropDownList("txtType", (IEnumerable<SelectListItem>)ViewBag.ContainerType, null, new { @class = "form-control", @id = "txtType" })
+                   
+                    </div>
+                    <div class="col-md-3">
+                        <br />
+                        <label class="control-label">Cargo Type</label>
+                        @Html.DropDownList("txtCargoType", (IEnumerable<SelectListItem>)ViewBag.CargoType, null, new { @class = "form-control", @id = "txtCargoType" })
+ 
+                    </div>
+                    <div class="col-md-3">
+                        <br />
+                        <label class="control-label">PKGS</label>
+                        <input type="text" id="txtPKGS" name="regular" class="form-control">
+                    </div>
+                </div>
+                <div class="row">
+                    <br />
+                    <div class="col-md-3">
+                        <label class="control-label">Weight</label>
+                        <input type="text" id="txtWeight" name="regular" class="form-control">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label">Vehicle/Trailer No</label>
+                        <input type="text" id="txtVehicle" name="regular" class="form-control">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label">Transporter</label>
+                        <input type="text" id="txtTransporter" name="regular" class="form-control">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label">Driver Name</label>
+                        <input type="text" id="txtDriverName" name="regular" class="form-control">
+                    </div>
+                    <div class="col-md-3">
+                        <br />
+                        <label class="control-label">EIR Date & Time</label>
+                        <input type="date" id="txtEIRDate" name="regular" class="form-control">
+                    </div>
+                    <div class="col-md-3">
+                        <br />
+                        <label class="control-label">Scan Status</label>
+                        <select class="form-control" id="txtScanStatus">
+                            <option selected="selected"></option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                   
+                        </select>
+                      
+                    </div>
+                    <div class="col-md-3">
+                        <br />
+                        <label class="control-label">Scan Type</label>
+                        <select class="form-control" id="txtScanType">
+                            <option selected="selected"></option>
+                            <option value="Cleared">Cleared</option>
+                            <option value="Not Cleared">Not Cleared</option>
+                        
+                        </select>
+                    
+                    </div>
+                    <div class="col-md-3">
+                        <br />
+                        <label class="control-label">Remark</label>
+                        <input type="text" id="txtRemark" name="regular" class="form-control">
+                    </div>
+
+                </div>
+
+            </div>
+
+            <button class="btn btn-info" onclick="SaveGateInEntry()" class="btn btn-info">Submit</button> <button class="btn btn-info">
+                Cancel
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="page-body" id="divSummary" style="display:none;">
+
+    <div class="page-header">
+
+        <div class="crumbs">
+            <ul id="breadcrumbs" class="breadcrumb">
+                <li>
+                    <i class="icon-home"></i>
+                    <a href="index.html">Gate In Summary</a>
+                </li>
+                <li class="current">
+                    <a href="pages_calendar.html" title="">Gate In Summary</a>
+                </li>
+            </ul>
+        </div>
+        <div class="page-header row">
+            <div class="page-title col-6">
+                <h3>Gate In Summary</h3>
+            </div>
+            <div class="col-6">
+                <br />
+                <button type="button" class="btn btn-primary float-right" id="btnBackButton" onclick="getBack();">Back</button>
+            </div>
+        </div>
+       
+    </div>
+    <div class="card col-sm-12 col-lg-12">
+        <div class="card-header">
+
+
+            <div class="card-header-right">
+                <i class="icofont icofont-rounded-down"></i>
+                <i class="icofont icofont-refresh"></i>
+                <i class="icofont icofont-close-circled"></i>
+            </div>
+        </div>
+
+
+        <div class="card-block col-sm-12 col-lg-12">
+            <div class="row" style="display:none;">
+                <div class="col-lg-3 col-sm-12">
+                    <div class="form-group">
+                        <label class="form-label" style="visibility:hidden"> No</label>
+                        <div class="row gutters-xs">
+                            <div class="col">
+                                @Html.TextBox("TXtSearchOn", null, new { @class = "form-control ", @id = "TXtSearchOn", autocomplete = "off" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-sm-12">
+                    <div class="form-group">
+                        <label class="form-label" style="visibility:hidden">.</label>
+                        <div class="row gutters-xs">
+                            <div class="col">
+                                <button type="button" id="btnShow" value="Show" class="btn btn-primary" onclick="GetDetailsForTariffSearch()"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 col-sm-12">
+                    <div class="table-responsive">
+                        <table id="example4" class="table table-bordered table-hover tbl-cart text-nowrap" style="width:100%">
+                            <thead>
+                                <tr></tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function() {
+ 
+      GetInPendingList();
+     });
+
+
+    function AddMaster() {
+        $("#divEntryfrom").hide();
+        $("#divSummary").show();
+        GetDetails();
+    }
+    function getBack() {
+        $("#divEntryfrom").show();
+        $("#divSummary").hide();
+    }
+
+    function GetDetails() {
+        $("#global-loader").fadeOut("slow");
+
+        var SearchType = $("#TXtSearchOn").val();
+
+        var data1 = { 'SearchType': SearchType };
+        var data = JSON.stringify(data1);
+        $.ajax({
+            type: "POST",
+            url: "/Finance/GateInSummary",
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+
+                $("#example4").empty();
+                RepTableDataJsonwopaging($("#example4"), data, "Voucher Details", "VoucherDetails_List");
+                $("#global-loader").fadeOut("slow");
+            },
+            error: function (response) {
+                alert(response.responseText);
+                $("#global-loader").fadeOut("slow");
+            }
+        })
+    }
+    function SelectTariff(Name, CONTAINER_NO, SIZE, CONTAINER_TYPE_ID, CARGO_TYPE_ID, QTY, WEIGHT) {
+         
+        $("#divAwaitingSummary").hide();
+        $("#divEntryfrom").show();
+
+        $("#txtCustomer").val(Name);
+        $("#txtContainerno").val(CONTAINER_NO);
+        $("#txtSize").val(SIZE);
+        $("#txtType").val(CONTAINER_TYPE_ID);
+        $("#txtCargoType").val(CARGO_TYPE_ID);
+        $("#txtPKGS").val(QTY);
+        $("#txtWeight").val(WEIGHT);
+         
+         
+    }
+
+    
+    </script>
+<script>
+    function GetInPendingList() {
+        $("#global-loader").fadeOut("slow");
+
+        var SearchType = $("#TXtSearchOn").val();
+
+        var data1 = { 'SearchType': SearchType };
+        var data = JSON.stringify(data1);
+        $.ajax({
+            type: "POST",
+            url: "/Finance/GateInPendingList",
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+
+                $("#example3").empty();
+                RepTableDataJsonwopaging($("#example3"), data, "Voucher Details", "VoucherDetails_List");
+                $("#global-loader").fadeOut("slow");
+            },
+            error: function (response) {
+                alert(response.responseText);
+                $("#global-loader").fadeOut("slow");
+            }
+        })
+    }
+    function SaveGateInEntry() {
+        debugger;
+
+
+        var GateInModel = new Object();
+
+        GateInModel.GATE_PASS_NO = $("#txtGTNo").val();
+        GateInModel.IN_DATE_TIME = $("#txtInDate").val();
+        GateInModel.CONTATINER_NAME = $("#txtCustomer").val();
+        GateInModel.CONTATINER_NO = $("#txtContainerno").val();
+        GateInModel.SIZE = $("#txtSize").val();
+        GateInModel.TYPE = $("#txtType").val();
+        GateInModel.CARGO_TYPE = $("#txtCargoType").val();
+        GateInModel.PKGS = $("#txtPKGS").val();
+        GateInModel.WEIGHT = $("#txtWeight").val();
+        GateInModel.VEHICLE_NO = $("#txtVehicle").val();
+        GateInModel.TRANSPORTER = $("#txtTransporter").val();
+        GateInModel.DRIVER_NAME = $("#txtDriverName").val();
+        GateInModel.EIR_DATE_TIME = $("#txtEIRDate").val();
+        GateInModel.SCAN_STATUS = $("#txtScanStatus").val();
+        GateInModel.SCAN_TYPE = $("#txtScanType").val();
+        GateInModel.REMARKS = $("#txtRemark").val();
+
+        var data = JSON.stringify({
+            gateInModel: GateInModel
+        });
+
+        return $.ajax({
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            type: 'POST',
+            url: "/GateInEntry/AddGateEntryDetails",
+            data: data,
+            success: function (result) {
+
+                if (result == 'SUCCESS') {
+                    alert("Saved");
+                    window.location = "/GateInEntry/GateInEntry"
+               
+                }
+                else {
+                    alert("Save failed!");
+                }
+            },
+            error: function () {
+                alert("Error!")
+            }
+        });
+    }</script>

@@ -1,0 +1,1127 @@
+﻿
+@{ ViewBag.Title = "Godown";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+
+    }
+<style>
+
+
+
+    .required {
+        content: "*";
+        color: red;
+        font: bold;
+        font-size: small;
+        padding-bottom: -50px;
+        vertical-align: middle;
+    }
+</style>
+<script src="~/js/GetTableJson.js"></script>
+
+<div class="page-header">
+    <div class="page-header-title">
+
+    </div>
+    <div class="crumbs">
+        <ul id="breadcrumbs" class="breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="#">Manage Master</a>
+            </li>
+            <li class="current">
+                <a href="#" title="">Godown Master</a>
+            </li>
+        </ul>
+    </div>
+
+</div>
+<div class=" content-area overflow-hidden" id="divCreate">
+  
+    <div class="page-header">
+        <div class="page-title">
+            <h3>Godown Master</h3>
+        </div>
+        <ul class="page-stats">
+
+            <li>
+                <div class="summary">
+                    <button type="button" class="btn btn-primary waves-effect waves-light f-right d-inline-block md-trigger" onclick="OpenWOSummary();" id="addlocallistbtn" data-modal="modal-13">
+                        Godown
+                    </button>
+                </div>
+
+            </li>
+        </ul>
+    </div>
+    <div class="widget box">
+        <div class="widget-header">
+            <h4><i class="icon-reorder"></i> Godown Master</h4>
+        </div>
+        <div class="widget-content">
+            <div class="row" style="display:none;">
+                <div class="col-lg-3 col-sm-12">
+                   
+                        <label class="form-label mandatory">Godown ID </label>
+                      
+                                @Html.TextBox("txtentryid", null, new { @class = "form-control ", @id = "txtentryid", Placeholder = "New", @autocomplete = "off", @readonly = "readonly" })
+
+                </div>
+                <div class="col-lg-3 col-sm-12" style="visibility:hidden">
+                    
+                        <label class="form-label mandatory">Category</label>
+                        <div class="row gutters-xs">
+                            <div class="col">
+                                @Html.DropDownList("ddlCategory", (IEnumerable<SelectListItem>)ViewBag.Warehouselist, "--Select--", new { @class = "form-control", @id = "ddlCategory", name = "ddltax", autocomplete = "off" })
+
+                                @*@Html.DropDownList("ddlCategory", (IEnumerable<SelectListItem>)ViewBag.ddlCategory, "--Select--", new { @class = "form-control", @id = "ddlCategory", name = "ddlCategory", autocomplete = "off" })*@
+                            </div>
+                        </div>
+                    </div>
+          
+            </div>
+            <div class="row">
+                <div class="col-lg-3 col-sm-4" style="display:none;">
+                
+                        <label class="form-label mandatory">Center Code<span class="required">*</span></label>
+                    
+                                @Html.TextBox("txtCenterCode", null, new { @class = "form-control ", @id = "txtCenterCode", Placeholder = "Center Code", style = "text-transform:uppercase", @autocomplete = "off" })
+                           
+                </div>
+
+                <div class="col-lg-3 col-sm-4">
+                        <label class="form-label mandatory">Godown Code<span class="required">*</span></label>
+                      
+                                @Html.TextBox("txtGodownCode", null, new { @class = "form-control ", @id = "txtGodownCode", Placeholder = "Godown Code", style = "text-transform:uppercase", @autocomplete = "off" })
+                          
+                </div>
+
+                <div class="col-lg-3 col-sm-12">
+               
+                        <label class="form-label">Date Of Possession<span class="required">*</span></label>
+                         @Html.TextBox("txtdobP", null, new { @class = "form-control form_datetime1", @Value = DateTime.Now.ToString("dd MMM yyyy hh:mm"), @disabled = "disabled" })
+
+                         
+                </div>
+                <div class="col-lg-3 col-sm-12">
+                   
+                        <label class="form-label">Warehouse Code<span class="required">*</span></label>
+                        @Html.DropDownList("ddltax", (IEnumerable<SelectListItem>)ViewBag.Warehouselist, "--Select--", new { @class = "form-control", @id = "ddltax", name = "ddltax", autocomplete = "off" })
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-sm-4">
+                   
+                        <label class="form-label">Godown Description</label>
+                      
+                                @Html.TextBox("txtdesc", null, new { @class = "form-control ", @id = "txtdesc", Placeholder = "Godown Description", style = "text-transform:uppercase", @autocomplete = "off" })
+
+                          
+                </div>
+
+                <div class="col-lg-3 col-sm-4" style="display:none;">
+                  
+                        <label class="form-label mandatory">Constructive Capacity(MT)</label>
+                      
+                                @Html.TextBox("txtconserv", null, new { @class = "form-control ", @id = "txtconserv", Placeholder = "Thumbrule Capacity(MT)", style = "text-transform:uppercase", @autocomplete = "off", onkeypress = "validate(event);" })
+                           
+                </div>
+
+                <div class="col-lg-3 col-sm-4" style="display:none;">
+                    <div class="form-group">
+                        <label class="form-label mandatory">Thumbrule Capacity(MT)</label>
+                        <div class="row gutters-xs">
+                            <div class="col">
+                                @Html.TextBox("txtthumb", null, new { @class = "form-control ", @id = "txtthumb", Placeholder = "Thumbrule Capacity(MT)", style = "text-transform:uppercase", @autocomplete = "off" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-4">
+                 
+                        <label class="form-label mandatory">Area In SQM<span class="required">*</span></label>
+                    
+                                @Html.TextBox("txtsqm", null, new { @class = "form-control ", @id = "txtsqm", Placeholder = "Area In SQM", style = "text-transform:uppercase", @autocomplete = "off", onkeypress = "validate(event);", onblur = "Filldetailsintbl(); " })
+                          
+                </div>
+                <div class="col-lg-3 col-sm-4">
+                  
+                        <label class="form-label mandatory">Area In SQFT<span class="required">*</span></label>
+                       
+                                @Html.TextBox("txtsqft", null, new { @class = "form-control ", @id = "txtsqft", Placeholder = "Area In SQFT", style = "text-transform:uppercase", @autocomplete = "off", @readonly = "readonly" })
+                          
+                </div>
+
+
+            </div>
+
+
+            <div class="form-horizontal" id="divdimension" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-3 col-sm-12">
+                        <div class="form-group">
+                            <label class="form-label mandatory">Width<span class="required">*</span> </label>
+                            <div class="row gutters-xs">
+                                <div class="col">
+                                    @Html.TextBox("txtwidth", null, new { @class = "form-control ", @id = "txtwidth", Placeholder = "Width", @autocomplete = "off", onkeypress = "validate(event);" })
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-sm-4">
+                        <div class="form-group">
+                            <label class="form-label mandatory">Length<span class="required">*</span></label>
+                            <div class="row gutters-xs">
+                                <div class="col">
+                                    @Html.TextBox("txtlen", null, new { @class = "form-control ", @id = "txtlen", Placeholder = "Length", style = "text-transform:uppercase", @autocomplete = "off", onkeypress = "validate(event);" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-sm-4">
+                        <div class="form-group">
+                            <label class="form-label mandatory">Height<span class="required">*</span></label>
+                            <div class="row gutters-xs">
+                                <div class="col">
+                                    @Html.TextBox("txthight", null, new { @class = "form-control ", @id = "txthight", Placeholder = "Height", @autocomplete = "off", onkeypress = "validate(event);" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-lg-3 col-xs-12">
+              
+                        <label class="custom-switch">
+                            <input type="checkbox" name="custom-switch-checkbox" id="chkIsActive" value="true" checked class="custom-switch-input">
+                            <span class="custom-switch-indicator"></span>
+                            <span class="custom-switch-description">IsActive</span>
+                        </label>
+                    
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label"></label>
+             
+                        <button id="btnSave" class="btn btn-info" onclick="return Save();">Save</button>
+                        <input type="button" name="clear" value="Clear" class="btn btn-danger" title="clear" id="clearValue" />
+                 
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+  
+<div class=" content-area" id="divCreateSummary" style="display:none">
+
+    <div class="page-header">
+        <div class="page-title">
+            <h3>Godown Master</h3>
+        </div>
+        <ul class="page-stats">
+
+            <li>
+                <div class="summary">
+                    <button type="button" class="btn btn-primary waves-effect waves-light f-right d-inline-block md-trigger" onclick="BackToWorkOrder();" id="addlocallistbtn" data-modal="modal-13">
+                         Add  Godown
+                    </button>
+                </div>
+
+            </li>
+        </ul>
+    </div>
+    <div class="widget box">
+        <div class="widget-header">
+            <h4><i class="icon-reorder"></i> Godown Master</h4>
+        </div>
+        <div class="widget-content">
+            <div class="row">
+                <div class="col-lg-3 col-sm-12">
+                 
+                        <label class="form-label mandatory">Search</label>
+                     
+                                @Html.TextBox("txtsearch", null, new { @class = "form-control ", @id = "txtsearch", style = "text-transform:uppercase", name = "txtsearch", autocomplete = "on" })
+                          
+                    
+                </div>
+                <div class="col-lg-3 col-sm-12" style="padding-top:20px;">
+                  
+                   
+                    
+                                <button class="btn btn-primary" id="TripSearch" title="Search" type="button" onclick="ShowSSRSummary()">Search</button>
+                            
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12 col-sm-12">
+                    <div class="table-responsive">
+                        <table id="example2" class="table table-bordered table-hover tbl-cart text-nowrap" style="width:100%">
+                            <thead>
+                                <tr>
+                                    @*<th class="wd-15p sorting">View</th>
+                                        <th class="wd-15p sorting"> Edit</th>*@
+                                    <th class="wd-15p sorting">Sr No</th>
+                                    <th class="wd-15p sorting">Godown Code</th>
+                                    <th class="wd-15p sorting">Warehouse Code</th>
+                                    <th class="wd-15p sorting">Warehouse Description</th>
+                                    @*<th class="wd-15p sorting">Constructive Capacity</th>
+                                        <th class="wd-15p sorting">Thumbrule Capacity</th>
+                                        <th class="wd-15p sorting">Width</th>
+                                        <th class="wd-15p sorting">Length</th>
+                                        <th class="wd-15p sorting">Height</th>*@
+                                    <th class="wd-15p sorting">Area in SQM</th>
+                                    <th class="wd-15p sorting">Area in SQ. FT.</th>
+                                    <th class="wd-15p sorting">Is Active</th>
+
+
+
+                                </tr>
+                            </thead>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+       
+    <div class="content-area overflow-hidden" id="divEditEntry" style="display:none">
+        <div class="page-header">
+            <h4 class="page-title">Godown</h4>
+
+            <div class="form-group">
+                <label class="form-label"></label>
+                <div class="row gutters-xs">
+                    <div class="col">
+                        <a onclick="OpenWOSummary();" class="btn btn-primary btn-xs" style="align-content:center;color:white">Summary</a>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="form-horizontal">
+                            <div class="row">
+                                <div class="col-lg-3 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label mandatory">Godown-ID </label>
+                                        <div class="row gutters-xs">
+                                            <div class="col">
+                                                @Html.TextBox("txtentryid1", null, new { @class = "form-control ", @id = "txtentryid1", Placeholder = "New", @autocomplete = "off", @readonly = "readonly" })
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-3 col-sm-4">
+                                    <div class="form-group">
+                                        <label class="form-label mandatory">Center Code</label>
+                                        <div class="row gutters-xs">
+                                            <div class="col">
+                                                @Html.TextBox("txtCenterCode1", null, new { @class = "form-control ", @id = "txtCenterCode1", Placeholder = "Center Code", style = "text-transform:uppercase", @autocomplete = "off", onkeyup = "allowNumeric(this)" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-3 col-sm-4">
+                                    <div class="form-group">
+                                        <label class="form-label mandatory">Godown Code</label>
+                                        <div class="row gutters-xs">
+                                            <div class="col">
+                                                @Html.TextBox("txtGodownCode1", null, new { @class = "form-control ", @id = "txtGodownCode1", Placeholder = "Godown Code", style = "text-transform:uppercase", @autocomplete = "off", onkeyup = "allowNumeric(this)" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">Date Of Possession</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.TextBox("txtdobP1", null, new { @class = "form-control form_datetime1", @Value = DateTime.Now.ToString("dd MMM yyyy hh:mm"), @disabled = "disabled" })
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">Warehouse Code</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.DropDownList("ddltax1", (IEnumerable<SelectListItem>)ViewBag.Warehouselist, "--Select--", new { @class = "form-control", @id = "ddltax1", name = "ddltax", autocomplete = "off", onkeyup = "allowNumeric(this)" })
+
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                           
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6 col-sm-4">
+                                <div class="form-group">
+                                    <label class="form-label">Warehouse Description</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.TextBox("txtdesc1", null, new { @class = "form-control ", @id = "txtdesc1", Placeholder = "Warehouse Description Code", style = "text-transform:uppercase", @autocomplete = "off", onkeyup = "allowAlpha(this)" })
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3 col-sm-4">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Constructive Capacity(MT)</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.TextBox("txtconserv1", null, new { @class = "form-control ", @id = "txtconserv1", Placeholder = "Thumbrule Capacity(MT)", style = "text-transform:uppercase", @autocomplete = "off", onkeypress = "validate(event);", onkeyup = "allowNumeric(this)" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3 col-sm-4">
+                                <div class="form-group">
+                                    <label class="form-label mandatory">Thumbrule Capacity(MT)</label>
+                                    <div class="row gutters-xs">
+                                        <div class="col">
+                                            @Html.TextBox("txtthumb1", null, new { @class = "form-control ", @id = "txtthumb1", Placeholder = "Thumbrule Capacity(MT)", style = "text-transform:uppercase", @autocomplete = "off", onkeyup = "allowNumeric(this)" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="Editdivdimension">
+            <div class="page-header">
+                <h4 class="page-title">Dimension In Mtrs</h4>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="form-horizontal">
+                                <div class="row">
+                                    <div class="col-lg-3 col-sm-12">
+                                        <div class="form-group">
+                                            <label class="form-label mandatory">Width </label>
+                                            <div class="row gutters-xs">
+                                                <div class="col">
+                                                    @Html.TextBox("txtwidth1", null, new { @class = "form-control ", @id = "txtwidth1", Placeholder = "Width", @autocomplete = "off", onkeypress = "validate(event);", onkeyup = "allowNumeric(this)" })
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-3 col-sm-4">
+                                        <div class="form-group">
+                                            <label class="form-label mandatory">Length</label>
+                                            <div class="row gutters-xs">
+                                                <div class="col">
+                                                    @Html.TextBox("txtlen1", null, new { @class = "form-control ", @id = "txtlen1", Placeholder = "Length", style = "text-transform:uppercase", @autocomplete = "off", onkeypress = "validate(event);", onkeyup = "allowNumeric(this)" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-3 col-sm-4">
+                                        <div class="form-group">
+                                            <label class="form-label mandatory">Height</label>
+                                            <div class="row gutters-xs">
+                                                <div class="col">
+                                                    @Html.TextBox("txthight1", null, new { @class = "form-control ", @id = "txthight1", Placeholder = "Height", @autocomplete = "off", onkeypress = "validate(event);", onkeyup = "allowNumeric(this)" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-3 col-sm-4">
+                                    <div class="form-group">
+                                        <label class="form-label mandatory">Area In SQM</label>
+                                        <div class="row gutters-xs">
+                                            <div class="col">
+                                                @Html.TextBox("txtsqm1", null, new { @class = "form-control ", @id = "txtsqm1", Placeholder = "Area In SQM", style = "text-transform:uppercase", @autocomplete = "off", onkeypress = "validate(event);", onblur = "Filldetailsintbl1(); " })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-3 col-sm-4">
+                                    <div class="form-group">
+                                        <label class="form-label mandatory">Area In SQFT</label>
+                                        <div class="row gutters-xs">
+                                            <div class="col">
+                                                @Html.TextBox("txtsqft1", null, new { @class = "form-control ", @id = "txtsqft1", Placeholder = "Area In SQFT", style = "text-transform:uppercase", @autocomplete = "off", @readonly = "readonly", onkeyup = "allowNumeric(this)" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-3 col-xs-12">
+                <div class="form-group">
+                    <label class="custom-switch">
+                        <input type="checkbox" name="custom-switch-checkbox" id="chkIsActive1" checked class="custom-switch-input">
+                        <span class="custom-switch-indicator"></span>
+                        <span class="custom-switch-description">IsActive</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label class="form-label"></label>
+                <div class="row gutters-xs">
+                    <div class="col">
+                        <button id="btnSave" class="btn btn-primary btn-xs" title="Save" onclick="return Update();">Update</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#example2').DataTable({
+                "bLengthChange": false,
+                "bInfo": false,
+                "bPaginate": false,
+                //"bFilter": false,
+                "paging": false
+
+            });
+        });
+        $(window).on("load", function (e) {
+            $("#global-loader").fadeOut("slow");
+        })</script>
+    <script>
+
+        function BackToWorkOrder() {
+            $("#divCreate").show();
+    
+            $("#divCreateSummary").hide();
+            $("#divEditEntry").hide();
+            $("#Editdivdimension").hide();
+        }
+            function OpenWOSummary() {
+                debugger
+                $("#divCreateSummary").show();
+        $("#divEditEntry").hide();
+        $("#divdimension").hide();
+        $("#divCreate").hide();
+        $("#Editdivdimension").hide();
+
+
+
+        }
+
+
+    function validate(evt) {
+        var theEvent = evt || window.event;
+
+        // Handle paste
+        if (theEvent.type === 'paste') {
+            key = event.clipboardData.getData('text/plain');
+        } else {
+            // Handle key press
+            var key = theEvent.keyCode || theEvent.which;
+            key = String.fromCharCode(key);
+        }
+        var regex = /[0-9]|\./;
+        if (!regex.test(key)) {
+            theEvent.returnValue = false;
+            if (theEvent.preventDefault) theEvent.preventDefault();
+        }
+    }
+    function Filldetailsintbl() {
+        debugger;
+
+
+        var Areasqm = $("#txtsqm").val();
+
+        var Areasqft = $("#txtsqft").val();
+        if (Areasqm == "") {
+            alert("plz specify Area")
+
+        } else {
+            Areasqft = Areasqm * 10.76
+
+        }
+
+        $("#txtsqm").val(Areasqm);
+        $("#txtsqft").val(Areasqft);
+
+
+
+    }
+
+    function Save() {
+
+        var CategoryID = document.getElementById('ddlCategory').value;
+            var CentreCode = document.getElementById('txtCenterCode').value;
+            var Godowncode = document.getElementById('txtGodownCode').value;
+            var dop = document.getElementById('txtdobP').value;
+            var warehouse = document.getElementById('ddltax').value;
+            var desc = document.getElementById('txtdesc').value;
+            var conscapacity = document.getElementById('txtconserv').value;
+            var thumbcap = document.getElementById('txtthumb').value;
+            var widht = document.getElementById('txtwidth').value;
+            var len = document.getElementById('txtlen').value;
+            var height = document.getElementById('txthight').value;
+            var areasqm = document.getElementById('txtsqm').value;
+            var areasqft = document.getElementById('txtsqft').value;
+            var isActive = document.getElementById('chkIsActive').value;
+            var EntryID = document.getElementById('txtentryid').value
+
+
+        //if (CategoryID == "") {
+        //    document.getElementById("ddlCategory").style.borderColor = "red";
+        //    alert('Please select category.')
+        //    event.preventDefault();
+        //    return;
+        //}
+
+         //   if (CentreCode == "") {
+         //       document.getElementById("txtCenterCode").style.borderColor = "red";
+         //   alert('Please enter center code.')
+         //   event.preventDefault();
+         //   return;
+         //}
+            if (Godowncode == "") {
+                document.getElementById("txtGodownCode").style.borderColor = "red";
+             alert('Please enter godown code.')
+             event.preventDefault();
+             return;
+         }
+
+         //   if (warehouse == "") {
+         //       document.getElementById("ddltax").style.borderColor = "red";
+         //    alert('Please Enter Series Code!')
+         //    event.preventDefault();
+         //    return;
+         //}
+            if (desc == "") {
+                document.getElementById("txtdesc").style.borderColor = "red";
+             alert('Please Specify descriptions.')
+             event.preventDefault();
+             return;
+         }
+
+         //   if (conscapacity == "") {
+         //       document.getElementById("txtconserv").style.borderColor = "red";
+         //    alert('Please specify conservative capacity.')
+         //    event.preventDefault();
+         //    return;
+         //}
+         //   if (thumbcap == "") {
+         //       document.getElementById("txtthumb").style.borderColor = "red";
+         //    alert('Please enter the thumbcapacity.')
+         //    event.preventDefault();
+         //    return;
+         //}
+         //   if (widht == "") {
+         //       document.getElementById("txtwidth").style.borderColor = "red";
+         //       alert('Please enter the width.')
+         //    event.preventDefault();
+         //    return;
+         //}
+         //   if (len == "") {
+         //       document.getElementById("txtlen").style.borderColor = "red";
+         //    alert('Please specify lenghth.')
+         //    event.preventDefault();
+         //    return;
+         //}
+            if (areasqm == "") {
+                document.getElementById("txtsqm").style.borderColor = "red";
+             alert('Please specify area.')
+             event.preventDefault();
+             return;
+         }
+         //   if (areasqft == "") {
+         //    document.getElementById("ddltax").style.borderColor = "red";
+         //    alert('Please select tax code!')
+         //    event.preventDefault();
+         //    return;
+         //}
+
+
+
+
+            debugger;
+        var element = {};
+        element.CategoryID = CategoryID;
+            element.CentreCode = CentreCode;
+            element.Godowncode = Godowncode;
+            element.Dateofposs = dop;
+            element.Warehousecode = warehouse;
+            element.Description = desc;
+            element.conscapacity = conscapacity;
+            element.thumbcapacity = thumbcap;
+            element.Width = widht;
+            element.len = len;
+            element.height = height;
+            element.Areasqm = areasqm;
+            element.Areasqft = areasqft;
+            element.isActive = isActive;
+            element.EntryID = EntryID;
+            var data1 = { 'element': element };
+            var data = JSON.stringify(data1);
+            console.log(data1);
+
+
+        var r = confirm("Do you want to save");
+        if (r == true) {
+
+
+        //expTariffMaster Is Entities Name
+        //This Is For Pass Data Through Java Script
+                $.ajax({
+                    url: "/Master/CheckGodownExist",
+                    data: '{ExpHeadMasterEnt: ' + JSON.stringify(element) + '}',
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    if (data != "Godown code already exists!") {
+                        Save1();
+                    } else {
+                        alert(data);
+                    }
+
+
+                },
+                    error: function (error) {
+                    let str = error.responseText;
+                    var a = str.indexOf("<title>") + 7;
+                    var b = str.indexOf("</title>");
+                    str = str.substring(a, b);
+                    alert("Something went wrong: " + str);
+                   }
+                });
+        }
+
+        else {
+
+            alert("You Pressed No!")
+
+        }
+    }
+
+
+    function Save1() {
+        var CategoryID = document.getElementById('ddlCategory').value;
+         var CentreCode = document.getElementById('txtCenterCode').value;
+         var Godowncode = document.getElementById('txtGodownCode').value;
+         var dop = document.getElementById('txtdobP').value;
+         var warehouse = document.getElementById('ddltax').value;
+         var desc = document.getElementById('txtdesc').value;
+         var conscapacity = document.getElementById('txtconserv').value;
+         var thumbcap = document.getElementById('txtthumb').value;
+         var widht = document.getElementById('txtwidth').value;
+         var len = document.getElementById('txtlen').value;
+         var height = document.getElementById('txthight').value;
+         var areasqm = document.getElementById('txtsqm').value;
+         var areasqft = document.getElementById('txtsqft').value;
+        // var isActive = document.getElementById('chkIsActive').value;
+         var chkIsActive = $("#chkIsActive").is(":checked");
+         var EntryID = document.getElementById('txtentryid').value
+         debugger;
+        var element = {};
+        element.CategoryID = CategoryID;
+         element.CentreCode = CentreCode;
+         element.Godowncode = Godowncode;
+         element.Dateofposs = dop;
+         element.Warehousecode = warehouse;
+         element.Description = desc;
+         element.conscapacity = conscapacity;
+         element.thumbcapacity = thumbcap;
+         element.Width = widht;
+         element.len = len;
+         element.height = height;
+         element.Areasqm = areasqm;
+         element.Areasqft = areasqft;
+         element.isActive = chkIsActive;
+         element.EntryID = EntryID;
+         var data1 = { 'element': element };
+         var data= JSON.stringify(data1);
+         console.log(data1);
+
+                $.ajax({
+                    url: "/Master/SaveGodownMaster",
+                    data: data,
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                    success: function (data) {
+                        @*alert("Record Saved Successfully");
+                         window.location.href = '@Url.Action("GodownMaster", "BondMaster")';*@
+                         debugger
+                        if (data !=0) {
+                           swal("Good Job!", "Record Added Successfully!!", "success").then(function () {
+                                window.location.href = '@Url.Action("GodownMaster", "Master")';
+                            });
+
+                        }
+                        else {
+                            alert(data);
+                            window.location.href = '@Url.Action("GodownMaster", "Master")';
+                        }
+
+
+                },
+                    error: function (error) {
+                    let str = error.responseText;
+                    var a = str.indexOf("<title>") + 7;
+                    var b = str.indexOf("</title>");
+                    str = str.substring(a, b);
+                    alert("Something went wrong: " + str);
+                   }
+                });
+
+    }
+    function ShowSSRSummary() {
+        debugger;
+        //console.log(data1);
+
+        var search = document.getElementById('txtsearch').value;
+        var data1 = { 'search': search };
+        data = JSON.stringify(data1);
+        $.ajax({
+            url: "/Master/GetGodownList",
+            data: data,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                debugger;
+               // alert(jsonResult)
+            //    //alert(jsonResult)
+            //    $("#reportTable").empty();
+            //    RepTableDataJson($("#tblWorkOrderOpenList"), data, "GetImportAcList", "GetImportAcList")
+            //    //  alert(jsonResult)
+                //},
+
+                $('#example2').dataTable({
+                    "destroy": true,
+                    "bLengthChange": false,
+                    "aaData": data,
+                    "info": true,
+                    "dataSrc": "",
+                    "bPaginate": true,
+                    "bFilter": false,
+                    "aaSorting": [],
+                    "order": [],
+
+                    //"aoColumnDefs": [
+                    //    {
+                    //        'bSortable': false,
+                    //        'aTargets': [0],
+                    //        //"defaultContent": "-",
+                    //        //"targets": "_all"
+                    //    }
+
+                    //],
+
+                "aoColumns": [
+                    //{
+                    //    "data": "EntryID",
+                    //    "render": function (data, type, row, meta) {
+                    //        data = "<a href=\"#\" class=\"btn btn-sm btn-primary\" title=\"View\" onclick=\"ViewGodownMaster('" + row.EntryID + "')\"><i class=\"fa fa-eye\" style=\"font-size: 16px;\"><i></a>";
+                    //        return data;
+                    //    }
+                    //},
+                    //{
+
+                    //    "data": "EntryID",
+                    //    "render": function (data, type, row, meta) {
+                    //        if (type === 'display') {
+                    //            data = "<a href=\"#\" class=\"btn btn-sm btn-primary\" title=\"Edit\" onclick=\"EditGodownMaster('" + row.EntryID + "')\"><i class=\"fa fa-edit\" style=\"font-size: 16px;\"><i></a>";
+                    //        }
+                    //        return data;
+                    //    }
+                    //},
+
+                    { "data": "EntryID" },
+                    //{ "data": "CentreCode" },
+                    { "data": "GodownCode" },
+                    { "data": "Warehousecode" },
+                    { "data": "Description" },
+
+                    //{ "data": "conscapacity" },
+                    //{ "data": "thumbcapacity" },
+                    //{ "data": "Width" },
+                    //{ "data": "len" },
+                    //{ "data": "Height" },
+                    { "data": "Areasqm" },
+                    { "data": "Areasqft" },
+                    { "data": "isActive" },
+
+                ]
+            })
+        },
+
+
+            error: function (errormessage) {
+                alert("error");
+                alert(errormessage.responseText);
+            }
+        });
+
+
+    }
+
+    function Filldetailsintbl1() {
+        debugger;
+
+
+        var Areasqm = $("#txtsqm1").val();
+
+        var Areasqft = $("#txtsqft1").val();
+        if (Areasqm == "") {
+            alert("plz specify Area")
+
+        } else {
+            Areasqft = Areasqm * 10.76
+
+        }
+
+        $("#txtsqm1").val(Areasqm);
+        $("#txtsqft1").val(Areasqft);
+
+
+
+    }
+    function EditGodownMaster(EntryID) {
+
+        //$("#divCreate").hide();
+        $("#divEditEntry").show();
+        $("#Editdivdimension").show();
+
+        //$("#divCreateSummary").hide();
+
+        //$("#divCreate").show();
+        //$("#divdimension").show();
+
+        //$("#divCreate").hide();
+
+        $("#divCreateSummary").hide();
+
+        var data = JSON.stringify({
+            'EntryID': EntryID
+        });
+        debugger;
+        $.ajax({
+            url: "/Master/ViewGodownMaster",
+            data: data,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            //  dataType: "json",
+            success: function (response) {
+                /*console.log(response);*/
+                debugger;
+                console.log(response);
+                //$('#divEditEntry').html(response);
+                $("#txtentryid1").val(response[0].EntryID);
+                $("#txtCenterCode1").val(response[0].CentreCode);
+                $("#txtGodownCode1").val(response[0].GodownCode);
+                $("#txtdobP1").val(response[0].Dateofposs);
+                $("#ddltax1").val(response[0].Warehousecode);
+                $("#txtdesc1").val(response[0].Description);
+                $("#txtconserv1").val(response[0].conscapacity);
+                $("#txtthumb1").val(response[0].thumbcapacity);
+                $("#txtwidth1").val(response[0].Width);
+                $("#txtlen1").val(response[0].len);
+                $("#txthight1").val(response[0].Height);
+                $("#txtsqm1").val(response[0].Areasqm);
+                $("#txtsqft1").val(response[0].Areasqft);
+               /* $("#chkIsActive1").val(response[0].isActive);*/
+
+
+                //$('#divCreate :input').attr('disabled', true);
+                //$('#divdimension :input').attr('disabled', true);
+
+
+            }
+        });
+
+    }
+
+    function Update() {
+        var r = confirm("Do you wish to modify?");
+        if (r == true) {
+            debugger;
+
+
+            $("#divCreate").hide();
+            $("#divEditEntry").show();
+            $("#divdimension").show();
+            $("#divCreateSummary").hide();
+            var CentreCode = document.getElementById('txtCenterCode1').value;
+            var Godowncode = document.getElementById('txtGodownCode1').value;
+            var dop = document.getElementById('txtdobP1').value;
+            var warehouse = document.getElementById('ddltax1').value;
+            var desc = document.getElementById('txtdesc1').value;
+            var conscapacity = document.getElementById('txtconserv1').value;
+            var thumbcap = document.getElementById('txtthumb1').value;
+            var widht = document.getElementById('txtwidth1').value;
+            var len = document.getElementById('txtlen1').value;
+            var height = document.getElementById('txthight1').value;
+            var areasqm = document.getElementById('txtsqm1').value;
+            var areasqft = document.getElementById('txtsqft1').value;
+            var chkIsActive = $("#chkIsActive1").is(":checked");
+           /* var isActive = document.getElementById('chkIsActive1').value;*/
+            var EntryID = document.getElementById('txtentryid1').value
+            debugger;
+            var element = {};
+            element.CentreCode = CentreCode;
+            element.Godowncode = Godowncode;
+            element.Dateofposs = dop;
+            element.Warehousecode = warehouse;
+            element.Description = desc;
+            element.conscapacity = conscapacity;
+            element.thumbcapacity = thumbcap;
+            element.Width = widht;
+            element.len = len;
+            element.Height = height;
+            element.Areasqm = areasqm;
+            element.Areasqft = areasqft;
+            element.isActive = chkIsActive;
+            element.EntryID = EntryID;
+            var data1 = { 'element': element };
+            var data = JSON.stringify(data1);
+
+           // var data1 };
+        var data = JSON.stringify(data1);
+        //alert(data);
+
+        $.ajax({
+            type: 'POST',
+            url: '/Master/EditGodownMaster',
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            success: function (data) {
+                alert("Record Update successfully!");
+                //$("#divCreateSummary").show();
+                //$("#divEditEntry").hide();
+                //$("#Editdivdimension").hide();
+                //$("#divCreate").hide();
+                //$("#divdimension").hide();
+                window.location.href = '@Url.Action("GodownMaster", "Master")';
+
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+                //  $("#global-loader").fadeOut("slow");
+            }
+        });
+    }
+
+        else {
+            alert("You Pressed No!")
+        }
+
+    }
+
+
+    function ViewGodownMaster(EntryID) {
+        //alert('View');
+        $("#divCreate").show();
+        $("#divdimension").show();
+
+        //$("#divCreate").hide();
+
+        $("#divCreateSummary").hide();
+
+        var data = JSON.stringify({
+            'EntryID': EntryID
+        });
+        debugger;
+        $.ajax({
+            url: "/BondNoc/ViewGodownMaster",
+            data: data,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            //  dataType: "json",
+            success: function (response) {
+                /*console.log(response);*/
+                debugger;
+                //$('#divEditEntry').html(response);
+                $("#txtentryid").val(response[0].EntryID);
+                $("#txtCenterCode").val(response[0].CentreCode);
+                $("#txtGodownCode").val(response[0].GodownCode);
+                $("#txtdobP").val(response[0].Dateofposs);
+                $("#ddltax").val(response[0].Warehousecode);
+                $("#txtdesc").val(response[0].Description);
+                $("#txtconserv").val(response[0].conscapacity);
+                $("#txtthumb").val(response[0].thumbcapacity);
+                $("#txtwidth").val(response[0].Width);
+                $("#txtlen").val(response[0].len);
+                $("#txthight").val(response[0].Height);
+                $("#txtsqm").val(response[0].Areasqm);
+                $("#txtsqft").val(response[0].Areasqft);
+                $("#chkIsActive").val(response[0].isActive);
+
+
+                $('#divCreate :input').attr('disabled', true);
+                $('#divdimension :input').attr('disabled', true);
+
+
+            }
+        });
+    }
+
+    function allowNumeric(thisInput) {
+        thisInput.value = thisInput.value.split(/[^0-9 ]/).join('');
+
+    }
+    function allowAlpha(thisInput) {
+        thisInput.value = thisInput.value.split(/[^a-zA-Z ]/).join('');
+
+    }
+    </script>
+

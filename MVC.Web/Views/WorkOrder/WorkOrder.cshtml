@@ -1,0 +1,111 @@
+﻿
+
+    @{
+        ViewBag.Title = "WorkOrder";
+        Layout = "~/Views/Shared/_MainLayout.cshtml";
+    }
+
+
+    <div class="crumbs">
+        <ul id="breadcrumbs" class="breadcrumb">
+            <li> <i class="icon-home"></i> <a href="index.html">General Entry</a> </li>
+            <li class="current"> <a href="pages_calendar.html" title="">WorkOrder</a> </li>
+        </ul>
+        @*<ul class="crumb-buttons">
+                <li><a href="charts.html" title=""><i class="icon-signal"></i><span>Statistics</span></a></li>
+                <li class="dropdown">
+                    <a href="#" title="" data-toggle="dropdown"><i class="icon-tasks"></i><span>Users <strong>(+3)</strong></span><i class="icon-angle-down left-padding"></i></a>
+                    <ul class="dropdown-menu pull-right">
+                        <li><a href="form_components.html" title=""><i class="icon-plus"></i>Add new User</a></li>
+                        <li><a href="tables_dynamic.html" title=""><i class="icon-reorder"></i>Overview</a></li>
+                    </ul>
+                </li>
+                <li class="range"><a href="#"> <i class="icon-calendar"></i> <span></span> <i class="icon-angle-down"></i> </a></li>
+            </ul>*@
+    </div>
+    ViewBag.Title = "WorkOrder";
+
+    <div class="col-md-12">
+        <div class="widget box">
+            <div class="widget-header">
+                <h4>
+                    <i class="icon-reorder"></i>GenerateWorkorder</h4>
+            </div> <div class="widget-content">
+
+                       <div class="form-group">
+
+                           <div class="row">
+                               <div class="col-md-3">
+                                   <label class="control-label">Search On</label>
+                                   <input type="text" id="txtTPNo" name="regular" class="form-control">
+                               </div>
+                               <div class="col-md-3">
+                                   <label class="control-label">WO Type</label>
+                                   <select class="form-control" id="ddlInboundType">
+                                       <option value="en-EN" selected="selected">Destuff</option>
+                                       <option value="de-DE">Examination</option>
+                                       <option value="de-DE">Loading</option>
+                                   </select>
+                               </div>
+                               <div class="col-md-3">
+                                   <label class="control-label">BL NO/ Container No/ JO NO/ Requst Id</label>
+                                   <input type="text" id="txtTPNo" name="regular" class="form-control">
+                               </div>
+                               <div class="col-md-3">
+                                   <label class="control-label">Customer</label>
+                                   <input type="text" id="txtRequestNo" name="regular" class="form-control">
+                               </div>
+
+                               <div class="col-md-3">
+                                   <br />
+                                   <label class="control-label">JO NO</label>
+                                   <input type="text" id="txtTPNo" name="regular" class="form-control">
+
+                               </div>
+
+
+                               <div class="col-md-3">
+
+                                   <label class="control-label">CHA</label>
+                                   <input type="text" id="txtBoeno" name="regular" class="form-control">
+
+                               </div>
+                               <div class="col-md-3">
+                                   <label class="control-label">Vendor Name</label>
+                                   <input type="text" id="txtBoeDate" name="regular" class="form-control">
+                               </div>
+
+                           </div>
+                           <div style="padding:1%">
+                               <table class="table table-striped table-bordered table-hover table-checkable datatable">
+                                   <thead>
+                                       <tr>
+                                           <th class="checkbox-column"> <input type="checkbox" class="uniform"> </th>
+                                           <th>Container/Cargo</th>
+                                           <th>size</th>
+                                           <th>PKGS</th>
+                                           <th>Weight</th>
+                                           <th>Destuff/Stuff PKGS</th>
+                                           <th>Destuff/Stuff Weight</th>
+                                           <th>Vehicle No</th>
+                                           <th>Equiptment Type</th>
+                                           <th>Equiptment No</th>
+                                       </tr>
+                                   </thead>
+                               </table>
+
+
+                           </div>
+                           <div class="col-md-3">
+                               <label class="control-label">Technical Documents</label>
+                               <input type="text" id="txtTPNo" name="regular" class="form-control">
+                           </div>
+                           <div class="col-md-3">
+                               <label class="control-label">Table Name</label>
+                               <input type="text" id="txtTPNo" name="regular" class="form-control">
+                           </div>
+
+                       </div>
+                  </div>
+       </div>
+  </div>

@@ -1,0 +1,143 @@
+﻿
+@{
+    ViewBag.Title = "ContractMaster";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+
+
+
+<div class="crumbs">
+    <ul id="breadcrumbs" class="breadcrumb">
+        <li> <i class="icon-home"></i> <a href="index.html">General Entry</a> </li>
+        <li class="current"> <a href="pages_calendar.html" title="">Contract Master</a> </li>
+    </ul>
+
+</div>
+<div class="page-header">
+    <div class="page-title">
+        <h3>Contract Master</h3>
+    </div>
+
+</div>
+<div class="col-md-12">
+    <div class="widget box">
+        <div class="widget-header">
+            <h4><i class="icon-reorder"></i>Contract Master Forms</h4>
+        </div>
+        <div class="widget-content">
+
+            <div class="form-group">
+
+                <div class="row">
+
+
+                    <div class="col-md-3">
+                        <label class="control-label">Contract ID</label>
+                        <input type="number" id="txtContractID" placeholder="NEW" name="regular" class="form-control" readonly>
+
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label">Contract Description</label>
+                        <input type="text" id="txtContractDescription" placeholder="Contract Description" name="regular" class="form-control">
+
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label">Customer</label>
+                        @Html.DropDownList("txtCustomer", (IEnumerable<SelectListItem>)ViewBag.Forwarderlist, "--Select--", new { @class = "form-control", @id = "txtCustomer", name = "txtExporter" })
+ 
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label">CHA</label>
+                        @Html.DropDownList("txtCHA", (IEnumerable<SelectListItem>)ViewBag.CHAlist, "--Select--", new { @class = "form-control", @id = "txtCHA", name = "txtCHA" })
+ 
+
+                    </div>   <div class="col-md-3">
+    <label class="control-label">Exporter</label>
+    @Html.DropDownList("txtExporter", (IEnumerable<SelectListItem>)ViewBag.Shipperlist, "--Select--", new { @class = "form-control", @id = "txtExporter", name = "txtExporter" })
+
+</div>   <div class="col-md-3">
+                        <label class="control-label">Line</label>
+                        <input type="text" id="txtLine" name="regular" placeholder="Line" class="form-control">
+
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label">Effective From</label>
+                        <input type="date" id="txtEffectiveFrom" name="regular" placeholder="Effective From" class="form-control">
+
+                    </div> <div class="col-md-3">
+                        <label class="control-label">Effective Upto</label>
+                        <input type="date" id="txtEffectiveUpto" name="regular" placeholder="Effective Upto" class="form-control">
+
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label">Upload</label>
+                        <input type="file" id="imgUpload" name="regular" placeholder="Upload Image" class=" form-control">
+
+                    </div>
+                    @*<div class="form-group"> 
+                    <label class="col-md-2 control-label">File Upload:</label>
+                    <div class="col-md-10"> 
+                        <div class="fileinput-holder input-group input-width-xlarge">
+                        <div class="fileinput-preview uneditable-input form-control" style="cursor: text; text-overflow: ellipsis; ">
+                            No file selected...</div>
+                        <div class="input-group-btn">
+                            <span class="fileinput-btn btn" style="overflow: hidden; position: relative; cursor: pointer; ">
+                            Browse...<input type="file" data-style="fileinput" style="position: absolute; top: 0px; right: 0px; margin: 0px; cursor: pointer; font-size: 99px; opacity: 0;"></span>
+                            </div>
+                            </div> 
+                        </div> 
+                    </div>*@
+
+                </div>
+            </div>
+            <div class="row">
+
+                <label class="checkbox pull-left">
+                    IsActive <span><input type="checkbox" class="uniform" ></span>
+                </label>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 col-lg-6">
+                    <button class="btn btn-info" id="btnSave" onclick="Save()">SAVE</button>
+                    
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+<script>
+    function Save() {
+        var ContractDescription =  $("#txtContractDescription").val();
+        var Customer = $("#txtCustomer").val();
+        var CHA = $("#txtCHA").val();
+        var Exporter = $("#txtExporter").val();
+        var Line = $("#txtLine").val();
+        var EffectiveFrom =  $("#txtEffectiveFrom").val();
+        var EffectiveUpto = $("#txtEffectiveUpto").val();
+         
+        var data1 = {
+            'ContractDescription': ContractDescription, 'Customer': Customer, 'CHA': CHA, 'Exporter': Exporter,
+            'Line': Line, 'EffectiveFrom': EffectiveFrom, 'EffectiveUpto': EffectiveUpto
+        };
+        var data = JSON.stringify(data1);
+
+        return $.ajax({
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            type: 'POST',
+            url: "/InBound/ContractSave",
+            data: data,
+            success: function (result) {
+                alert('Record saved successfully.')
+                      document.location = '@Url.Action("ContractMaster", "Finance")';
+            },
+            error: function () {
+                alert("Error!");
+            }
+        });
+        
+    }
+</script>

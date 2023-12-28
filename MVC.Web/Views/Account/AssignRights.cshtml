@@ -1,0 +1,623 @@
+﻿@model MVC.Domain.Model.User
+@{
+    ViewBag.Title = "Create User";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<style>
+
+
+    /*.tabs-menu ul li .active {
+        background-color: orange
+    }*/
+
+    .custom-switch-input:checked ~ .custom-switch-indicator {
+        background: #64A5FE;
+    }
+</style>
+
+<script src="~/js/GetTableJsonwopaging.js"></script>
+<div class="crumbs">
+    <ul id="breadcrumbs" class="breadcrumb">
+        <li> <i class="icon-home"></i> <a href="index.html">Manage User</a> </li>
+        <li class="current"> <a href="pages_calendar.html" title="">Create New User </a> </li>
+    </ul>
+</div>
+<div class=" content-area overflow-hidden" id="divCreate">
+    <div class="page-header">
+        <div class="page-title">
+            <h3>Manage User</h3>
+        </div>
+        <ul class="page-stats">
+
+            <li>
+                <div class="summary">
+                    <button type="button" class="btn btn-primary waves-effect waves-light f-right d-inline-block md-trigger" onclick="BackToWorkOrder();" id="addlocallistbtn" data-modal="modal-13">
+                        @*<i class="fa-solid fa-list-ul"></i>*@  Add New User
+                    </button>
+                </div>
+
+            </li>
+        </ul>
+    </div>
+
+
+    <div class="widget box">
+        <div class="widget-header">
+            <h4><i class="icon-reorder"></i> User Deatils</h4>
+        </div>
+        <div class="widget-content">
+            <div class="form-horizontal">
+                <div class="row">
+                    <div class="col-lg-4 col-sm-12" id="divTrailerno">
+                       
+                                <label class="form-label mandatory">User Name</label>
+                                @Html.DropDownList("ddlUserName", (IEnumerable<SelectListItem>)ViewBag.User, "--Select--", new { @class = "form-control", @id = "ddlUserName", name = "ddlUserName", autocomplete = "off" })
+                          
+                    </div>
+            
+                    <div class="col-lg-2 col-sm-12">
+                        <div class="form-group" style="padding-top:20px;">
+                           
+                                <label class="form-label" style="visibility:hidden">'</label>
+                          
+                                <button type="button" class="btn btn-primary" name="clearProfile" title="clear" id="clearValue" onclick="ShowIGMDetails()">Show</button>
+                                 
+                           
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 col-lg-12">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover tbl-cart text-nowrap" id="example2" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Sr No.</th>
+                                        <th>Menu</th>
+                                        <th>Can Access?</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody style="box-sizing :border-box;"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="display:none;">
+                    <div class="col-lg-3 col-xs-3">
+                        <div class="form-group">
+                            <label class="form-label mandatory" style="visibility:hidden">.</label>
+                            <label class="custom-switch">
+                                <input type="checkbox" name="custom-switch-checkbox" id="chkIsActiveEdit" class="custom-switch-input">
+                                <span class="custom-switch-indicator"></span>
+                                <span class="custom-switch-description">Is Web Access?</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-xs-3">
+                        <div class="form-group">
+                            <label class="form-label mandatory" style="visibility:hidden">.</label>
+                            <label class="custom-switch">
+                                <input type="checkbox" name="custom-switch-checkbox" id="chkIsActiveEdit" class="custom-switch-input">
+                                <span class="custom-switch-indicator"></span>
+                                <span class="custom-switch-description">Is Mobile Access</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-xs-3">
+                        <div class="form-group">
+                            <label class="form-label mandatory" style="visibility:hidden">.</label>
+                            <label class="custom-switch">
+                                <input type="checkbox" name="custom-switch-checkbox" id="chkIsActiveEdit" class="custom-switch-input">
+                                <span class="custom-switch-indicator"></span>
+                                <span class="custom-switch-description">Is Local Path Access</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-primary" name="clearProfile" title="clear" id="clearValue" onclick="SaveAssignRights()">Update</button>
+
+                </div>
+                <script type="text/javascript">
+                                    $(document).ready(function () {
+                                        $('#example2').DataTable({
+                                            "bLengthChange": false,
+                                            "bInfo": false,
+                                            "bPaginate": false,
+                                            //"bFilter": false,
+                                            "paging": true,
+                                            "aoColumnDefs": [
+                                                {
+                                                    'bSortable': false,
+                                                    'aTargets': [2]
+                                                }
+                                            ]
+                                        });
+                                    });
+                </script>
+            </div>
+        </div>
+    </div>
+
+  
+</div>
+
+
+<script>
+
+
+    function Addmenu() {
+        debugger;
+        var MenuDesc = document.getElementById('txtmenudesc').value;
+        var MenuDept = document.getElementById('ddlMenuDept').value;
+        var fromName = document.getElementById('txtfromName').value;
+        var menuName = document.getElementById('txtmenu').value;
+        var Controller = document.getElementById('txtcontroller').value;
+        var Action = document.getElementById('txtAction').value;
+        var Menu = document.getElementById('ddlMenu').value;
+
+
+        var CreateUser = {};
+        CreateUser.MenuDesc = MenuDesc;
+        CreateUser.MenuDept = MenuDept;
+        CreateUser.fromName = fromName;
+        CreateUser.menuName = menuName;
+        CreateUser.Controller = Controller;
+        CreateUser.Action = Action;
+        CreateUser.Menu = Menu;
+      ;
+        $.ajax({
+        url: "/Account/AddMenu",
+        data: '{CreateUser: ' + JSON.stringify(CreateUser) + '}',
+        type: "POST",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (result) {
+            if (result == "") {
+                       alert('Record saved successfully');
+                window.location.href = '@Url.Action("AssignRights", "Account")';
+            }
+            else {
+                alert(result);
+            }
+        },
+        error: function (errormessage) {
+        alert(errormessage.responseText);
+        }
+        });
+   }
+
+
+    function AddSave1() {
+        debugger;
+        var firstname = document.getElementById('txtfirstname').value;
+        var lastname = document.getElementById('txtlastname').value;
+        var gender = document.getElementById('ddlgender').value;
+        var DOB = document.getElementById('txtDOB').value;
+        var employeeid = document.getElementById('txtemployeeid').value;
+        var password = document.getElementById('txtpassword').value;
+        var department = document.getElementById('ddldepartment').value;
+        var userType = document.getElementById('ddlusertype').value;
+        var emailid = document.getElementById('txtemailid').value;
+        var passEmail = document.getElementById('txtpasswordemail').value;
+        var Contact = document.getElementById('txtcontact').value;
+        var isactive = document.getElementById('chkIsActiveEdit').value;
+        var txtuserID = document.getElementById('txtuserID').value;
+
+        if (firstname == "") {
+            document.getElementById("txtfirstname").style.borderColor = "red";
+            alert('Please Enter Your Name!')
+            event.preventDefault();
+            return;
+        }
+        if (lastname == "") {
+            document.getElementById("txtlastname").style.borderColor = "red";
+            alert('Please Enter Your LastName!')
+            event.preventDefault();
+            return;
+        }
+        if (employeeid == "") {
+            document.getElementById("txtemployeeid").style.borderColor = "red";
+            alert('Please Enter Your ID')
+            event.preventDefault();
+            return;
+        }
+
+    if (password == "") {
+        document.getElementById("txtpassword").style.borderColor = "red";
+        alert('Please Choose Your Password!')
+        event.preventDefault();
+        return;
+    }
+        if (department == 0) {
+            document.getElementById("ddldepartment").style.borderColor = "red";
+            alert('Please select Department')
+            event.preventDefault();
+            return;
+        }
+
+        if (userType == 0) {
+            document.getElementById("ddlusertype").style.borderColor = "red";
+            alert('Please select UserType')
+            event.preventDefault();
+            return;
+        }
+        var CreateUser = {};
+        CreateUser.firstname = firstname;
+        CreateUser.lastname = lastname;
+        CreateUser.gender = gender;
+        CreateUser.DOB = DOB;
+        CreateUser.employeeid = employeeid;
+        CreateUser.password = password;
+        CreateUser.department = department;
+        CreateUser.userType = userType;
+        CreateUser.emailid = emailid;
+        CreateUser.passEmail = passEmail;
+        CreateUser.Contact = Contact;
+        CreateUser.isactive = isactive;
+        CreateUser.UseriDN = txtuserID;
+   $.ajax({
+       url: "/Account/Save",
+       data: '{CreateUser: ' + JSON.stringify(CreateUser) + '}',
+    type: "POST",
+    contentType: "application/json; charset=utf-8",
+    dataType: "json",
+    success: function (result) {
+        if(JSON.stringify(result) > 0)
+        {
+
+              swal("Good Job!", "Record Added Successfully!!", "success").then(function () {
+                            window.location.href = '@Url.Action("AssignRights", "Account")';
+                        });
+        }
+
+
+    },
+    error: function (errormessage) {
+    alert(errormessage.responseText);
+    }
+    });
+    }
+
+    function BackToWorkOrder() {
+        $("#divCreate").show();
+        $("#divCreateSummary").hide();
+    }
+    function OpenWOSummary() {
+        $("#divCreate").hide();
+        $("#divCreateSummary").show();
+    }
+
+    function ShowSSRSummary() {
+        debugger;
+        var search = document.getElementById('txtsearch').value;
+
+        try {
+            var data1 = { 'search': search};
+            data = JSON.stringify(data1);
+            $.ajax({
+                url: "/Account/CreateSearch",
+                data: data,
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    debugger;
+                    RepTableDataJsonwopaging($("#tblWorkOrderOpenList"), response, "CreateSearch", "CreateSearch")
+                },
+                error: function (errormessage) {
+                    alert("error");
+                    alert(errormessage.responseText);
+                }
+            });
+
+        } catch (ex) {
+
+        }
+    }
+    function edittext(UserID) {
+        debugger;
+        $("#divCreate").show();
+        $("#divCreateSummary").hide();
+        if (UserID == "") {
+            alert("Please Select Valid Jo Number");
+            return;
+        }
+
+        var data1 = { "UserID": UserID };
+
+        var data = JSON.stringify(data1);
+
+        $.ajax({
+            type: 'POST',
+            url: '/Account/GetLocationDetails',
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                debugger;
+                $('#txtfirstname').val(data[0].firstname);
+                $('#txtlastname').val(data[0].lastname);
+                $('#ddlgender').val(data[0].gender);
+                ///$('#txtDOB').val(data[0].DOB);
+                $('#txtemployeeid').val(data[0].employeeid);
+                $('#txtpassword').val(data[0].password);
+                $('#ddldepartment').val(data[0].department);
+                $('#ddlusertype').val(data[0].userType);
+                $('#txtemailid').val(data[0].emailid);
+                $('#txtpasswordemail').val(data[0].passEmail);
+                $('#txtcontact').val(data[0].Contact);
+                $('#chkIsActiveEdit').val(data[0].isactive);
+                $('#txtuserID').val(data[0].UseriDN);
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+                $("#global-loader").fadeOut("slow");
+            }
+        });
+    }
+</script>
+<script type="text/javascript">
+    function AddSave() {
+        var firstname = document.getElementById('txtfirstname').value;
+        var lastname = document.getElementById('txtlastname').value;
+        var employeeid = document.getElementById('txtemployeeid').value;
+        var data1 = { 'firstname': employeeid };
+        var data = JSON.stringify(data1);
+
+        $.ajax({
+            url: "/Account/AjaxCheckFirstname",
+            data: data,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response == 1) {
+                    alert("Employee Name already exist!");
+                    document.getElementById('txtemployeeid').value = "";
+                }
+                else {
+                    AddSave1();
+                }
+
+            },
+            error: function (errormessage) {
+                alert("error");
+                alert(errormessage.responseText);
+            }
+        });
+    }
+
+    $("#ddlMenu").change(function () {
+        debugger;
+        var ddlSearchby = $("#ddlMenu option:selected").text();
+        if (ddlSearchby == "--Select--") {
+            $("#divcontroller").hide();
+            $("#divAction").hide();
+            $("#divfromName").hide();
+            $("#divmenuName").hide();
+
+        }
+        if (ddlSearchby == "CFS") {
+            $("#divcontroller").show();
+            $("#divAction").show();
+            $("#divfromName").hide();
+            $("#divmenuName").hide();
+
+        }
+        if (ddlSearchby == "Bond") {
+            $("#divcontroller").hide();
+            $("#divAction").hide();
+            $("#divfromName").show();
+            $("#divmenuName").show();
+
+        }
+        if (ddlSearchby == "Depo") {
+            $("#divcontroller").hide();
+            $("#divAction").hide();
+            $("#divfromName").show();
+            $("#divmenuName").show();
+
+        }
+        if (ddlSearchby == "Domestic") {
+            $("#divcontroller").hide();
+            $("#divAction").hide();
+            $("#divfromName").show();
+            $("#divmenuName").show();
+
+        }
+    });
+
+    function ShowIGMDetails() {
+        debugger;
+        var ddlUserName = $("#ddlUserName").val();
+        var ddlMenusfrom = $("#ddlMenusfrom").val();
+
+        try {
+            var data1 = { 'UserName': ddlUserName, ',Menusfrom': ddlMenusfrom };
+            data = JSON.stringify(data1);
+            $.ajax({
+                url: "/Account/BindMenuDetails",
+                data: data,
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    debugger;
+                    RepTableDataJsonwopaging($("#example2"), response, "CreateSearch", "CreateSearch")
+                },
+                error: function (errormessage) {
+                    alert("error");
+                    alert(errormessage.responseText);
+                }
+            });
+
+        } catch (ex) {
+
+        }
+    }
+
+
+    function ShowUserDetails() {
+        debugger;
+        var ddlUserName = $("#ddlCUserName").val();
+
+        try {
+            var data1 = { 'UserName': ddlUserName, ',Menusfrom': "" };
+            data = JSON.stringify(data1);
+            $.ajax({
+                url: "/Account/CopyMenuDetails",
+                data: data,
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    debugger;
+                    RepTableDataJsonwopaging($("#example3"), response, "CreateSearch", "CreateSearch")
+                },
+                error: function (errormessage) {
+                    alert("error");
+                    alert(errormessage.responseText);
+                }
+            });
+
+        } catch (ex) {
+
+        }
+    }
+
+    function SaveAssignRights() {
+        debugger;
+        try {
+
+            if ($("#ddlUserName").val() == "") {
+                alert("Plase Select User Name.");
+                $("#ddlUserName").focus();
+                return;
+            }
+
+            var rowlenght = 0;
+
+            try {
+                $('#example2 tbody tr').each(function (i, row) {
+                    if ($(this).find('input.checklist').is(':checked')) {
+                        rowlenght = rowlenght + 1;
+                    }
+                });
+            } catch (ex) { rowlenght = 0; }
+
+
+
+
+            var SelectedData = new Array();
+            $('#example2 tbody tr').each(function (i, row) {
+                //debugger;
+                if ($(this).find('input.checklist').is(':checked')) {
+                    //debugger;
+                    var data1 = {};
+                    var checklistAccess = false;
+                    var checklistAdd = false;
+                    var checklistUpdate = false;
+                    var checklistCancel = false;
+                    var checklistView = false;
+                    var checklistMail = false;
+                    var MenuId = 0;
+                    $(this).find('input').each(function () {
+                        //debugger;
+                        //alert(this.id);
+                        MenuId = $(this).val();
+                        if (this.name == "checklistAccess") {
+                            checklistAccess = this.checked;
+                        }
+                        //} else if (this.name == "checklistAdd") {
+                        //    checklistAdd = this.checked;
+                        //}
+                        //else if (this.name == "checklistUpdate") {
+                        //    checklistUpdate = this.checked;
+                        //}
+                        //else if (this.name == "checklistCancel") {
+                        //    checklistCancel = this.checked;
+                        //}
+                        //else if (this.name == "checklistView") {
+                        //    checklistView = this.checked;
+                        //}
+                        //else if (this.name == "checklistMail") {
+                        //    checklistMail = this.checked;
+                        //}
+                    });
+
+                    data1 = { 'MenuId': MenuId, 'IsAccess': checklistAccess, 'CanAdd': checklistAdd, 'CanUpdate': checklistUpdate, 'CanCancel': checklistCancel, 'CanView': checklistView, 'CanMail': checklistMail };
+                    SelectedData.push(data1);
+                }
+            });
+
+            $.ajax({
+                type: 'POST',
+                url: '/Account/SaveAssingRight',
+                data: '{UserId: ' + JSON.stringify($("#ddlUserName").val()) + ', RightsData: ' + JSON.stringify(SelectedData) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    //alert(data);
+                    //window.location = "/Account/Account";
+
+                    swal("Good Job!", data, "success").then(function () {
+                            window.location.href = '@Url.Action("AssignRights", "Account")';
+                        });
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+        }
+        catch (ex) { alert(ex.message); };
+    }
+
+    function SaveCopyRights() {
+        debugger;
+        try {
+
+            if ($("#ddlCUserName").val() == "") {
+                alert("Plase Select User Name.");
+                $("#ddlCUserName").focus();
+                return;
+            }
+
+            if ($("#ddlCopyUser").val() == "") {
+                alert("Plase Copy To User Name");
+                $("#ddlCopyUser").focus();
+                return;
+            }
+
+
+            //if (rowlenght == 0) {
+            //    alert('Please Select Menu Details');
+            //    return;
+            //};
+
+
+
+            $.ajax({
+                type: 'POST',
+                url: '/Account/SaveAssingCopy',
+                data: '{UserIdAgens: ' + JSON.stringify($("#ddlCUserName").val()) + ', CopyUser: ' + JSON.stringify($("#ddlCopyUser").val()) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    alert('Copy Done.');
+                    window.location = "/Account/Account";
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+        }
+        catch (ex) { alert(ex.message); };
+    }
+
+</script>

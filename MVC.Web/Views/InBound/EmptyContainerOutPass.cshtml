@@ -1,0 +1,465 @@
+﻿
+@{
+    ViewBag.Title = "EmptyContainerOutPass";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<link href="~/assets1/css/all.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<style>
+
+    .hiderow {
+        display: none;
+    }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+
+    .close {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+</style>
+
+<script src="~/js/GetTableJsonPagging.js"></script>
+
+<div class="col-md-12" id="divEntryfrom" >
+    <div class="crumbs">
+        <ul id="breadcrumbs" class="breadcrumb">
+            <li> <i class="icon-home"></i> <a href="index.html">Generate Empty Out Gate Pass</a> </li>
+            <li class="current"> <a href="pages_calendar.html" title="">Generate Empty Out Gate Pass</a> </li>
+        </ul>
+
+    </div>
+    <div class="widget box">
+        <div class="widget-header">
+            <br />
+            <h4><i class="icon-reorder"></i>Generate Empty Out Gate Pass</h4>
+            <div class="col-6">
+
+                <button type="button" class="btn btn-primary float-right" id="CustomerAddBtn" onclick="AddMaster();">Summary</button>
+            </div>
+        </div>
+        <div class="widget-content">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label class="control-label">Gate Pass No</label>
+                        <input type="text" id="txtGTNo" name="regular" readonly="readonly" placeholder="New" class="form-control">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label">Indate & Time</label>
+                        <input type="date" id="txtInDate" name="regular" class="form-control">
+                    </div>
+
+                    <div class="col-md-2">
+                        <label class="control-label">Container No</label>
+                        <input type="text" id="txtContainerno" name="regular" class="form-control">
+                       
+                    </div>
+                    <div class="col-md-1">
+                        <br />
+                        <button class="btn btn-info" onclick="ShowContainerDetails();" style="background-color:#2f96b4">Show</button>
+                    </div>
+                    <div class="col-md-3">
+
+                        <label class="control-label"> Size</label>
+                        <select class="form-control" id="txtSize">
+                            <option selected="selected"></option>
+                            <option value="20">20</option>
+                            <option value="40">40</option>
+                            <option value="45">45</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3">
+
+                        <label class="control-label">Type</label>
+                        @Html.DropDownList("txtType", (IEnumerable<SelectListItem>)ViewBag.ContainerType, null, new { @class = "form-control", @id = "txtType" })
+
+                    </div>
+
+
+                    <div class="col-md-3">
+                        <label class="control-label">Line Name</label>
+                        <input type="text" id="txtLineName" name="regular" class="form-control">
+                    </div>
+                    <div class="col-md-3">
+
+                        <label class="control-label">Movement By</label>
+                        <select class="form-control" id="txtMovement">
+                            <option selected="selected"></option>
+                            <option value="Sez">Sez</option>
+                            <option value="Party">Party</option>
+
+                        </select>
+
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label">Vehicle No</label>
+                        <input type="text" id="txtVehicle" name="regular" class="form-control">
+                    </div>
+                </div>
+                <div class="row">
+
+
+
+
+                    <div class="col-md-3">
+                        <label class="control-label">Transporter</label>
+                        <input type="text" id="txtTransporter" name="regular" class="form-control">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label">Driver Name</label>
+                        <input type="text" id="txtDriverName" name="regular" class="form-control">
+                    </div>
+
+                    <div class="col-md-3">
+
+                        <label class="control-label">Offloading Location</label>
+                        <select class="form-control" id="txtOffloadingLocation">
+                            <option selected="selected"></option>
+                            <option value=""></option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="col-md-3">
+
+                        <label class="control-label">Remark</label>
+                        <input type="text" id="txtRemark" name="regular" class="form-control">
+                        <input type="text" id="txtentryid" style="visibility:hidden" name="regular" class="form-control">
+                    </div>
+
+                </div>
+                <br />
+                <button class="btn btn-info" onclick="AddContainerDetails();" style="background-color:#2f96b4">+ADD</button>
+
+                <br />
+                <div class="row">
+                    <br />
+                    <div class="col-lg-12 col-sm-12">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover tbl-cart text-nowrap" id="tblContianerDetails">
+                                <thead>
+                                    <tr>
+                                        <th class="wd-15p sorting">#</th>
+                                        <th class="wd-15p sorting">Container No</th>
+
+                                        <th class="wd-15p sorting">Container Size</th>
+                                        <th class="wd-15p sorting">Container Type</th>
+                                        <th class="wd-15p sorting">Line Name</th>
+                                        <th class="wd-15p sorting">Movement By</th>
+                                        <th class="wd-15p sorting">Vehicle No</th>
+                                        <th class="wd-15p sorting">Transporter</th>
+                                        <th class="wd-15p sorting">Driver Name</th>
+                                        <th class="wd-15p sorting">Offloading Location</th>
+                                        <th class="wd-15p sorting">Remark</th>
+                                        <th class="wd-15p sorting">EntryID</th>
+                                        @*<th class="wd-15p sorting">Total Man Cost</th>
+        <th class="wd-15p sorting">Material Cost</th>
+        <th class="wd-15p sorting">MF Date</th>*@
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn btn-info" onclick="SaveGateInEntry()" >Submit</button> <button class="btn btn-info">
+                Cancel
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="page-body" id="divSummary" style="display:none">
+
+    <div class="page-header">
+
+        <div class="crumbs">
+            <ul id="breadcrumbs" class="breadcrumb">
+                <li>
+                    <i class="icon-home"></i>
+                    <a href="index.html">Empty Out Gate Pass Summary</a>
+                </li>
+                <li class="current">
+                    <a href="pages_calendar.html" title="">Empty Out Gate Pass Summary</a>
+                </li>
+            </ul>
+        </div>
+        <div class="page-header row">
+            <div class="page-title col-6">
+                <h3>Empty Out Gate Pass Summary</h3>
+            </div>
+            <div class="col-6">
+                <br />
+                <button type="button" class="btn btn-primary float-right" id="btnBackButton" onclick="getBack();">Back</button>
+            </div>
+        </div>
+
+    </div>
+    <div class="card col-sm-12 col-lg-12">
+        <div class="card-header">
+
+
+            <div class="card-header-right">
+                <i class="icofont icofont-rounded-down"></i>
+                <i class="icofont icofont-refresh"></i>
+                <i class="icofont icofont-close-circled"></i>
+            </div>
+        </div>
+
+
+        <div class="card-block col-sm-12 col-lg-12">
+            <div class="row" style="display:none;">
+                <div class="col-lg-3 col-sm-12">
+                    <div class="form-group">
+                        <label class="form-label" style="visibility:hidden"> No</label>
+                        <div class="row gutters-xs">
+                            <div class="col">
+                                @Html.TextBox("TXtSearchOn", null, new { @class = "form-control ", @id = "TXtSearchOn", autocomplete = "off" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-sm-12">
+                    <div class="form-group">
+                        <label class="form-label" style="visibility:hidden">.</label>
+                        <div class="row gutters-xs">
+                            <div class="col">
+                                <button type="button" id="btnShow" value="Show" class="btn btn-primary" onclick="GetDetails()"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 col-sm-12">
+                    <div class="table-responsive">
+                        <table id="example4" class="table table-bordered table-hover tbl-cart text-nowrap" style="width:100%">
+                            <thead>
+                                <tr></tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function AddMaster() {
+        $("#divEntryfrom").hide();
+        $("#divSummary").show();
+        GetDetails();
+    }
+    function getBack() {
+        $("#divEntryfrom").show();
+        $("#divSummary").hide();
+    }
+
+    function GetDetails() {
+        $("#global-loader").fadeOut("slow");
+
+        var SearchType = $("#TXtSearchOn").val();
+
+        var data1 = { 'SearchType': SearchType };
+        var data = JSON.stringify(data1);
+        $.ajax({
+            type: "POST",
+            url: "/InBound/OutSummaryList",
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+
+                $("#example4").empty();
+                RepTableDataJsonwopaging($("#example4"), data, "Voucher Details", "VoucherDetails_List");
+                $("#global-loader").fadeOut("slow");
+            },
+            error: function (response) {
+                alert(response.responseText);
+                $("#global-loader").fadeOut("slow");
+            }
+        })
+    }
+
+    function PrintOut(GPNO) {
+        var data1 = { 'GPNO': GPNO };
+        var data = JSON.stringify(data1);
+        // alert(data);
+        $.ajax({
+            type: "POST",
+            url: "/InBound/EmptyOUTPrint",
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                var myWindow = window.open("", "MsgWindow");
+                myWindow.close();
+                var myWindow = window.open("", "MsgWindow");
+                myWindow.document.write(response);
+
+            },
+            failure: function (response) {
+                alert(response);
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        })
+    }
+
+    function ShowContainerDetails() {
+        var Containerno = $("#txtContainerno").val();
+        var data1 = { 'Containerno': Containerno };
+        data = JSON.stringify(data1);
+        $.ajax({
+            url: "/InBound/ItemDetails",
+            data: data,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                data = JSON.parse(data);
+                 
+                $("#txtSize").val(data[0].SIZE);
+                $("#txtType").val(data[0].TYPE);
+             
+                $("#txtVehicle").val(data[0].VEHICLE_NO);
+                $("#txtTransporter").val(data[0].TRANSPORTER);
+                $("#txtDriverName").val(data[0].DRIVER_NAME);
+                $("#txtentryid").val(data[0].GATE_PASS_NO);
+                
+                    
+            },
+            error: function (errormessage) {
+                alert("error");
+                alert(errormessage.responseText);
+            }
+        });
+    }
+
+    function AddContainerDetails() {
+        debugger
+        var isValid = true;
+
+        var Containerno = $("#txtContainerno").val();
+        var ContainerSize = $("#txtSize").val();
+        var ContainerType = $("#txtType").val();
+        var LineName = $("#txtLineName").val();
+        var Movement = $("#txtMovement").val();
+        var Vehicle = $("#txtVehicle").val();
+        var Transporter = $("#txtTransporter").val();
+        var DriverName = $("#txtDriverName").val();
+        var OffloadingLocation = $("#txtOffloadingLocation").val();
+        var Remark = $("#txtRemark").val();
+        var entryid = $("#txtentryid").val();
+        
+        if (isValid) {
+
+
+
+            t = $('#tblContianerDetails').DataTable();
+            t.row.add([
+                "<input type='button' id='btnDelete' value='Delete'  class='btn btn-danger' />",
+                Containerno,
+                ContainerSize,
+                ContainerType,
+                LineName,
+                Movement,
+                Vehicle,
+                Transporter,
+                DriverName,
+                OffloadingLocation,
+                Remark,
+                entryid
+            ]).draw(false);
+             
+        }
+    }
+
+    function SaveGateInEntry() {
+        var SelectedData = new Array();
+        
+        var table = document.getElementById("tblContianerDetails");
+
+        var row;
+        var t = $('#tblInbound').DataTable();
+         
+        for (var i = 1; i < table.rows.length; i++) {
+            debugger;
+            row = table.rows[i];
+
+            Containerno = row.cells[1].innerText;
+            ContainerSize = row.cells[2].innerText;
+            ContainerType = row.cells[3].innerText;
+            LineName = row.cells[4].innerText;
+            Movement = row.cells[5].innerText;
+            Vehicle = row.cells[6].innerText;
+            Transporter = row.cells[7].innerText;
+            DriverName = row.cells[8].innerText;
+ 
+            OffloadingLocation = row.cells[9].innerText;
+            Remark = row.cells[10].innerText;
+            EntryID  = row.cells[11].innerText;
+
+            SelectedData.push({
+                'Containerno': Containerno, 'ContainerSize': ContainerSize, 'ContainerType': ContainerType, 'LineName': LineName,
+                'Movement': Movement, 'Vehicle': Vehicle, 'Transporter': Transporter, 'DriverName': DriverName, 'EntryID': EntryID
+            })
+        }
+        var data1 = {
+            'SelectedData': SelectedData
+        };
+
+
+        var data = JSON.stringify(data1);
+        return $.ajax({
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            type: 'POST',
+            url: "/InBound/SaveEmptyContainer",
+            data: data,
+            success: function (result) {
+
+                if (result == 'SUCCESS') {
+                    alert("Saved");
+                    window.location = "/Inbound/EmptyContainerOutPass"
+
+                }
+                else {
+                    alert("Save failed!");
+                }
+            },
+            error: function () {
+                alert("Error!")
+            }
+        });
+    }
+    
+</script>
+
