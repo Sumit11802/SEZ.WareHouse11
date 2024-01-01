@@ -297,15 +297,7 @@
                     </div>
 
                 </div>
-                <br />
-                <div class="row">
-                    <div class="col-md-12">
-                        <button class="btn btn-info" onclick="SaveInbound();">Submit</button>
-                        <button class="btn btn-info" style="background-color:red">Cancel</button>
-
-                    </div>
-
-                </div>
+                
 
                 <div class="widget-content">
 
@@ -371,6 +363,16 @@
                                 </table>
                             </div>
                         </div>
+                    </div>
+
+                    <br />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button class="btn btn-info" onclick="SaveInbound();">Submit</button>
+                            <button class="btn btn-info" style="background-color:red">Cancel</button>
+
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -583,6 +585,19 @@
                 }
 </script>
 
+
+<script>
+     function DeleteButton() {
+    debugger;
+    var t = $('#tblContianerDetails').DataTable();
+
+    // Event delegation for delete button click
+    $('#tblContianerDetails').on('click', '.btnDelete', function () {
+        var row = $(this).closest('tr');
+        t.row(row).remove().draw(false);
+    });
+</script>
+
 <script>
      function AddContainerDetails() {
     debugger
@@ -600,7 +615,7 @@
 
             t = $('#tblContianerDetails').DataTable();
             t.row.add([
-                "<input type='button' id='btnDelete' value='Delete'  class='btn btn-danger' />",
+                "<input type='button' id='btnDelete' onclick='DeleteButton()' value='Delete'  class='btn btn-danger' />",
                 ContainerNo,
                 ContainerSize,
                 ContainerType,

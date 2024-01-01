@@ -191,7 +191,7 @@
                                     <label class="form-label">NSDL MAKER ID</label>
 
                                     <div class="col">
-                                        @Html.EditorFor(model => model.AGRemarks, new { htmlAttributes = new { @class = "form-control", @id = "makerid", maxlength = 50 } })
+                                        @Html.EditorFor(model => model.NSDLID, new { htmlAttributes = new { @class = "form-control", @id = "makerid", maxlength = 50 } })
                                     </div>
 
                                 </div>
@@ -201,18 +201,20 @@
                                     <label class="form-label">IEC NO</label>
 
                                     <div class="col">
-                                        @Html.EditorFor(model => model.AGRemarks, new { htmlAttributes = new { @class = "form-control", @id = "iecno", maxlength = 50 } })
+                                        @Html.EditorFor(model => model.IECNO, new { htmlAttributes = new { @class = "form-control", @id = "iecno", maxlength = 50 } })
                                     </div>
 
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <label class="control-label">Agreement Date</label>
-                                <input type="date" id="txtInDate" name="regular" class="form-control">
+                                @Html.TextBoxFor(model => model.AgreementDate, "{0:yyyy-MM-dd}", new { @class = "form-control", @id = "txtInDate", type = "date", step = "1" })
+                               @*<input type="date" id="txtInDate" name="regular" class="form-control">*@
                             </div>
                             <div class="col-md-3">
                                 <label class="control-label">Agreement Expiry Date</label>
-                                <input type="date" id="txtExDate" name="regular" class="form-control">
+                                @Html.TextBoxFor(model => model.ExpireDate, "{0:yyyy-MM-dd}", new { @class = "form-control", @id = "txtExDate", type = "date", step = "1" })
+                                @*<input type="date" id="txtExDate" name="regular" class="form-control" value="model => model.ExpireDate">*@
                             </div>
 
                             <div class="col-lg-6 col-sm-12">
@@ -576,6 +578,10 @@
             var txtcustAddress = document.getElementById('custAddress').value;
             var custCode = document.getElementById('custCode').value;
             var custName = document.getElementById('custName').value;
+            var NSDLID =document.getElementById('makerid').value;
+            var IECNO =document.getElementById('iecno').value;
+            var AgreementDate =document.getElementById('txtInDate').value;
+            var ExpireDate =document.getElementById('txtExDate').value;
 
             var element = {};
             //
@@ -617,6 +623,10 @@
             element.IsFreightForwarder = chkFreightForwarder;
 
             element.CHACode = $("#CHACode").val();
+            element.NSDLID = NSDLID;
+            element.IECNO = IECNO ;
+            element.AgreementDate = AgreementDate;
+            element.ExpireDate = ExpireDate;
 
 
             //element.RunningID = $("#AGID").val();

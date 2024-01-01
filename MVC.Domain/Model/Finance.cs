@@ -41,8 +41,10 @@ namespace MVC.Domain.Model
     }
     public class MasterEntities
     {
-
-
+        public DateTime ExpireDate { get; set; }
+        public DateTime AgreementDate { get; set; }
+        public string IECNO { get; set; }
+        public string NSDLID { get; set; }
         public Int64 AGID { get; set; }
         public string AGaID { get; set; }
         public string AGName { get; set; }
@@ -67,15 +69,15 @@ namespace MVC.Domain.Model
         public string Business { get; set; }
         public bool IsContract { get; set; }
 
-        public Boolean CHA { get; set; }
-        public Boolean shippers { get; set; }
-        public Boolean ShipLines { get; set; }
-        public Boolean Importer { get; set; }
-        public Boolean Customer { get; set; }
+        public bool CHA { get; set; }
+        public bool shippers { get; set; }
+        public bool ShipLines { get; set; }
+        public bool Importer { get; set; }
+        public bool Customer { get; set; }
         public string TallyLedger { get; set; }
-        public Boolean JV { get; set; }
-        public Boolean Vendor { get; set; }
-        public Boolean IsFreightForwarder { get; set; }
+        public bool JV { get; set; }
+        public bool Vendor { get; set; }
+        public bool IsFreightForwarder { get; set; }
         public string LineAgentCode { get; set; }
         public string CHACode { get; set; }
 

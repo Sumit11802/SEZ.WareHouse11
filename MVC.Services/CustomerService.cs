@@ -238,6 +238,11 @@ namespace MVC.Services
                     UserData.DocFileName = Convert.ToString(row["DOCFILENAME"]);
                     UserData.RunningID = Convert.ToInt32(row["RunningID"]);
                     UserData.srno = Convert.ToInt32(row["srno"]);
+                    UserData.AGRemarks = Convert.ToString(row["remark"]);
+                    UserData.NSDLID = Convert.ToString(row["NSDL"]);
+                    UserData.IECNO = Convert.ToString(row["IEC"]);
+                    UserData.AgreementDate = Convert.ToDateTime(row["agreedate"]);
+                    UserData.ExpireDate = Convert.ToDateTime(row["agreeexp"]);
 
                 }
             }
@@ -261,14 +266,12 @@ namespace MVC.Services
             string Message = "";
             DataTable dt = new DataTable();
             int i = 0;
-            dt = customerRepository.UpdateMaster(MasterData.AGName, MasterData.AGaID, MasterData.AGAddress, MasterData.AGAuthPerson,
-                MasterData.AGAuthPersonII, MasterData.AGAuthPersonDesig, MasterData.AGAuthPersonDesigII,
-                MasterData.AGTelI, MasterData.AGTelII, MasterData.AGEMail, MasterData.AGEMailII, MasterData.Business, MasterData.AGWebsite, MasterData.AGGrade,
-                MasterData.IsContract,
-                MasterData.AGRemarks, userId, MasterData.CHA, MasterData.Customer, MasterData.shippers, MasterData.ShipLines,
-                MasterData.Importer,
-                MasterData.AGCellNo, MasterData.AGFax, MasterData.IsActive, MasterData.AGID, MasterData.TallyLedger, MasterData.JV,
-                MasterData.Vendor, MasterData.LineAgentCode, MasterData.IsFreightForwarder
+            dt = customerRepository.UpdateMaster(MasterData.AGID,  MasterData.AGName,  MasterData.AGAddress, MasterData.AGAuthPerson,
+                MasterData.AGEMail, MasterData.AGRemarks,  MasterData.CHA, MasterData.Customer, MasterData.ShipLines,
+                MasterData.Importer,  MasterData.IsActive, userId,
+                MasterData.Vendor, MasterData.NSDLID, MasterData.IECNO,
+                MasterData.AgreementDate,
+                MasterData.ExpireDate
 
                 );
             if (dt == null)

@@ -163,17 +163,17 @@ namespace MVC.Repository
 
             return dt;
         }
-        public DataTable UpdateMaster(string Name, string code, string address, string contactPer, string contactPer2,
-           string contactDesi, string contactDesi2, string cont1, string cont2, string email, string email2, string Business, string website, string grade, Boolean chkContract, string remarks,
-       int userId, Boolean CHA, Boolean Customer, Boolean shipper, Boolean shippline,
-       Boolean importer, string cellno, string faxno, Boolean isactive, Int64 id, string TalleyMaster,
-       Boolean JV, Boolean Vendor, string LineAgentCode, Boolean IsFreightForwarder
+        public DataTable UpdateMaster(Int64 id, string Name,  string address, string contactPer, 
+            string email,   string remarks, bool CHA, bool Customer, bool shippline, bool importer, bool isactive, int userId,
+       bool Vendor, string NSDLID, string IECNO, 
+                DateTime AgreementDate,
+                DateTime ExpireDate
         )
         {
             DataTable dt = new DataTable();
             int i = 0;
              
-            dt = db.getData("uspAddUpdateCustomerDetails  '" + id + "','" + code + "','" + Name + "','" + address + "','" + contactPer + "','" + contactPer2 + "','" + contactDesi + "','" + contactDesi2 + "','" + cont1 + "','" + cont2 + "','" + faxno + "','" + cellno + "','" + email + "','" + email2 + "','" + Business + "','" + website + "','" + remarks + "','" + grade + "','" + chkContract + "','" + userId + "','" + CHA + "','" + Customer + "','" + shipper + "','" + shippline + "','" + importer + "','" + isactive + "','" + TalleyMaster + "','" + JV + "','" + Vendor + "','" + LineAgentCode + "','" + IsFreightForwarder + "'");
+            dt = db.getData("uspAddUpdateCustomerDetails1 '" + id + "','" + Name + "','" + address + "','" + contactPer +  "','" + email + "','" + remarks + "','" + userId + "','" + CHA + "','" + Customer + "','" + shippline + "','" + importer + "','" + isactive + "','"  + Vendor + "','" + NSDLID + "','" + IECNO + "','" + AgreementDate + "','" + ExpireDate + "'" );
 
             return dt;
 
